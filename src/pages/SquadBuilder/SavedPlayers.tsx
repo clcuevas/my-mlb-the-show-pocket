@@ -6,9 +6,10 @@ import styled from 'styled-components'
 import type { MarketPlayerItemListing } from '@services/marketListings'
 
 const Style = {
-  Container: styled.div``,
+  Container: styled.div`
+    height: 100%;
+  `,
   List: styled(List)`
-    max-height: 90vh;
     overflow-y: auto;
   `,
   ListItem: styled(ListItem)`

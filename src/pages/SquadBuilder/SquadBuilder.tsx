@@ -1,4 +1,4 @@
-import { Divider, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 import * as React from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -72,7 +72,7 @@ const SquadBuilder = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Style.Container container spacing={2}>
-        <Grid item xs={6} md={8} lg={9}>
+        <Grid item xs={7} md={9} lg={10}>
           <Squad
             bullpen={bullpen}
             squad={squad}
@@ -80,9 +80,6 @@ const SquadBuilder = () => {
             onDrop={handleOnCardDrop}
             onRemove={handleOnPositionClear}
           />
-        </Grid>
-        <Grid item xs={1} md={1} lg={1}>
-          <Divider orientation="vertical" />
         </Grid>
         <Grid item xs={5} md={3} lg={2}>
           <SavedPlayers savedPlayers={savedPlayers as MarketPlayerItemListing[]} />
