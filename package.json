@@ -1,5 +1,5 @@
 {
-  "name": "my-mlb-the-show-pocket-vite",
+  "name": "my-mlb-the-show-pocket",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -37,7 +37,7 @@
     "match-sorter": "6.3.1",
     "prettier": "3.0.2",
     "react-dnd": "16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
+    "react-dnd-html5-backend": "16.0.1",
     "react-redux": "8.1.2",
     "react-router-dom": "6.15.0",
     "redux-saga": "1.2.3",
