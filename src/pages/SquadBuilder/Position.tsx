@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Typography } from '@mui/material'
+import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
@@ -9,15 +9,11 @@ import { Position as PositionType } from '@services/squadBuilder'
 import type { DropItem } from './types'
 
 const Style = {
-  Position: styled.div`
-    border: 1px dotted gray;
+  Position: styled(Grid)`
     text-align: center;
   `,
   Card: styled(Card)`
     position: relative;
-
-    height: 275px;
-    width: 200px;
 
     &:hover .action {
       display: flex;
@@ -80,8 +76,9 @@ const Position = ({ player, position, type, onDrop, onRemove }: Props) => {
   }, [])
 
   return (
-    <Style.Position ref={dropRef}>
-      <Style.Card>
+    <Style.Position ref={dropRef} item xs="auto">
+      <Style.Card
+        sx={{ width: { md: '150px', lg: '200px' }, height: { md: '225px', lg: '275px' } }}>
         {player != null ? (
           <>
             <Style.CardActionArea className="action">

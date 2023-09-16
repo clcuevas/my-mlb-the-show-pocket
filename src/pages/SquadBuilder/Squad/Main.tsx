@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import { Grid } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -9,20 +9,20 @@ import type { DropItem } from '../types'
 import Position from '../Position'
 
 const Style = {
-  CatcherContainer: styled(Stack)`
+  CatcherContainer: styled(Grid)`
     margin-top: 10px;
   `,
-  OutfieldContainer: styled(Stack)`
+  OutfieldContainer: styled(Grid)`
     margin-bottom: 10px;
   `,
-  SecondShortContainer: styled(Stack)`
+  SecondShortContainer: styled(Grid)`
     margin-top: 10px;
     margin-bottom: 10px;
   `,
-  SquadContainer: styled(Stack)`
+  SquadContainer: styled(Grid)`
     margin-top: 30px;
   `,
-  ThirdPitcherFirstContainer: styled(Stack)`
+  ThirdPitcherFirstContainer: styled(Grid)`
     margin-top: 10px;
     margin-bottom: 10px;
   `,
@@ -40,8 +40,13 @@ type Props = {
 
 const Squad = ({ squad, onDrop, onRemove }: Props) => {
   return (
-    <Style.SquadContainer alignItems="center">
-      <Style.OutfieldContainer direction="row" spacing={22}>
+    <Style.SquadContainer container justifyContent="center" direction="column" alignItems="center">
+      <Style.OutfieldContainer
+        item
+        container
+        xs="auto"
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
         <Position
           onDrop={onDrop}
           position={Positions.LF}
@@ -64,7 +69,12 @@ const Squad = ({ squad, onDrop, onRemove }: Props) => {
           onRemove={onRemove}
         />
       </Style.OutfieldContainer>
-      <Style.SecondShortContainer direction="row" spacing={12}>
+      <Style.SecondShortContainer
+        item
+        container
+        xs="auto"
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
         <Position
           onDrop={onDrop}
           position={Positions.SS}
@@ -80,7 +90,12 @@ const Squad = ({ squad, onDrop, onRemove }: Props) => {
           onRemove={onRemove}
         />
       </Style.SecondShortContainer>
-      <Style.ThirdPitcherFirstContainer direction="row" spacing={16}>
+      <Style.ThirdPitcherFirstContainer
+        item
+        container
+        xs="auto"
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 9 }}>
         <Position
           onDrop={onDrop}
           position={Positions['3B']}
@@ -103,7 +118,7 @@ const Squad = ({ squad, onDrop, onRemove }: Props) => {
           onRemove={onRemove}
         />
       </Style.ThirdPitcherFirstContainer>
-      <Style.CatcherContainer>
+      <Style.CatcherContainer item container xs="auto" rowSpacing={1}>
         <Position
           onDrop={onDrop}
           position={Positions.C}

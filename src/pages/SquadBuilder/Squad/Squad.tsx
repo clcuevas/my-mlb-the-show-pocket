@@ -1,4 +1,4 @@
-import { Tab, Tabs } from '@mui/material'
+import { Box, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
 
 import CustomTabPanel from '@components/CustomTabPanel'
@@ -43,8 +43,8 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
   )
 
   return (
-    <>
-      <Tabs value={activeTab} onChange={handleChange}>
+    <Box sx={{ pl: '55px', pr: '15px' }}>
+      <Tabs value={activeTab} onChange={handleChange} centered>
         <Tab label="Main Squad" {...a11yProps(0)} />
         <Tab label="Pitchers" {...a11yProps(1)} />
       </Tabs>
@@ -60,7 +60,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
           onRemove={onRemove}
         />
       </CustomTabPanel>
-    </>
+    </Box>
   )
 }
 
