@@ -2,10 +2,9 @@ import { Grid } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import type { MarketPlayerItemListing } from '@services/marketListings'
-import { Positions, type Position as PositionType, type SquadBuild } from '@services/squadBuilder'
+import { Positions, type SquadBuild } from '@services/squadBuilder'
 
-import type { DropItem } from '../types'
+import type { OnDrop, OnRemove } from '../types'
 import Position from '../Position'
 
 const Style = {
@@ -30,15 +29,11 @@ const Style = {
 
 type Props = {
   squad: SquadBuild
-  onDrop: (
-    item: DropItem,
-    pos: PositionType,
-    type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
-  ) => void
-  onRemove: (player: MarketPlayerItemListing, pos: PositionType) => void
+  onDrop: (onDropParam: OnDrop) => void
+  onRemove: (onRemoveParam: OnRemove) => void
 }
 
-const Squad = ({ squad, onDrop, onRemove }: Props) => {
+const MainSquad = ({ squad, onDrop, onRemove }: Props) => {
   return (
     <Style.SquadContainer container justifyContent="center" direction="column" alignItems="center">
       <Style.OutfieldContainer
@@ -131,4 +126,4 @@ const Squad = ({ squad, onDrop, onRemove }: Props) => {
   )
 }
 
-export default Squad
+export default MainSquad

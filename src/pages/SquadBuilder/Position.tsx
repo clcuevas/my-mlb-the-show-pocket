@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { MarketPlayerItemListing } from '@services/marketListings'
 import { Position as PositionType } from '@services/squadBuilder'
 
-import type { DropItem } from './types'
+import type { DropItem, OnDrop, OnRemove } from './types'
 
 const Style = {
   Position: styled(Grid)`
@@ -48,22 +48,17 @@ type Props = {
   position: PositionType
   type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
   index?: number
-  onDrop: (
-    item: DropItem,
-    pos: PositionType,
-    type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench',
-    index?: number
-  ) => void
-  onRemove: (player: MarketPlayerItemListing, pos: PositionType) => void
+  onDrop: (onDropParam: OnDrop) => void
+  onRemove: (onRemoveParam: OnRemove) => void
 }
 
-const Position = ({ player, position, type, onDrop, onRemove }: Props) => {
+const Position = ({ player, position, index, type, onDrop, onRemove }: Props) => {
   const [selectedPosition, setSelectedPosition] = React.useState('')
 
   const [_, dropRef] = useDrop(() => ({
     accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
     drop: (item: DropItem) => {
-      onDrop(item, position, type)
+      onDrop({ index, item, position, type })
     },
     collect: (monitor) => ({
       didDrop: monitor.didDrop(),
@@ -90,7 +85,7 @@ const Position = ({ player, position, type, onDrop, onRemove }: Props) => {
                 variant="contained"
                 color="secondary"
                 className="action-btn"
-                onClick={() => onRemove(player, position)}>
+                onClick={() => onRemove({ player, pos: position, squadType: type, index })}>
                 Remove
               </Button>
             </Style.CardActionArea>

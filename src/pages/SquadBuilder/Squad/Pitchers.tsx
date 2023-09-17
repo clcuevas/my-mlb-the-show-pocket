@@ -3,14 +3,10 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import type { MarketPlayerItemListing } from '@services/marketListings'
-import {
-  StartingPitchingRotation,
-  type Bullpen,
-  type Position as PositionType,
-} from '@services/squadBuilder'
+import { StartingPitchingRotation, type Bullpen } from '@services/squadBuilder'
 
 import Position from '../Position'
-import type { DropItem } from '../types'
+import type { OnDrop, OnRemove } from '../types'
 
 const Style = {
   Container: styled.div``,
@@ -28,16 +24,11 @@ type Props = {
   bullpen: Bullpen
   mainSP: MarketPlayerItemListing | null
   startingPitchingRotation: StartingPitchingRotation
-  onDrop: (
-    item: DropItem,
-    pos: PositionType,
-    type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench',
-    index?: number
-  ) => void
-  onRemove: (player: MarketPlayerItemListing, pos: PositionType) => void
+  onDrop: (onDropParam: OnDrop) => void
+  onRemove: (onRemoveParam: OnRemove) => void
 }
 
-const Pitchers = ({ bullpen, startingPitchingRotation, mainSP, onDrop, onRemove }: Props) => {
+const Pitchers = ({ bullpen, startingPitchingRotation, onDrop, onRemove }: Props) => {
   return (
     <Style.Container>
       <Style.Section>

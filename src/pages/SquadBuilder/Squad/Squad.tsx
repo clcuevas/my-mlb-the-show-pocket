@@ -3,33 +3,18 @@ import * as React from 'react'
 
 import CustomTabPanel from '@components/CustomTabPanel'
 import { a11yProps } from '@components/helpers'
-import type { MarketPlayerItemListing } from '@services/marketListings'
-import type {
-  Bullpen,
-  Position as PositionType,
-  SquadBuild,
-  StartingPitchingRotation,
-} from '@services/squadBuilder'
+import type { Bullpen, SquadBuild, StartingPitchingRotation } from '@services/squadBuilder'
 
 import Main from './Main'
 import Pitchers from './Pitchers'
-
-type DropItem = {
-  id: string
-  player: MarketPlayerItemListing
-}
+import type { OnDrop, OnRemove } from '../types'
 
 type Props = {
   bullpen: Bullpen
   squad: SquadBuild
   startingPitchingRotation: StartingPitchingRotation
-  onDrop: (
-    item: DropItem,
-    pos: PositionType,
-    type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench',
-    index?: number
-  ) => void
-  onRemove: (player: MarketPlayerItemListing, pos: PositionType) => void
+  onDrop: (onDropParam: OnDrop) => void
+  onRemove: (onRemoveParam: OnRemove) => void
 }
 
 const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: Props) => {
