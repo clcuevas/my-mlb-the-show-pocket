@@ -4,7 +4,7 @@ import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 
 import { MarketPlayerItemListing } from '@services/marketListings'
-import { Position as PositionType } from '@services/squadBuilder'
+import { Position as PositionType, Positions } from '@services/squadBuilder'
 
 import type { DropItem, OnDrop, OnRemove } from './types'
 
@@ -71,15 +71,35 @@ type Props = {
 const Position = ({ player, position, index, type, onDrop, onRemove }: Props) => {
   const [selectedPosition, setSelectedPosition] = React.useState('')
 
-  const [_, dropRef] = useDrop(() => ({
-    accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
-    drop: (item: DropItem) => {
-      onDrop({ index, item, position, type })
-    },
-    collect: (monitor) => ({
-      didDrop: monitor.didDrop(),
+  const [_collectObj, dropRef] = useDrop(
+    () => ({
+      accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
+      canDrop: ({ player }: DropItem) => {
+        const playerPosition = player.item.display_position
+        const bullpenPositions = [Positions.CP, Positions.RP] as PositionType[]
+
+        switch (position) {
+          case Positions.MAIN_SP:
+            return playerPosition === Positions.SP && type === 'main_squad'
+          case Positions.SP:
+            return playerPosition === Positions.SP && type === 'starting_rotation'
+          case Positions.RP:
+            return type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
+          case Positions.CP:
+            return type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
+          default:
+            return true
+        }
+      },
+      drop: (item: DropItem) => {
+        onDrop({ index, item, position, type })
+      },
+      collect: (monitor) => ({
+        canDrop: !!monitor.canDrop(),
+      }),
     }),
-  }))
+    [player]
+  )
 
   React.useEffect(() => {
     const _position = position === 'MAIN_SP' ? 'SP' : position
