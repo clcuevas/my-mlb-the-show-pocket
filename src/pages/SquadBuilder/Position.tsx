@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
+import { Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material'
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
@@ -8,11 +8,19 @@ import { Position as PositionType } from '@services/squadBuilder'
 
 import type { DropItem, OnDrop, OnRemove } from './types'
 
+const CardResponsiveSettings = {
+  width: { md: '150px', lg: '200px' },
+  height: { md: '225px', lg: '275px' },
+}
+
 const Style = {
   Position: styled(Grid)`
     text-align: center;
   `,
   Card: styled(Card)`
+    display: flex;
+    flex-direction: column;
+
     position: relative;
 
     &:hover .action {
@@ -30,7 +38,10 @@ const Style = {
     }
   `,
   CardContent: styled(CardContent)`
-    padding: 0;
+    flex: 0;
+
+    padding: 10px 10px 0 10px;
+    text-align: left;
   `,
   CardActionArea: styled.div`
     background: rgba(0, 0, 0, 0.6);
@@ -38,8 +49,13 @@ const Style = {
     opacity: 1;
     position: absolute;
 
-    height: 275px;
-    width: 200px;
+    height: 100%;
+    width: 100%;
+  `,
+  CardMedia: styled(CardMedia)`
+    flex: 2;
+
+    background-size: 100% 100%;
   `,
 }
 
@@ -72,8 +88,7 @@ const Position = ({ player, position, index, type, onDrop, onRemove }: Props) =>
 
   return (
     <Style.Position ref={dropRef} item xs="auto">
-      <Style.Card
-        sx={{ width: { md: '150px', lg: '200px' }, height: { md: '225px', lg: '275px' } }}>
+      <Style.Card sx={CardResponsiveSettings}>
         {player != null ? (
           <>
             <Style.CardActionArea className="action">
@@ -89,12 +104,15 @@ const Position = ({ player, position, index, type, onDrop, onRemove }: Props) =>
                 Remove
               </Button>
             </Style.CardActionArea>
-            <img src={player.item.img} alt={player.item.name} height="210px" width="200px" />
-            <Style.CardContent>
+            <Style.CardMedia
+              image={player.item.img}
+              sx={{ position: 'center', height: { md: 200 } }}
+            />
+            <Style.CardContent sx={{ display: { sx: 'none' } }}>
               <Typography>
                 {player.listing_name}, {player.item.display_position}
               </Typography>
-              <Typography>
+              <Typography variant="body2">
                 Buy: {player.best_buy_price}, Sell: {player.best_sell_price}
               </Typography>
             </Style.CardContent>
