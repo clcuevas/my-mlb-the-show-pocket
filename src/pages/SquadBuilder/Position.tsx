@@ -66,9 +66,18 @@ type Props = {
   index?: number
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
 }
 
-const Position = ({ player, position, index, type, onDrop, onRemove }: Props) => {
+const Position = ({
+  player,
+  position,
+  index,
+  type,
+  onDrop,
+  onRemove,
+  onShowPlayerDetail,
+}: Props) => {
   const [selectedPosition, setSelectedPosition] = React.useState('')
 
   const [_collectObj, dropRef] = useDrop(
@@ -112,7 +121,11 @@ const Position = ({ player, position, index, type, onDrop, onRemove }: Props) =>
         {player != null ? (
           <>
             <Style.CardActionArea className="action">
-              <Button type="button" variant="contained" className="action-btn">
+              <Button
+                type="button"
+                variant="contained"
+                className="action-btn"
+                onClick={() => onShowPlayerDetail('show', player)}>
                 Detail
               </Button>
               <Button

@@ -26,9 +26,16 @@ type Props = {
   startingPitchingRotation: StartingPitchingRotation
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
 }
 
-const Pitchers = ({ bullpen, startingPitchingRotation, onDrop, onRemove }: Props) => {
+const Pitchers = ({
+  bullpen,
+  startingPitchingRotation,
+  onDrop,
+  onRemove,
+  onShowPlayerDetail,
+}: Props) => {
   return (
     <Style.Container>
       <Style.Section>
@@ -43,6 +50,7 @@ const Pitchers = ({ bullpen, startingPitchingRotation, onDrop, onRemove }: Props
                 index={index}
                 onDrop={onDrop}
                 onRemove={onRemove}
+                onShowPlayerDetail={onShowPlayerDetail}
               />
             </Grid>
           ))}
@@ -61,6 +69,7 @@ const Pitchers = ({ bullpen, startingPitchingRotation, onDrop, onRemove }: Props
                 index={index}
                 onDrop={onDrop}
                 onRemove={onRemove}
+                onShowPlayerDetail={onShowPlayerDetail}
               />
             </Grid>
           ))}

@@ -1,12 +1,10 @@
 import { State } from '@reducers'
 
-import { PlayerItem } from './types.ts'
+import { MarketPlayerItem } from './types.ts'
 
 export const getMarketListings = (state: State) => state.marketListings
 
-export const findPlayerMarketListing = (state: State, platerItem: PlayerItem) => {
+export const findPlayerMarketListing = (state: State, playerItem: MarketPlayerItem) => {
   const listings = getMarketListings(state).listings
-  const player = listings.find((listing) => listing.item.uuid === platerItem.uuid)
-
-  return player
+  return listings.find((listing) => listing.item.uuid === playerItem.uuid)
 }

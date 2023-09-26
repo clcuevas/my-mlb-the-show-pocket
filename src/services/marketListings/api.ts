@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import type { PayloadResponseMarketPlayerListings } from './types'
+import type { DetailedPlayerItem, PayloadResponseMarketPlayerListings } from './types'
 import { API_URL } from '../helpers'
 
 export const marketListingsApi = createApi({
@@ -12,7 +12,11 @@ export const marketListingsApi = createApi({
       // but we should use this instead so we can cache the data
       query: () => 'market-listings/?type=mlb_card',
     }),
+    fetchPlayerMarketListing: builder.mutation<DetailedPlayerItem, string>({
+      query: (playerUUID: string) => ({ url: `player-item?uuid=${playerUUID}`, method: 'GET' }),
+    }),
   }),
 })
 
-export const { useGetPlayerMarketListingsQuery } = marketListingsApi
+export const { useFetchPlayerMarketListingMutation, useGetPlayerMarketListingsQuery } =
+  marketListingsApi
