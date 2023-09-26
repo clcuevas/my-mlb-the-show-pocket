@@ -24,7 +24,8 @@ type Props = {
 }
 
 const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: Props) => {
-  const [fetchPlayer, { isError, isLoading: isFetchingå }] = useFetchPlayerMarketListingMutation()
+  const [fetchPlayer, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
+    useFetchPlayerMarketListingMutation()
 
   const [activeTab, setActiveTab] = React.useState(0)
   const [selectedPlayer, setSelectedPlayer] = React.useState<DetailedPlayerItem | null>(null)
@@ -78,13 +79,21 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
           />
         </CustomTabPanel>
       </Box>
-      <Dialog open={shouldShowPlayerDetail} onClose={() => handleShowPlayerDetail('close')}>
-        <DialogTitle>{`${selectedPlayer?.name} ` ?? ''}Player Details</DialogTitle>
-        <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
-        <DialogContent dividers>
-          {selectedPlayer?.name}, {selectedPlayer?.ovr}
-        </DialogContent>
-        <DialogActions></DialogActions>
+      <Dialog
+        open={shouldShowPlayerDetail && !isPlayerDetailError}
+        onClose={() => handleShowPlayerDetail('close')}>
+        {isFetchingå ? (
+          <DialogContent>Loading...</DialogContent>
+        ) : (
+          <>
+            <DialogTitle>{`${selectedPlayer?.name} ` ?? ''}Player Details</DialogTitle>
+            <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
+            <DialogContent dividers>
+              {selectedPlayer?.name}, {selectedPlayer?.ovr}
+            </DialogContent>
+            <DialogActions></DialogActions>
+          </>
+        )}
       </Dialog>
     </>
   )
