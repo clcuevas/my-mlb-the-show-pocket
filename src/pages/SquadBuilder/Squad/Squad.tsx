@@ -1,13 +1,14 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs } from '@mui/material'
+import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
 
 import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
+import PlayerDetail from '@components/PlayerDetail'
+import { SelectedPlayer } from '@components/PlayerDetail/types'
 import { a11yProps } from '@components/helpers'
 import {
   useFetchPlayerMarketListingMutation,
   MarketPlayerItemListing,
-  DetailedPlayerItem,
 } from '@services/marketListings'
 import type { Bullpen, SquadBuild, StartingPitchingRotation } from '@services/squadBuilder'
 
@@ -28,7 +29,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
     useFetchPlayerMarketListingMutation()
 
   const [activeTab, setActiveTab] = React.useState(0)
-  const [selectedPlayer, setSelectedPlayer] = React.useState<DetailedPlayerItem | null>(null)
+  const [selectedPlayer, setSelectedPlayer] = React.useState<SelectedPlayer | null>(null)
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
 
   const handleChange = React.useCallback(
@@ -48,7 +49,11 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
       }
 
       setShouldShowPlayerDetail(open)
-      setSelectedPlayer(playerDetail)
+      setSelectedPlayer({
+        ...(playerDetail ?? {}),
+        ['buy_now']: player?.best_buy_price ?? 0,
+        ['sell_now']: player?.best_buy_price ?? 0,
+      } as SelectedPlayer)
     },
     [fetchPlayer]
   )
@@ -89,9 +94,8 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
             <DialogTitle>{`${selectedPlayer?.name} ` ?? ''}Player Details</DialogTitle>
             <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
             <DialogContent dividers>
-              {selectedPlayer?.name}, {selectedPlayer?.ovr}
+              <PlayerDetail player={selectedPlayer} />
             </DialogContent>
-            <DialogActions></DialogActions>
           </>
         )}
       </Dialog>
