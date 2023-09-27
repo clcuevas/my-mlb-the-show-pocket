@@ -21,3 +21,13 @@ export const updateBullpen = createActionWithPayload<{
 export const updateBullpenResult = createActionWithPayload<{ bullpen: Bullpen }>(
   'UPDATE_SQUAD_BULLPEN__RESULT'
 )
+
+export const updateStartingRotation = createActionWithPayload<{
+  player: MarketPlayerItemListing
+  index: number
+  type?: 'remove'
+}>('UPDATE_STARTING_ROTATION')
+export const updateStartingRotationResult = createActionWithPayload<{
+  squad: SquadBuild
+  startingPitchingRotation: StartingPitchingRotation
+}>('UPDATE_STARTING_ROTATION__RESULT')

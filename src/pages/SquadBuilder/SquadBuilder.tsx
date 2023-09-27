@@ -7,16 +7,11 @@ import styled from 'styled-components'
 
 import { State } from '@reducers'
 import type { MarketPlayerItemListing } from '@services/marketListings'
-import type { Position as PositionType } from '@services/squadBuilder'
 import * as squadBuilderService from '@services/squadBuilder'
 
 import SavedPlayers from './SavedPlayers'
 import Squad from './Squad'
-
-type DropItem = {
-  id: string
-  player: MarketPlayerItemListing
-}
+import type { OnDrop, OnRemove } from './types'
 
 const Style = {
   Container: styled(Grid)`
@@ -32,28 +27,47 @@ const SquadBuilder = () => {
   )
 
   const handleOnPositionClear = React.useCallback(
-    (player: MarketPlayerItemListing, position: PositionType) => {
-      dispatch(
-        squadBuilderService.updateSquadBuild({
-          player,
-          position,
-          isMainSP: position === 'SP',
-          type: 'remove',
-        })
-      )
+    ({ squadType, player, index, pos: position }: OnRemove) => {
+      switch (squadType) {
+        case 'bullpen':
+          dispatch(squadBuilderService.updateBullpen({ player, index: index ?? 0, type: 'remove' }))
+          return
+        case 'starting_rotation':
+          dispatch(
+            squadBuilderService.updateStartingRotation({
+              player,
+              index: index ?? 0,
+              type: 'remove',
+            })
+          )
+          return
+        default:
+          dispatch(
+            squadBuilderService.updateSquadBuild({
+              player,
+              position,
+              isMainSP: position === 'MAIN_SP',
+              type: 'remove',
+            })
+          )
+      }
     },
     [dispatch]
   )
   const handleOnCardDrop = React.useCallback(
-    (
-      item: DropItem,
-      position: PositionType,
-      type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench',
-      index?: number
-    ) => {
+    ({ item, index, type, actionType, position }: OnDrop) => {
       switch (type) {
         case 'bullpen':
           dispatch(squadBuilderService.updateBullpen({ player: item.player, index: index ?? 0 }))
+          return
+        case 'starting_rotation':
+          dispatch(
+            squadBuilderService.updateStartingRotation({
+              player: item.player,
+              index: index ?? 0,
+              type: actionType,
+            })
+          )
           return
         default:
           dispatch(

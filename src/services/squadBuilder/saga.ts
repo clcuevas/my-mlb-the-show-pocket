@@ -14,6 +14,7 @@ import { isObjKey } from '../helpers'
 
 type UpdateSquadBuild = ReturnType<typeof actions.updateSquadBuild>
 type UpdateSquadBullpen = ReturnType<typeof actions.updateBullpen>
+type UpdateStartingRotation = ReturnType<typeof actions.updateStartingRotation>
 
 type SquadBuildState = {
   bullpen: Bullpen
@@ -44,7 +45,7 @@ function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
     const startingRotation = [...squadBuild.startingPitchingRotation]
 
     if (isMainSP) {
-      startingRotation[0] = { ...startingRotation[0], player }
+      startingRotation[0] = { ...startingRotation[0], player: shouldRemove ? null : player }
     }
 
     yield put(actions.updateSquadBuildResult({ squad, startingPitchingRotation: startingRotation }))
@@ -71,7 +72,30 @@ function* updateSquadBullpen(action: UpdateSquadBullpen): SagaIterator {
   }
 }
 
+function* updateStartingRotation(action: UpdateStartingRotation): SagaIterator {
+  try {
+    const { player, index, type } = action.payload
+
+    const squadBuild: SquadBuildState = yield select(view.getSquadBuild)
+    const startingRotation = [...squadBuild.startingPitchingRotation]
+    const squad = { ...squadBuild.squad }
+
+    const isMainSP = index === 0
+    const removePlayer = type && type === 'remove'
+
+    startingRotation[index] = { position: Positions.SP, player: removePlayer ? null : player }
+    squad[Positions.MAIN_SP] = isMainSP ? (removePlayer ? null : player) : squad[Positions.MAIN_SP]
+
+    yield put(
+      actions.updateStartingRotationResult({ squad, startingPitchingRotation: startingRotation })
+    )
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export default function* saga(): SagaIterator<void> {
   yield takeEvery('UPDATE_SQUAD_BUILD', updateSquadBuild)
   yield takeEvery('UPDATE_SQUAD_BULLPEN', updateSquadBullpen)
+  yield takeEvery('UPDATE_STARTING_ROTATION', updateStartingRotation)
 }

@@ -1,18 +1,26 @@
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
+import { Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material'
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 
 import { MarketPlayerItemListing } from '@services/marketListings'
-import { Position as PositionType } from '@services/squadBuilder'
+import { Position as PositionType, Positions } from '@services/squadBuilder'
 
-import type { DropItem } from './types'
+import type { DropItem, OnDrop, OnRemove } from './types'
+
+const CardResponsiveSettings = {
+  width: { md: '150px', lg: '200px' },
+  height: { md: '225px', lg: '275px' },
+}
 
 const Style = {
   Position: styled(Grid)`
     text-align: center;
   `,
   Card: styled(Card)`
+    display: flex;
+    flex-direction: column;
+
     position: relative;
 
     &:hover .action {
@@ -30,7 +38,10 @@ const Style = {
     }
   `,
   CardContent: styled(CardContent)`
-    padding: 0;
+    flex: 0;
+
+    padding: 10px 10px 0 10px;
+    text-align: left;
   `,
   CardActionArea: styled.div`
     background: rgba(0, 0, 0, 0.6);
@@ -38,8 +49,13 @@ const Style = {
     opacity: 1;
     position: absolute;
 
-    height: 275px;
-    width: 200px;
+    height: 100%;
+    width: 100%;
+  `,
+  CardMedia: styled(CardMedia)`
+    flex: 2;
+
+    background-size: 100% 100%;
   `,
 }
 
@@ -48,27 +64,51 @@ type Props = {
   position: PositionType
   type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
   index?: number
-  onDrop: (
-    item: DropItem,
-    pos: PositionType,
-    type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench',
-    index?: number
-  ) => void
-  onRemove: (player: MarketPlayerItemListing, pos: PositionType) => void
+  onDrop: (onDropParam: OnDrop) => void
+  onRemove: (onRemoveParam: OnRemove) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
 }
 
-const Position = ({ player, position, type, onDrop, onRemove }: Props) => {
+const Position = ({
+  player,
+  position,
+  index,
+  type,
+  onDrop,
+  onRemove,
+  onShowPlayerDetail,
+}: Props) => {
   const [selectedPosition, setSelectedPosition] = React.useState('')
 
-  const [_, dropRef] = useDrop(() => ({
-    accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
-    drop: (item: DropItem) => {
-      onDrop(item, position, type)
-    },
-    collect: (monitor) => ({
-      didDrop: monitor.didDrop(),
+  const [_collectObj, dropRef] = useDrop(
+    () => ({
+      accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
+      canDrop: ({ player }: DropItem) => {
+        const playerPosition = player.item.display_position
+        const bullpenPositions = [Positions.CP, Positions.RP] as PositionType[]
+
+        switch (position) {
+          case Positions.MAIN_SP:
+            return playerPosition === Positions.SP && type === 'main_squad'
+          case Positions.SP:
+            return playerPosition === Positions.SP && type === 'starting_rotation'
+          case Positions.RP:
+            return type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
+          case Positions.CP:
+            return type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
+          default:
+            return true
+        }
+      },
+      drop: (item: DropItem) => {
+        onDrop({ index, item, position, type })
+      },
+      collect: (monitor) => ({
+        canDrop: !!monitor.canDrop(),
+      }),
     }),
-  }))
+    [player]
+  )
 
   React.useEffect(() => {
     const _position = position === 'MAIN_SP' ? 'SP' : position
@@ -77,12 +117,15 @@ const Position = ({ player, position, type, onDrop, onRemove }: Props) => {
 
   return (
     <Style.Position ref={dropRef} item xs="auto">
-      <Style.Card
-        sx={{ width: { md: '150px', lg: '200px' }, height: { md: '225px', lg: '275px' } }}>
+      <Style.Card sx={CardResponsiveSettings}>
         {player != null ? (
           <>
             <Style.CardActionArea className="action">
-              <Button type="button" variant="contained" className="action-btn">
+              <Button
+                type="button"
+                variant="contained"
+                className="action-btn"
+                onClick={() => onShowPlayerDetail('show', player)}>
                 Detail
               </Button>
               <Button
@@ -90,16 +133,19 @@ const Position = ({ player, position, type, onDrop, onRemove }: Props) => {
                 variant="contained"
                 color="secondary"
                 className="action-btn"
-                onClick={() => onRemove(player, position)}>
+                onClick={() => onRemove({ player, pos: position, squadType: type, index })}>
                 Remove
               </Button>
             </Style.CardActionArea>
-            <img src={player.item.img} alt={player.item.name} height="210px" width="200px" />
-            <Style.CardContent>
+            <Style.CardMedia
+              image={player.item.img}
+              sx={{ position: 'center', height: { md: 200 } }}
+            />
+            <Style.CardContent sx={{ display: { sx: 'none' } }}>
               <Typography>
                 {player.listing_name}, {player.item.display_position}
               </Typography>
-              <Typography>
+              <Typography variant="body2">
                 Buy: {player.best_buy_price}, Sell: {player.best_sell_price}
               </Typography>
             </Style.CardContent>

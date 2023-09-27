@@ -69,6 +69,19 @@ const reducer = createReducer(initialState, (builder) => {
       loading: false,
       bullpen: payload.bullpen,
     }))
+    .addCase(actions.updateStartingRotation, (state, { payload }) => ({
+      ...state,
+      loading: true,
+      player: payload.player,
+      index: payload.index,
+      type: payload.type,
+    }))
+    .addCase(actions.updateStartingRotationResult, (state, { payload }) => ({
+      ...state,
+      loading: false,
+      squad: payload.squad,
+      startingPitchingRotation: payload.startingPitchingRotation,
+    }))
     .addDefaultCase((state) => state)
 })
 
