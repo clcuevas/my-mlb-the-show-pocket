@@ -12,6 +12,7 @@ type DataSet = {
   data: Data[]
   backgroundColor: string
   label: string
+  barThickness: number
 }
 
 export type Chart = {

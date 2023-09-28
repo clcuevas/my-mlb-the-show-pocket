@@ -122,6 +122,7 @@ export const buildDatasets = (player: SelectedPlayer) => {
       label: set,
       data: getDatasetValues(set, player),
       backgroundColor: getLabelColor(set),
+      barThickness: 20,
     }))
 }
 

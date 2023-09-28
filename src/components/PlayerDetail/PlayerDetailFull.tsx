@@ -18,6 +18,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const Style = {
   ChartContainer: styled.div`
+    margin-bottom: 20px;
     min-width: 900px;
   `,
 }
