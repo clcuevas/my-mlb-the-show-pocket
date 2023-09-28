@@ -86,7 +86,8 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
       </Box>
       <Dialog
         open={shouldShowPlayerDetail && !isPlayerDetailError}
-        onClose={() => handleShowPlayerDetail('close')}>
+        onClose={() => handleShowPlayerDetail('close')}
+        maxWidth="lg">
         {isFetchingå ? (
           <DialogContent>Loading...</DialogContent>
         ) : (
