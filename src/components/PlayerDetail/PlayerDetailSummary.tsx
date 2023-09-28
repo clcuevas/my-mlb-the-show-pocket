@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { SelectedPlayer } from '@components/PlayerDetail/types'
 
 import { constructStatLabel, getTopStats } from './utils'
+import type { Stat } from './types'
 
 const Style = {
   Container: styled.div`
@@ -15,8 +16,6 @@ const Style = {
 type Props = {
   player: SelectedPlayer | null
 }
-
-type Stat = Array<(string | number)[]>
 
 const PlayerDetailSummary = ({ player }: Props) => {
   const [stats, setStats] = React.useState<Stat>([])

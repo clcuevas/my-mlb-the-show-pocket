@@ -1,4 +1,7 @@
 import { SelectedPlayer } from '@components/PlayerDetail/types'
+import Color from '@styles/Color'
+
+import type { Stat } from './types'
 
 export const pitchingStats = [
   'stamina',
@@ -69,4 +72,63 @@ export const getTopStats = (player: SelectedPlayer, numOfTopStats = 5) => {
 export const constructStatLabel = (key: string) => {
   const labelItems = key.split('_').map((item) => `${item.charAt(0).toUpperCase()}${item.slice(1)}`)
   return labelItems.length > 0 ? labelItems.join(' ') : labelItems[0]
+}
+
+export const CHART_LABELS = {
+  pitching: pitchingStats.map((value) => constructStatLabel(value)),
+  fielding: fieldingStats.map((value) => constructStatLabel(value)),
+  batting: battingStats.map((value) => constructStatLabel(value)),
+}
+
+const getLabelColor = (label: string) => {
+  switch (label) {
+    case 'Batting':
+      return Color.BLUE
+    case 'Fielding':
+      return Color.GREEN
+    default:
+      return Color.RED
+  }
+}
+
+const getDatasetValues = (label: string, player: SelectedPlayer) => {
+  const isPitcher = !player['is_hitter']
+
+  return Object.entries(player)
+    .flatMap(([key, value]) => {
+      if (isPitcher && pitchingStats.includes(key) && label === 'Pitching') {
+        return { x: constructStatLabel(key), y: value }
+      } else if (!isPitcher && label === 'Batting' && battingStats.includes(key)) {
+        return { x: constructStatLabel(key), y: value }
+      } else if (!isPitcher && label === 'Fielding' && fieldingStats.includes(key)) {
+        return { x: constructStatLabel(key), y: value }
+      }
+    })
+    .filter((data) => data != null)
+}
+
+export const buildDatasets = (player: SelectedPlayer) => {
+  const datasets = ['Batting', 'Fielding', 'Pitching']
+
+  return datasets
+    .filter((set) => {
+      if (player['is_hitter'] && (set === 'Batting' || set === 'Fielding')) {
+        return set
+      } else if (!player['is_hitter'] && set === 'Pitching') {
+        return set
+      }
+    })
+    .map((set) => ({
+      label: set,
+      data: getDatasetValues(set, player),
+      backgroundColor: getLabelColor(set),
+    }))
+}
+
+export const buildHorizontalLabels = (isPitcher: boolean) => {
+  if (isPitcher) {
+    return CHART_LABELS.pitching
+  }
+
+  return [...CHART_LABELS.batting, ...CHART_LABELS.fielding]
 }

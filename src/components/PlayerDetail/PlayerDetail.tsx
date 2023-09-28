@@ -23,7 +23,11 @@ const PlayerDetail = ({ player }: Props) => {
 
   return (
     <>
-      {showFullDetails ? <PlayerDetailFull /> : <PlayerDetailSummary player={player} />}
+      {showFullDetails ? (
+        <PlayerDetailFull player={player} />
+      ) : (
+        <PlayerDetailSummary player={player} />
+      )}
       <Style.Actions direction="row" justifyContent="space-between">
         <Button type="button" variant="outlined" onClick={handleShowFullDetailsToggle}>
           Show {showFullDetails ? 'Less' : 'More'}
