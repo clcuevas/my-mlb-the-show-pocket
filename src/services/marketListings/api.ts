@@ -12,11 +12,11 @@ export const marketListingsApi = createApi({
       // but we should use this instead so we can cache the data
       query: () => 'market-listings/?type=mlb_card',
     }),
-    fetchPlayerMarketListing: builder.mutation<DetailedPlayerItem, string>({
+    fetchPlayerItemDetails: builder.mutation<DetailedPlayerItem, string>({
       query: (playerUUID: string) => ({ url: `player-item?uuid=${playerUUID}`, method: 'GET' }),
     }),
   }),
 })
 
-export const { useFetchPlayerMarketListingMutation, useGetPlayerMarketListingsQuery } =
+export const { useFetchPlayerItemDetailsMutation, useGetPlayerMarketListingsQuery } =
   marketListingsApi

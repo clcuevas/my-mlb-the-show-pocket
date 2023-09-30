@@ -1,8 +1,6 @@
 import { SelectedPlayer } from '@components/PlayerDetail/types'
 import Color from '@styles/Color'
 
-import type { Stat } from './types'
-
 export const pitchingStats = [
   'stamina',
   'pitching_clutch',

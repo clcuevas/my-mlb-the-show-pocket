@@ -3,7 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import { type MarketPlayerItemListing } from '@services/marketListings'
-import { Positions, type SquadBuild } from '@services/squadBuilder'
+import { type Position as PositionType, Positions, type SquadBuild } from '@services/squadBuilder'
 
 import type { OnDrop, OnRemove } from '../types'
 import Position from '../Position'
@@ -31,11 +31,12 @@ const Style = {
 type Props = {
   squad: SquadBuild
   onDrop: (onDropParam: OnDrop) => void
+  onPositionSearch: (positionSelected: PositionType) => void
   onRemove: (onRemoveParam: OnRemove) => void
   onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
 }
 
-const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
+const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDetail }: Props) => {
   return (
     <Style.SquadContainer container justifyContent="center" direction="column" alignItems="center">
       <Style.OutfieldContainer
@@ -50,6 +51,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad.LF}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
         <Position
@@ -58,6 +60,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad.CF}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
         <Position
@@ -66,6 +69,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad.RF}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
       </Style.OutfieldContainer>
@@ -81,6 +85,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad.SS}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
         <Position
@@ -89,6 +94,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad['2B']}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
       </Style.SecondShortContainer>
@@ -104,6 +110,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad['3B']}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
         <Position
@@ -112,6 +119,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad.MAIN_SP}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
         <Position
@@ -120,6 +128,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad['1B']}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
       </Style.ThirdPitcherFirstContainer>
@@ -130,6 +139,7 @@ const MainSquad = ({ squad, onDrop, onRemove, onShowPlayerDetail }: Props) => {
           player={squad.C}
           type="main_squad"
           onRemove={onRemove}
+          onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
       </Style.CatcherContainer>

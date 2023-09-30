@@ -66,6 +66,7 @@ type Props = {
   index?: number
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
+  onSearch: (position: PositionType) => void
   onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
 }
 
@@ -76,9 +77,10 @@ const Position = ({
   type,
   onDrop,
   onRemove,
+  onSearch,
   onShowPlayerDetail,
 }: Props) => {
-  const [selectedPosition, setSelectedPosition] = React.useState('')
+  const [selectedPosition, setSelectedPosition] = React.useState<PositionType | string>('')
 
   const [_collectObj, dropRef] = useDrop(
     () => ({
@@ -118,9 +120,9 @@ const Position = ({
   return (
     <Style.Position ref={dropRef} item xs="auto">
       <Style.Card sx={CardResponsiveSettings}>
-        {player != null ? (
-          <>
-            <Style.CardActionArea className="action">
+        <Style.CardActionArea className="action">
+          {player != null ? (
+            <>
               <Button
                 type="button"
                 variant="contained"
@@ -136,7 +138,19 @@ const Position = ({
                 onClick={() => onRemove({ player, pos: position, squadType: type, index })}>
                 Remove
               </Button>
-            </Style.CardActionArea>
+            </>
+          ) : (
+            <Button
+              type="button"
+              variant="contained"
+              color="secondary"
+              onClick={() => onSearch(position)}>
+              Search
+            </Button>
+          )}
+        </Style.CardActionArea>
+        {player != null ? (
+          <>
             <Style.CardMedia
               image={player.item.img}
               sx={{ position: 'center', height: { md: 200 } }}

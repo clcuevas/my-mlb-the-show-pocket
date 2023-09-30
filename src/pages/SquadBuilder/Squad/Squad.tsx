@@ -5,12 +5,18 @@ import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetail from '@components/PlayerDetail'
 import { SelectedPlayer } from '@components/PlayerDetail/types'
+import MarketplaceModal from '@components/Search/MarketplaceModal'
 import { a11yProps } from '@components/helpers'
 import {
-  useFetchPlayerMarketListingMutation,
+  useFetchPlayerItemDetailsMutation,
   MarketPlayerItemListing,
 } from '@services/marketListings'
-import type { Bullpen, SquadBuild, StartingPitchingRotation } from '@services/squadBuilder'
+import type {
+  Bullpen,
+  Position,
+  SquadBuild,
+  StartingPitchingRotation,
+} from '@services/squadBuilder'
 
 import Main from './Main'
 import Pitchers from './Pitchers'
@@ -25,12 +31,14 @@ type Props = {
 }
 
 const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: Props) => {
-  const [fetchPlayer, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
-    useFetchPlayerMarketListingMutation()
+  const [fetchPlayerItemDetails, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
+    useFetchPlayerItemDetailsMutation()
 
   const [activeTab, setActiveTab] = React.useState(0)
   const [selectedPlayer, setSelectedPlayer] = React.useState<SelectedPlayer | null>(null)
+  const [selectedPosition, setSelectedPosition] = React.useState<Position | string>('')
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
+  const [shouldShowMarketplaceSearch, setShouldShowMarketplaceSearch] = React.useState(false)
 
   const handleChange = React.useCallback(
     (_e: React.SyntheticEvent, newValue: number) => {
@@ -45,7 +53,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
       let playerDetail = null
 
       if (open && player) {
-        playerDetail = await fetchPlayer(player.item.uuid).unwrap()
+        playerDetail = await fetchPlayerItemDetails(player.item.uuid).unwrap()
       }
 
       setShouldShowPlayerDetail(open)
@@ -55,7 +63,18 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
         ['sell_now']: player?.best_buy_price ?? 0,
       } as SelectedPlayer)
     },
-    [fetchPlayer]
+    [fetchPlayerItemDetails]
+  )
+
+  const handleOnPositionSearch = React.useCallback(
+    (positionSelected: Position) => {
+      if (selectedPosition !== positionSelected) {
+        setSelectedPosition(positionSelected)
+      }
+
+      setShouldShowMarketplaceSearch(true)
+    },
+    [selectedPosition]
   )
 
   return (
@@ -69,6 +88,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
           <Main
             squad={squad}
             onDrop={onDrop}
+            onPositionSearch={handleOnPositionSearch}
             onRemove={onRemove}
             onShowPlayerDetail={handleShowPlayerDetail}
           />
@@ -79,13 +99,14 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
             startingPitchingRotation={startingPitchingRotation}
             mainSP={squad['MAIN_SP']}
             onDrop={onDrop}
+            onPositionSearch={handleOnPositionSearch}
             onRemove={onRemove}
             onShowPlayerDetail={handleShowPlayerDetail}
           />
         </CustomTabPanel>
       </Box>
       <Dialog
-        open={shouldShowPlayerDetail && !isPlayerDetailError}
+        open={shouldShowPlayerDetail && !isPlayerDetailError && !shouldShowMarketplaceSearch}
         onClose={() => handleShowPlayerDetail('close')}
         maxWidth="lg">
         {isFetchingå ? (
@@ -100,6 +121,11 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
           </>
         )}
       </Dialog>
+      <MarketplaceModal
+        position={selectedPosition}
+        isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
+        onModalClose={() => setShouldShowMarketplaceSearch(false)}
+      />
     </>
   )
 }
