@@ -5,7 +5,9 @@ import {
   CardContent,
   CardActionArea,
   Grid,
+  Pagination,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material'
 import * as React from 'react'
@@ -43,7 +45,13 @@ const Style = {
 }
 
 const Marketplace = () => {
-  const { data, error, isLoading } = useGetPlayerMarketListingsQuery()
+  const [pageCounter, setPageCounter] = React.useState(1)
+
+  const { data, error, isLoading, isFetching } = useGetPlayerMarketListingsQuery(pageCounter)
+
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPageCounter(value)
+  }
 
   if (error) {
     return (
@@ -65,7 +73,7 @@ const Marketplace = () => {
 
   return (
     <Container>
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <Style.LoadingContainer
           container
           spacing={{ xs: 2, md: 3 }}
@@ -79,24 +87,34 @@ const Marketplace = () => {
           ))}
         </Style.LoadingContainer>
       ) : (
-        <Style.CardListingsContainer>
-          {data != null &&
-            data?.listings?.map((listing) => (
-              <div key={`plater-item-${listing.item.uuid}`}>
-                <Card sx={{ width: 210, margin: '10px' }}>
-                  <CardActionArea onClick={() => console.log('clicking list item')}>
-                    <img src={listing.item.img} alt={listing.item.name} />
-                    <CardContent>
-                      <Typography variant="h6">
-                        {listing.item.name}, {listing.item.ovr}
-                      </Typography>
-                      <Typography>{listing.item.series} Series</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </div>
-            ))}
-        </Style.CardListingsContainer>
+        <>
+          <Style.CardListingsContainer>
+            {data != null &&
+              data?.listings?.map((listing, index) => (
+                <div key={`player-item-${listing.item.uuid}-${index}`}>
+                  <Card sx={{ width: 210, margin: '10px' }}>
+                    <CardActionArea onClick={() => console.log('clicking list item')}>
+                      <img src={listing.item.img} alt={listing.item.name} />
+                      <CardContent>
+                        <Typography variant="h6">
+                          {listing.item.name}, {listing.item.ovr}
+                        </Typography>
+                        <Typography>{listing.item.series} Series</Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </div>
+              ))}
+          </Style.CardListingsContainer>
+          <Stack alignItems="center" mb="30px">
+            <Pagination
+              count={data?.total_pages}
+              page={pageCounter}
+              shape="rounded"
+              onChange={handleChange}
+            />
+          </Stack>
+        </>
       )}
     </Container>
   )
