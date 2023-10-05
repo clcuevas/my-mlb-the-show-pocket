@@ -1,16 +1,16 @@
-import { List, ListItem, Typography } from '@mui/material'
+import { List, ListItem } from '@mui/material'
 import * as React from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
+import SmallCard from '@components/cards/SmallCard'
 import type { MarketPlayerItemListing } from '@services/marketListings'
 
 const Style = {
   Container: styled.div`
-    height: 100%;
-  `,
-  List: styled(List)`
-    overflow-y: auto;
+    height: 90vh;
+    margin-top: 25px;
+    overflow-y: scroll;
   `,
   ListItem: styled(ListItem)`
     flex-direction: column;
@@ -18,12 +18,10 @@ const Style = {
 
     padding-left: 0px;
 
-    &:hover {
+    &:hover .MuiPaper-root {
       cursor: grab;
     }
   `,
-  ListItemPrimaryText: styled.div``,
-  ListItemSubText: styled.div``,
 }
 
 type Props = {
@@ -54,10 +52,7 @@ const Player = ({ player }: { player: MarketPlayerItemListing }) => {
 
   return (
     <Style.ListItem ref={dragRef}>
-      <Style.ListItemPrimaryText>
-        {player.item.name}, {player.item.display_position}
-      </Style.ListItemPrimaryText>
-      <Style.ListItemSubText>Overall {player.item.ovr}</Style.ListItemSubText>
+      <SmallCard player={player} />
     </Style.ListItem>
   )
 }
@@ -65,12 +60,11 @@ const Player = ({ player }: { player: MarketPlayerItemListing }) => {
 const SavedPlayers = ({ savedPlayers }: Props) => {
   return (
     <Style.Container>
-      <Typography variant="h5">Saved Players</Typography>
-      <Style.List disablePadding>
+      <List disablePadding>
         {savedPlayers.map((player) => (
           <Player key={`saved-player-item-${player.item.uuid}`} player={player} />
         ))}
-      </Style.List>
+      </List>
     </Style.Container>
   )
 }

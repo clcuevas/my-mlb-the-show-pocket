@@ -3,7 +3,11 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import type { MarketPlayerItemListing } from '@services/marketListings'
-import { StartingPitchingRotation, type Bullpen } from '@services/squadBuilder'
+import {
+  StartingPitchingRotation,
+  type Bullpen,
+  type Position as PositionType,
+} from '@services/squadBuilder'
 
 import Position from '../Position'
 import type { OnDrop, OnRemove } from '../types'
@@ -25,6 +29,7 @@ type Props = {
   mainSP: MarketPlayerItemListing | null
   startingPitchingRotation: StartingPitchingRotation
   onDrop: (onDropParam: OnDrop) => void
+  onPositionSearch: (position: PositionType) => void
   onRemove: (onRemoveParam: OnRemove) => void
   onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
 }
@@ -33,6 +38,7 @@ const Pitchers = ({
   bullpen,
   startingPitchingRotation,
   onDrop,
+  onPositionSearch,
   onRemove,
   onShowPlayerDetail,
 }: Props) => {
@@ -50,6 +56,7 @@ const Pitchers = ({
                 index={index}
                 onDrop={onDrop}
                 onRemove={onRemove}
+                onSearch={onPositionSearch}
                 onShowPlayerDetail={onShowPlayerDetail}
               />
             </Grid>
@@ -69,6 +76,7 @@ const Pitchers = ({
                 index={index}
                 onDrop={onDrop}
                 onRemove={onRemove}
+                onSearch={onPositionSearch}
                 onShowPlayerDetail={onShowPlayerDetail}
               />
             </Grid>

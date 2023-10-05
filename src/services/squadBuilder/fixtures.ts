@@ -1,3 +1,5 @@
+import { MarketPlayerItemListing } from '@services/marketListings'
+
 const staticSquad = [
   {
     listing_name: 'Luis Gonzalez',
@@ -824,6 +826,6 @@ const staticSquad = [
       ui_anim_index: 0,
     },
   },
-]
+] as unknown[] as MarketPlayerItemListing[]
 
 export default staticSquad
