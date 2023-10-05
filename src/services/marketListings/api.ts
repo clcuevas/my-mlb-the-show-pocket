@@ -1,17 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import type {
-  DetailedPlayerItem,
-  MarketListingsPayloadResponse,
-  PayloadResponseMarketPlayerListings,
-} from './types'
+import { MarketListingsPayloadResponse, MarketPlayerItemListingsPayloadResponse } from './types'
 import { API_URL } from '../helpers'
+import { DetailedPlayerItem } from '../types'
 
 export const marketListingsApi = createApi({
   reducerPath: 'marketListingsApi',
   baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
   endpoints: (builder) => ({
-    getPlayerMarketListings: builder.query<PayloadResponseMarketPlayerListings, number>({
+    getPlayerMarketListings: builder.query<MarketPlayerItemListingsPayloadResponse, number>({
       query: (page = 1) => `market-listings/?type=mlb_card&page=${page}`,
     }),
     fetchPlayerItemDetails: builder.mutation<DetailedPlayerItem, string>({
