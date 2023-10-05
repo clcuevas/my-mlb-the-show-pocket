@@ -80,21 +80,22 @@ const Marketplace = () => {
         </Style.LoadingContainer>
       ) : (
         <Style.CardListingsContainer>
-          {data?.listings?.map((listing) => (
-            <div key={`plater-item-${listing.item.uuid}`}>
-              <Card sx={{ width: 210, margin: '10px' }}>
-                <CardActionArea onClick={() => console.log('clicking list item')}>
-                  <img src={listing.item.img} alt={listing.item.name} />
-                  <CardContent>
-                    <Typography variant="h6">
-                      {listing.item.name}, {listing.item.ovr}
-                    </Typography>
-                    <Typography>{listing.item.series} Series</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </div>
-          ))}
+          {data != null &&
+            data?.listings?.map((listing) => (
+              <div key={`plater-item-${listing.item.uuid}`}>
+                <Card sx={{ width: 210, margin: '10px' }}>
+                  <CardActionArea onClick={() => console.log('clicking list item')}>
+                    <img src={listing.item.img} alt={listing.item.name} />
+                    <CardContent>
+                      <Typography variant="h6">
+                        {listing.item.name}, {listing.item.ovr}
+                      </Typography>
+                      <Typography>{listing.item.series} Series</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </div>
+            ))}
         </Style.CardListingsContainer>
       )}
     </Container>

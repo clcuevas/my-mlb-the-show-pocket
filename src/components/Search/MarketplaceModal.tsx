@@ -1,34 +1,28 @@
 import {
   Alert,
   AppBar,
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  FormControl,
   List,
   ListItem,
-  MenuItem,
-  Select,
-  TextField,
+  Stack,
   Toolbar,
   Typography,
 } from '@mui/material'
 import * as React from 'react'
-import { Controller, useForm } from 'react-hook-form'
 
-import CloseIconButton from '@components/CloseIconButton'
-import { Positions, type Position } from '@services/squadBuilder'
+import {
+  useFetchMarketListingMutation,
+  type PayloadResponseMarketPlayerListings,
+} from '@services/marketListings'
+import { type Position } from '@services/squadBuilder'
 
-const filteredPositions = Object.values(Positions).filter(
-  (p) => p !== Positions.MAIN_SP && p !== Positions.BENCH
-)
-
-type Form = {
-  ['display_position']: string
-  ['min_rank']: string
-  ['max_rank']: string
-}
+import CloseIconButton from '../CloseIconButton'
+import SmallCard from '../cards/SmallCard'
+import MarketplaceSearch, { type Form as MarketplaceSearchForm } from '../forms/MarketplaceSearch'
 
 type Props = {
   isOpen: boolean
@@ -37,28 +31,49 @@ type Props = {
 }
 
 const MarketplaceModal = ({ isOpen, position, onModalClose }: Props) => {
-  const {
-    control,
-    formState: { defaultValues: formStateDefaultValues, errors },
-    handleSubmit,
-    reset,
-  } = useForm<Form>({
-    defaultValues: { ['display_position']: position, ['min_rank']: '', ['max_rank']: '' },
-  })
+  const [fetchMarketListings] = useFetchMarketListingMutation()
 
-  const handleOnFormSubmit = React.useCallback((data: Form) => {
-    console.log(data)
-  }, [])
+  const [formErrors, setFormErrors] = React.useState<string[]>([])
+  const [marketListings, setMarketListings] =
+    React.useState<PayloadResponseMarketPlayerListings | null>(null)
+  const [searchedPlayer, setSearchedPlayer] = React.useState<unknown | null>(null)
 
-  React.useEffect(() => {
-    if (position !== formStateDefaultValues?.display_position) {
-      reset({
-        ['display_position']: position,
-        ['min_rank']: '',
-        ['max_rank']: '',
-      })
-    }
-  }, [position, formStateDefaultValues?.display_position, reset])
+  const handleOnPlayerSearch = React.useCallback(
+    async (data: MarketplaceSearchForm) => {
+      try {
+        const queryParams = [] as string[][]
+
+        Object.entries(data).forEach(([key, value]) => {
+          if (value && value !== '') {
+            queryParams.push([key, value])
+          }
+        })
+
+        const qp = queryParams.map(([key, value]) => `${key}=${value}`).join('&')
+        // NOTE: Only supporting MLB Card listings for now so we're being explicit
+        // about the type in the queryParams
+        const response = await fetchMarketListings({
+          type: 'mlb_card',
+          queryParams: qp,
+        }).unwrap()
+
+        // RTKQuery handles responses in an opinionated format. When making network requests
+        // (i.e. fetching, etc.) the opinionated format in which a successful response body
+        // should be is { data: NetworkResponseData }. So, what this means is that when unwrap
+        // is called it returns the data key/value which is why we need to update the type
+        // here from unknown to PayloadResponse*
+        //
+        // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
+        //
+        // TODO: Should investigate this a bit more
+        setMarketListings(response as unknown as PayloadResponseMarketPlayerListings)
+      } catch (e) {
+        console.log('NOOOOOOO')
+        console.log(e)
+      }
+    },
+    [fetchMarketListings]
+  )
 
   return (
     <>
@@ -71,57 +86,41 @@ const MarketplaceModal = ({ isOpen, position, onModalClose }: Props) => {
             </Toolbar>
           </AppBar>
           <DialogContent>
-            {Object.keys(errors).length > 0 && (
+            {formErrors.length > 0 && (
               <Alert severity="error">
                 <List>
-                  {Object.entries(errors).map(([key, value]) => (
-                    <ListItem key={`error-${key}`}>{value.message}</ListItem>
+                  {formErrors.map((error, index) => (
+                    <ListItem key={`error-${index}`}>{error}</ListItem>
                   ))}
                 </List>
               </Alert>
             )}
-            <form onSubmit={handleSubmit(handleOnFormSubmit)}>
-              <FormControl>
-                <Controller
-                  control={control}
-                  name="display_position"
-                  defaultValue={formStateDefaultValues?.display_position}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange }, fieldState: { error } }) => (
-                    <Select onChange={onChange} value={value} error={error != null}>
-                      {filteredPositions.map((p) => (
-                        <MenuItem key={`position-${p}`} value={p}>
-                          {p}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="min_rank"
-                  defaultValue={formStateDefaultValues?.min_rank}
-                  rules={{ pattern: /\d*/ }}
-                  render={({ field: { name, value, onBlur, onChange }, fieldState: { error } }) => (
-                    <TextField
-                      type="text"
-                      name={name}
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={error != null}
-                      placeholder="Min Rank"
-                    />
-                  )}
-                />
-              </FormControl>
-            </form>
+            <MarketplaceSearch
+              position={position}
+              onError={setFormErrors}
+              onSubmit={handleOnPlayerSearch}
+            />
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              justifyContent="space-between"
+              sx={{ mt: '20px' }}>
+              {marketListings != null &&
+                marketListings.listings.map((player, index) => (
+                  <Box key={`market-listing-result-${index}`} sx={{ mt: '10px' }}>
+                    <SmallCard player={player} />
+                  </Box>
+                ))}
+            </Stack>
           </DialogContent>
           <DialogActions>
             <Button type="button" variant="outlined" onClick={onModalClose}>
               CANCEL
             </Button>
-            <Button type="button" variant="contained">
+            <Button
+              type="button"
+              variant="contained"
+              disabled={formErrors.length > 0 || searchedPlayer == null}>
               ADD
             </Button>
           </DialogActions>

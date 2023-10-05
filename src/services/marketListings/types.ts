@@ -13,7 +13,7 @@ export type Quirks = {
   img: string
 }
 
-type CommonPlayerInfo = {
+interface CommonPlayerInfo {
   uuid: string
   type: string
   img: string
@@ -96,11 +96,16 @@ export type MarketPlayerItemListing = {
   item: MarketPlayerItem
 }
 
+// TODO: Give the type name a more dynamic name
 export type PayloadResponseMarketPlayerListings = {
   listings: MarketPlayerItemListing[]
   page: number
   ['per_page']: number
   ['total_pages']: number
+}
+
+export type MarketListingsPayloadResponse = {
+  data: PayloadResponseMarketPlayerListings
 }
 
 export type MarketListingsType = 'mlb_card' | 'stadium' | 'equipment' | 'sponsorship' | 'unlockable'

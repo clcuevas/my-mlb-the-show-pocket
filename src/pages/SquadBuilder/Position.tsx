@@ -53,9 +53,8 @@ const Style = {
     width: 100%;
   `,
   CardMedia: styled(CardMedia)`
-    flex: 2;
-
-    background-size: 100% 100%;
+    flex: 2 1 auto;
+    height: 200px;
   `,
 }
 
@@ -151,16 +150,21 @@ const Position = ({
         </Style.CardActionArea>
         {player != null ? (
           <>
-            <Style.CardMedia
+            <CardMedia
+              component="img"
+              alt="Card Image"
+              sx={{ height: { sm: '100px', md: '200px' }, objectFit: 'contain' }}
               image={player.item.img}
-              sx={{ position: 'center', height: { md: 200 } }}
             />
             <Style.CardContent sx={{ display: { sx: 'none' } }}>
               <Typography>
                 {player.listing_name}, {player.item.display_position}
               </Typography>
-              <Typography variant="body2">
-                Buy: {player.best_buy_price}, Sell: {player.best_sell_price}
+              <Typography variant="body2" color="text.secondary">
+                Buy: {player.best_buy_price}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Sell: {player.best_sell_price}
               </Typography>
             </Style.CardContent>
           </>

@@ -3,6 +3,7 @@ import * as React from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
 
+import SmallCard from '@components/cards/SmallCard'
 import type { MarketPlayerItemListing } from '@services/marketListings'
 
 const Style = {
@@ -22,8 +23,6 @@ const Style = {
       cursor: grab;
     }
   `,
-  ListItemPrimaryText: styled.div``,
-  ListItemSubText: styled.div``,
 }
 
 type Props = {
@@ -54,10 +53,7 @@ const Player = ({ player }: { player: MarketPlayerItemListing }) => {
 
   return (
     <Style.ListItem ref={dragRef}>
-      <Style.ListItemPrimaryText>
-        {player.item.name}, {player.item.display_position}
-      </Style.ListItemPrimaryText>
-      <Style.ListItemSubText>Overall {player.item.ovr}</Style.ListItemSubText>
+      <SmallCard player={player} />
     </Style.ListItem>
   )
 }
