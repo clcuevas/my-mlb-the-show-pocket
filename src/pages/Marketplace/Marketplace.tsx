@@ -1,16 +1,9 @@
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import {
-  Container,
-  Card,
-  CardContent,
-  CardActionArea,
-  Grid,
-  Skeleton,
-  Typography,
-} from '@mui/material'
+import { Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
+import Card from '@components/cards/Card'
 import { useGetPlayerMarketListingsQuery } from '@services/marketListings'
 import Color from '@styles/Color'
 
@@ -43,7 +36,13 @@ const Style = {
 }
 
 const Marketplace = () => {
-  const { data, error, isLoading } = useGetPlayerMarketListingsQuery()
+  const [pageCounter, setPageCounter] = React.useState(1)
+
+  const { data, error, isLoading, isFetching } = useGetPlayerMarketListingsQuery(pageCounter)
+
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPageCounter(value)
+  }
 
   if (error) {
     return (
@@ -65,7 +64,7 @@ const Marketplace = () => {
 
   return (
     <Container>
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <Style.LoadingContainer
           container
           spacing={{ xs: 2, md: 3 }}
@@ -79,24 +78,31 @@ const Marketplace = () => {
           ))}
         </Style.LoadingContainer>
       ) : (
-        <Style.CardListingsContainer>
-          {data != null &&
-            data?.listings?.map((listing) => (
-              <div key={`plater-item-${listing.item.uuid}`}>
-                <Card sx={{ width: 210, margin: '10px' }}>
-                  <CardActionArea onClick={() => console.log('clicking list item')}>
-                    <img src={listing.item.img} alt={listing.item.name} />
-                    <CardContent>
+        <>
+          <Style.CardListingsContainer>
+            {data != null &&
+              data?.listings?.map((player, index) => (
+                <div key={`player-item-${player.item.uuid}-${index}`}>
+                  <Card stylingProps={{ width: 210, margin: '10px' }} player={player}>
+                    <>
                       <Typography variant="h6">
-                        {listing.item.name}, {listing.item.ovr}
+                        {player.item.name}, {player.item.ovr}
                       </Typography>
-                      <Typography>{listing.item.series} Series</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </div>
-            ))}
-        </Style.CardListingsContainer>
+                      <Typography>{player.item.series} Series</Typography>
+                    </>
+                  </Card>
+                </div>
+              ))}
+          </Style.CardListingsContainer>
+          <Stack alignItems="center" mb="30px">
+            <Pagination
+              count={data?.total_pages}
+              page={pageCounter}
+              shape="rounded"
+              onChange={handleChange}
+            />
+          </Stack>
+        </>
       )}
     </Container>
   )
