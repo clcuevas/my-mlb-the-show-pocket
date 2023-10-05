@@ -9,7 +9,7 @@ import { State } from '@reducers'
 import type { MarketPlayerItemListing } from '@services/marketListings'
 import * as squadBuilderService from '@services/squadBuilder'
 
-import SavedPlayers from './SavedPlayers'
+import RightPanel from './RightPanel'
 import Squad from './Squad'
 import type { OnDrop, OnRemove } from './types'
 
@@ -109,7 +109,7 @@ const SquadBuilder = () => {
           />
         </Grid>
         <Grid item xs={5} md={3} lg={2}>
-          <SavedPlayers savedPlayers={savedPlayers} />
+          <RightPanel savedPlayers={savedPlayers} />
         </Grid>
       </Style.Container>
     </DndProvider>

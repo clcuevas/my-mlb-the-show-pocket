@@ -1,4 +1,4 @@
-import { List, ListItem, Typography } from '@mui/material'
+import { List, ListItem } from '@mui/material'
 import * as React from 'react'
 import { useDrag } from 'react-dnd'
 import styled from 'styled-components'
@@ -8,10 +8,9 @@ import type { MarketPlayerItemListing } from '@services/marketListings'
 
 const Style = {
   Container: styled.div`
-    height: 100%;
-  `,
-  List: styled(List)`
-    overflow-y: auto;
+    height: 90vh;
+    margin-top: 25px;
+    overflow-y: scroll;
   `,
   ListItem: styled(ListItem)`
     flex-direction: column;
@@ -61,12 +60,11 @@ const Player = ({ player }: { player: MarketPlayerItemListing }) => {
 const SavedPlayers = ({ savedPlayers }: Props) => {
   return (
     <Style.Container>
-      <Typography variant="h5">Saved Players</Typography>
-      <Style.List disablePadding>
+      <List disablePadding>
         {savedPlayers.map((player) => (
           <Player key={`saved-player-item-${player.item.uuid}`} player={player} />
         ))}
-      </Style.List>
+      </List>
     </Style.Container>
   )
 }

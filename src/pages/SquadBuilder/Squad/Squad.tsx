@@ -41,13 +41,6 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
   const [shouldShowMarketplaceSearch, setShouldShowMarketplaceSearch] = React.useState(false)
 
-  const handleChange = React.useCallback(
-    (_e: React.SyntheticEvent, newValue: number) => {
-      setActiveTab(newValue)
-    },
-    [setActiveTab]
-  )
-
   const handleShowPlayerDetail = React.useCallback(
     async (handleType: 'show' | 'close', player?: MarketPlayerItemListing) => {
       const open = handleType === 'show'
@@ -90,7 +83,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
   return (
     <>
       <Box sx={{ pl: '55px', pr: '15px' }}>
-        <Tabs value={activeTab} onChange={handleChange} centered>
+        <Tabs value={activeTab} onChange={(_e, value) => setActiveTab(value)} centered>
           <Tab label="Main Squad" {...a11yProps(0)} />
           <Tab label="Pitchers" {...a11yProps(1)} />
         </Tabs>
