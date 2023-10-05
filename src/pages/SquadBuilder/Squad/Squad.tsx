@@ -26,11 +26,12 @@ type Props = {
   bullpen: Bullpen
   squad: SquadBuild
   startingPitchingRotation: StartingPitchingRotation
+  onAdd: (player: MarketPlayerItemListing, position: Position) => void
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
 }
 
-const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: Props) => {
+const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemove }: Props) => {
   const [fetchPlayerItemDetails, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
     useFetchPlayerItemDetailsMutation()
 
@@ -75,6 +76,15 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
       setShouldShowMarketplaceSearch(true)
     },
     [selectedPosition]
+  )
+
+  const handleOnPlayerAdd = React.useCallback(
+    (player: MarketPlayerItemListing) => {
+      if (selectedPosition !== '') {
+        onAdd(player, selectedPosition as Position)
+      }
+    },
+    [selectedPosition, onAdd]
   )
 
   return (
@@ -124,6 +134,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onDrop, onRemove }: P
       <MarketplaceModal
         position={selectedPosition}
         isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
+        onAdd={handleOnPlayerAdd}
         onModalClose={() => setShouldShowMarketplaceSearch(false)}
       />
     </>

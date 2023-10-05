@@ -82,6 +82,18 @@ const SquadBuilder = () => {
     },
     [dispatch]
   )
+  const handleOnCardAdd = React.useCallback(
+    (player: MarketPlayerItemListing, position: squadBuilderService.Position) => {
+      dispatch(
+        squadBuilderService.updateSquadBuild({
+          player,
+          position,
+          isMainSP: position === 'MAIN_SP', // TODO: Do not allow non-SP players
+        })
+      )
+    },
+    [dispatch]
+  )
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -91,12 +103,13 @@ const SquadBuilder = () => {
             bullpen={bullpen}
             squad={squad}
             startingPitchingRotation={startingPitchingRotation}
+            onAdd={handleOnCardAdd}
             onDrop={handleOnCardDrop}
             onRemove={handleOnPositionClear}
           />
         </Grid>
         <Grid item xs={5} md={3} lg={2}>
-          <SavedPlayers savedPlayers={savedPlayers as MarketPlayerItemListing[]} />
+          <SavedPlayers savedPlayers={savedPlayers} />
         </Grid>
       </Style.Container>
     </DndProvider>

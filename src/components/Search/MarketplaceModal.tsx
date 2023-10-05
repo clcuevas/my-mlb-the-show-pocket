@@ -3,6 +3,7 @@ import {
   AppBar,
   Box,
   Button,
+  ButtonBase,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,10 +14,12 @@ import {
   Typography,
 } from '@mui/material'
 import * as React from 'react'
+import styled from 'styled-components'
 
 import {
   useFetchMarketListingMutation,
   type PayloadResponseMarketPlayerListings,
+  type MarketPlayerItemListing,
 } from '@services/marketListings'
 import { type Position } from '@services/squadBuilder'
 
@@ -24,19 +27,30 @@ import CloseIconButton from '../CloseIconButton'
 import SmallCard from '../cards/SmallCard'
 import MarketplaceSearch, { type Form as MarketplaceSearchForm } from '../forms/MarketplaceSearch'
 
+const Style = {
+  CardButton: styled(ButtonBase)`
+    &.selected {
+      .MuiPaper-outlined {
+        border: 2px solid gray;
+      }
+    }
+  `,
+}
+
 type Props = {
   isOpen: boolean
   position: Position | string
+  onAdd: (selectedPlayer: MarketPlayerItemListing) => void
   onModalClose: () => void
 }
 
-const MarketplaceModal = ({ isOpen, position, onModalClose }: Props) => {
+const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   const [fetchMarketListings] = useFetchMarketListingMutation()
 
   const [formErrors, setFormErrors] = React.useState<string[]>([])
   const [marketListings, setMarketListings] =
     React.useState<PayloadResponseMarketPlayerListings | null>(null)
-  const [searchedPlayer, setSearchedPlayer] = React.useState<unknown | null>(null)
+  const [selectedPlayer, setSelectedPlayer] = React.useState<MarketPlayerItemListing | null>(null)
 
   const handleOnPlayerSearch = React.useCallback(
     async (data: MarketplaceSearchForm) => {
@@ -108,7 +122,14 @@ const MarketplaceModal = ({ isOpen, position, onModalClose }: Props) => {
               {marketListings != null &&
                 marketListings.listings.map((player, index) => (
                   <Box key={`market-listing-result-${index}`} sx={{ mt: '10px' }}>
-                    <SmallCard player={player} />
+                    <Style.CardButton
+                      type="button"
+                      className={`${
+                        selectedPlayer?.item.uuid === player.item.uuid ? 'selected' : ''
+                      }`}
+                      onClick={() => setSelectedPlayer(player)}>
+                      <SmallCard player={player} />
+                    </Style.CardButton>
                   </Box>
                 ))}
             </Stack>
@@ -120,7 +141,18 @@ const MarketplaceModal = ({ isOpen, position, onModalClose }: Props) => {
             <Button
               type="button"
               variant="contained"
-              disabled={formErrors.length > 0 || searchedPlayer == null}>
+              disabled={formErrors.length > 0 || selectedPlayer === null}
+              onClick={() => {
+                if (selectedPlayer != null) {
+                  onAdd(selectedPlayer)
+                  // Clear everything
+                  setMarketListings(null)
+                  setSelectedPlayer(null)
+                  setFormErrors([])
+                  // Close Modal
+                  onModalClose()
+                }
+              }}>
               ADD
             </Button>
           </DialogActions>
