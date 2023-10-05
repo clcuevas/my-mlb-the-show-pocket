@@ -5,7 +5,7 @@ import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetail from '@components/PlayerDetail'
 import { SelectedPlayer } from '@components/PlayerDetail/types'
-import MarketplaceModal from '@components/Search/MarketplaceModal'
+import MarketplaceModal from '@components/modals/MarketplaceModal'
 import { a11yProps } from '@components/helpers'
 import {
   useFetchPlayerItemDetailsMutation,

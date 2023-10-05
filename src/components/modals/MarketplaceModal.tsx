@@ -18,8 +18,8 @@ import styled from 'styled-components'
 
 import {
   useFetchMarketListingMutation,
-  type PayloadResponseMarketPlayerListings,
   type MarketPlayerItemListing,
+  type MarketPlayerItemListingsPayloadResponse,
 } from '@services/marketListings'
 import { type Position } from '@services/squadBuilder'
 
@@ -49,7 +49,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
 
   const [formErrors, setFormErrors] = React.useState<string[]>([])
   const [marketListings, setMarketListings] =
-    React.useState<PayloadResponseMarketPlayerListings | null>(null)
+    React.useState<MarketPlayerItemListingsPayloadResponse | null>(null)
   const [selectedPlayer, setSelectedPlayer] = React.useState<MarketPlayerItemListing | null>(null)
 
   const handleOnPlayerSearch = React.useCallback(
@@ -80,7 +80,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
         // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
         //
         // TODO: Should investigate this a bit more
-        setMarketListings(response as unknown as PayloadResponseMarketPlayerListings)
+        setMarketListings(response as unknown as MarketPlayerItemListingsPayloadResponse)
       } catch (e) {
         console.log('NOOOOOOO')
         console.log(e)

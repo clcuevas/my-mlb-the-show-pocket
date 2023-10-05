@@ -1,4 +1,4 @@
-import { DetailedPlayerItem } from '@services/marketListings'
+import { DetailedPlayerItem } from '@services/types'
 
 export interface SelectedPlayer extends DetailedPlayerItem {
   ['buy_now']: number
