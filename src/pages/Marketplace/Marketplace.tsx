@@ -1,18 +1,9 @@
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import {
-  Container,
-  Card,
-  CardContent,
-  CardActionArea,
-  Grid,
-  Pagination,
-  Skeleton,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
+import Card from '@components/cards/Card'
 import { useGetPlayerMarketListingsQuery } from '@services/marketListings'
 import Color from '@styles/Color'
 
@@ -90,18 +81,15 @@ const Marketplace = () => {
         <>
           <Style.CardListingsContainer>
             {data != null &&
-              data?.listings?.map((listing, index) => (
-                <div key={`player-item-${listing.item.uuid}-${index}`}>
-                  <Card sx={{ width: 210, margin: '10px' }}>
-                    <CardActionArea onClick={() => console.log('clicking list item')}>
-                      <img src={listing.item.img} alt={listing.item.name} />
-                      <CardContent>
-                        <Typography variant="h6">
-                          {listing.item.name}, {listing.item.ovr}
-                        </Typography>
-                        <Typography>{listing.item.series} Series</Typography>
-                      </CardContent>
-                    </CardActionArea>
+              data?.listings?.map((player, index) => (
+                <div key={`player-item-${player.item.uuid}-${index}`}>
+                  <Card stylingProps={{ width: 210, margin: '10px' }} player={player}>
+                    <>
+                      <Typography variant="h6">
+                        {player.item.name}, {player.item.ovr}
+                      </Typography>
+                      <Typography>{player.item.series} Series</Typography>
+                    </>
                   </Card>
                 </div>
               ))}
