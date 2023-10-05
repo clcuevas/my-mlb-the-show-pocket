@@ -19,7 +19,7 @@ const Style = {
 
     padding-left: 0px;
 
-    &:hover {
+    &:hover .MuiPaper-root {
       cursor: grab;
     }
   `,
