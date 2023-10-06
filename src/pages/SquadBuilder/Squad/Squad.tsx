@@ -55,6 +55,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
         ...(playerDetail ?? {}),
         ['buy_now']: player?.best_buy_price ?? 0,
         ['sell_now']: player?.best_buy_price ?? 0,
+        marketItem: player,
       } as SelectedPlayer)
     },
     [fetchPlayerItemDetails]

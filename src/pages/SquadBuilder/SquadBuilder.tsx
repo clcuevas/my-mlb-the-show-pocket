@@ -22,7 +22,7 @@ const Style = {
 const SquadBuilder = () => {
   const dispatch = useDispatch()
 
-  const { bullpen, squad, savedPlayers, startingPitchingRotation } = useSelector((state: State) =>
+  const { bullpen, squad, startingPitchingRotation } = useSelector((state: State) =>
     squadBuilderService.getSquadBuild(state)
   )
 
@@ -109,7 +109,7 @@ const SquadBuilder = () => {
           />
         </Grid>
         <Grid item xs={5} md={3} lg={2}>
-          <RightPanel savedPlayers={savedPlayers} />
+          <RightPanel />
         </Grid>
       </Style.Container>
     </DndProvider>

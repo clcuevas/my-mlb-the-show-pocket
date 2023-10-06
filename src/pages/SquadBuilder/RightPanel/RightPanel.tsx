@@ -1,18 +1,13 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
-import styled from 'styled-components'
 
 import CustomTabPanel from '@components/CustomTabPanel'
 import { a11yProps } from '@components/helpers'
-import { MarketPlayerItemListing } from '@services/marketListings'
 
 import Overall from './Overall'
 import SavedPlayers from './SavedPlayers'
 
-type Props = {
-  savedPlayers: MarketPlayerItemListing[]
-}
-const RightPanel = ({ savedPlayers }: Props) => {
+const RightPanel = () => {
   const [activeTab, setActiveTab] = React.useState(0)
 
   return (
@@ -24,7 +19,7 @@ const RightPanel = ({ savedPlayers }: Props) => {
         </Tabs>
       </Box>
       <CustomTabPanel value={activeTab} index={0}>
-        <SavedPlayers savedPlayers={savedPlayers} />
+        <SavedPlayers />
       </CustomTabPanel>
       <CustomTabPanel value={activeTab} index={1}>
         <Overall />
