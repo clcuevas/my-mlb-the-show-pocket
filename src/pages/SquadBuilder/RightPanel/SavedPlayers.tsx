@@ -1,10 +1,13 @@
-import { List, ListItem } from '@mui/material'
+import { List, ListItem, Typography } from '@mui/material'
 import * as React from 'react'
 import { useDrag } from 'react-dnd'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import SmallCard from '@components/cards/SmallCard'
+import { State } from '@reducers'
 import type { MarketPlayerItemListing } from '@services/marketListings'
+import * as squadBuilderService from '@services/squadBuilder'
 
 const Style = {
   Container: styled.div`
@@ -22,10 +25,6 @@ const Style = {
       cursor: grab;
     }
   `,
-}
-
-type Props = {
-  savedPlayers: MarketPlayerItemListing[]
 }
 
 const calculatePlayerType = (player: MarketPlayerItemListing): string => {
@@ -57,14 +56,20 @@ const Player = ({ player }: { player: MarketPlayerItemListing }) => {
   )
 }
 
-const SavedPlayers = ({ savedPlayers }: Props) => {
+const SavedPlayers = () => {
+  const { savedPlayers } = useSelector((state: State) => squadBuilderService.getSquadBuild(state))
+
   return (
     <Style.Container>
-      <List disablePadding>
-        {savedPlayers.map((player) => (
-          <Player key={`saved-player-item-${player.item.uuid}`} player={player} />
-        ))}
-      </List>
+      {savedPlayers.length === 0 ? (
+        <Typography variant="body2">No saved players</Typography>
+      ) : (
+        <List disablePadding>
+          {savedPlayers.map((player) => (
+            <Player key={`saved-player-item-${player.item.uuid}`} player={player} />
+          ))}
+        </List>
+      )}
     </Style.Container>
   )
 }

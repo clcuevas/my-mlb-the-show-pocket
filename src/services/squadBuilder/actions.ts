@@ -31,3 +31,8 @@ export const updateStartingRotationResult = createActionWithPayload<{
   squad: SquadBuild
   startingPitchingRotation: StartingPitchingRotation
 }>('UPDATE_STARTING_ROTATION__RESULT')
+
+export const savePlayer = createActionWithPayload<MarketPlayerItemListing>('SAVE_PLAYER')
+export const savePlayerResult = createActionWithPayload<{
+  savedPlayers: MarketPlayerItemListing[]
+}>('SAVE_PLAYER__RESULT')

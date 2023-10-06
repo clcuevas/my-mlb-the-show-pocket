@@ -1,9 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit'
 
+import { MarketPlayerItemListing } from '@services/marketListings'
+
 import * as actions from './actions'
 import { Bullpen, SquadBuild, StartingPitchingRotation, Positions } from './types'
-
-import staticSquad from './fixtures'
 
 const BULLPEN_PLACEHOLDER = [
   { position: Positions.RP, player: null },
@@ -39,7 +39,7 @@ const initialState = {
   startingPitchingRotation: STARTING_ROTATION,
   bullpen: BULLPEN_PLACEHOLDER as Bullpen,
   loading: false,
-  savedPlayers: staticSquad,
+  savedPlayers: [] as MarketPlayerItemListing[],
 }
 
 const reducer = createReducer(initialState, (builder) => {
@@ -81,6 +81,14 @@ const reducer = createReducer(initialState, (builder) => {
       loading: false,
       squad: payload.squad,
       startingPitchingRotation: payload.startingPitchingRotation,
+    }))
+    .addCase(actions.savePlayer, (state, { payload }) => ({
+      ...state,
+      player: payload,
+    }))
+    .addCase(actions.savePlayerResult, (state, { payload }) => ({
+      ...state,
+      savedPlayers: payload.savedPlayers,
     }))
     .addDefaultCase((state) => state)
 })

@@ -1,5 +1,6 @@
 import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
@@ -7,33 +8,28 @@ import PlayerDetail from '@components/PlayerDetail'
 import { SelectedPlayer } from '@components/PlayerDetail/types'
 import MarketplaceModal from '@components/modals/MarketplaceModal'
 import { a11yProps } from '@components/helpers'
+import { State } from '@reducers'
 import {
   useFetchPlayerItemDetailsMutation,
   MarketPlayerItemListing,
 } from '@services/marketListings'
-import type {
-  Bullpen,
-  Position,
-  SquadBuild,
-  StartingPitchingRotation,
-} from '@services/squadBuilder'
+import type { Position } from '@services/squadBuilder'
+import * as squadBuilderService from '@services/squadBuilder'
 
 import Main from './Main'
 import Pitchers from './Pitchers'
+import { onPlayerCardAdd, onPlayerCardDrop, onPositionClear } from './utils'
 import type { OnDrop, OnRemove } from '../types'
 
-type Props = {
-  bullpen: Bullpen
-  squad: SquadBuild
-  startingPitchingRotation: StartingPitchingRotation
-  onAdd: (player: MarketPlayerItemListing, position: Position) => void
-  onDrop: (onDropParam: OnDrop) => void
-  onRemove: (onRemoveParam: OnRemove) => void
-}
+const Squad = () => {
+  const dispatch = useDispatch()
 
-const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemove }: Props) => {
   const [fetchPlayerItemDetails, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
     useFetchPlayerItemDetailsMutation()
+
+  const { bullpen, squad, startingPitchingRotation } = useSelector((state: State) =>
+    squadBuilderService.getSquadBuild(state)
+  )
 
   const [activeTab, setActiveTab] = React.useState(0)
   const [selectedPlayer, setSelectedPlayer] = React.useState<SelectedPlayer | null>(null)
@@ -55,6 +51,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
         ...(playerDetail ?? {}),
         ['buy_now']: player?.best_buy_price ?? 0,
         ['sell_now']: player?.best_buy_price ?? 0,
+        marketItem: player,
       } as SelectedPlayer)
     },
     [fetchPlayerItemDetails]
@@ -71,13 +68,25 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
     [selectedPosition]
   )
 
-  const handleOnPlayerAdd = React.useCallback(
+  const handleOnCardAdd = React.useCallback(
     (player: MarketPlayerItemListing) => {
       if (selectedPosition !== '') {
-        onAdd(player, selectedPosition as Position)
+        onPlayerCardAdd(dispatch, player, selectedPosition as Position)
       }
     },
-    [selectedPosition, onAdd]
+    [selectedPosition, dispatch]
+  )
+  const handleOnCardDrop = React.useCallback(
+    (onDropProp: OnDrop) => {
+      onPlayerCardDrop(dispatch, onDropProp)
+    },
+    [dispatch]
+  )
+  const handleOnPositionClear = React.useCallback(
+    (onRemoveProp: OnRemove) => {
+      onPositionClear(dispatch, onRemoveProp)
+    },
+    [dispatch]
   )
 
   return (
@@ -90,9 +99,9 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
         <CustomTabPanel value={activeTab} index={0}>
           <Main
             squad={squad}
-            onDrop={onDrop}
+            onDrop={handleOnCardDrop}
             onPositionSearch={handleOnPositionSearch}
-            onRemove={onRemove}
+            onRemove={handleOnPositionClear}
             onShowPlayerDetail={handleShowPlayerDetail}
           />
         </CustomTabPanel>
@@ -101,9 +110,9 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
             bullpen={bullpen}
             startingPitchingRotation={startingPitchingRotation}
             mainSP={squad['MAIN_SP']}
-            onDrop={onDrop}
+            onDrop={handleOnCardDrop}
             onPositionSearch={handleOnPositionSearch}
-            onRemove={onRemove}
+            onRemove={handleOnPositionClear}
             onShowPlayerDetail={handleShowPlayerDetail}
           />
         </CustomTabPanel>
@@ -127,7 +136,7 @@ const Squad = ({ bullpen, squad, startingPitchingRotation, onAdd, onDrop, onRemo
       <MarketplaceModal
         position={selectedPosition}
         isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
-        onAdd={handleOnPlayerAdd}
+        onAdd={handleOnCardAdd}
         onModalClose={() => setShouldShowMarketplaceSearch(false)}
       />
     </>

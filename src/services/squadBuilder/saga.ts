@@ -11,16 +11,19 @@ import {
   StartingPitchingRotation,
 } from './types'
 import { isObjKey } from '../helpers'
+import { MarketPlayerItemListing } from '../marketListings'
 
 type UpdateSquadBuild = ReturnType<typeof actions.updateSquadBuild>
 type UpdateSquadBullpen = ReturnType<typeof actions.updateBullpen>
 type UpdateStartingRotation = ReturnType<typeof actions.updateStartingRotation>
+type UpdateSavedPlayers = ReturnType<typeof actions.savePlayer>
 
 type SquadBuildState = {
   bullpen: Bullpen
   squad: SquadBuildType
   startingPitchingRotation: StartingPitchingRotation
   loading: boolean
+  savedPlayers: MarketPlayerItemListing[]
 }
 
 function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
@@ -51,6 +54,7 @@ function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
     yield put(actions.updateSquadBuildResult({ squad, startingPitchingRotation: startingRotation }))
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -69,6 +73,7 @@ function* updateSquadBullpen(action: UpdateSquadBullpen): SagaIterator {
     yield put(actions.updateBullpenResult({ bullpen }))
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -91,6 +96,22 @@ function* updateStartingRotation(action: UpdateStartingRotation): SagaIterator {
     )
   } catch (e) {
     console.log(e)
+    throw e
+  }
+}
+
+function* updateSavedPlayers(action: UpdateSavedPlayers): SagaIterator {
+  try {
+    const { payload: player } = action
+
+    const squadBuild: SquadBuildState = yield select(view.getSquadBuild)
+    // Let's append it to the top of the list so it's more visible
+    const updatedSavedPlayers = [player, ...squadBuild.savedPlayers]
+
+    yield put(actions.savePlayerResult({ savedPlayers: updatedSavedPlayers }))
+  } catch (e) {
+    console.log(e)
+    throw e
   }
 }
 
@@ -98,4 +119,5 @@ export default function* saga(): SagaIterator<void> {
   yield takeEvery('UPDATE_SQUAD_BUILD', updateSquadBuild)
   yield takeEvery('UPDATE_SQUAD_BULLPEN', updateSquadBullpen)
   yield takeEvery('UPDATE_STARTING_ROTATION', updateStartingRotation)
+  yield takeEvery('SAVE_PLAYER', updateSavedPlayers)
 }
