@@ -16,9 +16,10 @@ const Style = {
 
 type Props = {
   player: SelectedPlayer | null
+  canAddPlayer?: boolean
 }
 
-const PlayerDetail = ({ player }: Props) => {
+const PlayerDetail = ({ canAddPlayer, player }: Props) => {
   const dispatch = useDispatch()
 
   const [showFullDetails, setShowFullDetails] = React.useState(false)
@@ -56,7 +57,10 @@ const PlayerDetail = ({ player }: Props) => {
             onClick={handleOnSavePlayer}>
             SAVE
           </Button>
-          <Button type="button" variant="contained">
+          <Button
+            type="button"
+            variant="contained"
+            disabled={canAddPlayer == null || !canAddPlayer}>
             ADD
           </Button>
         </Stack>
