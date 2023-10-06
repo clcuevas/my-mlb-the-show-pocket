@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { type MarketPlayerItemListing } from '@services/marketListings'
 import { type Position as PositionType, Positions, type SquadBuild } from '@services/squadBuilder'
 
-import type { OnDrop, OnRemove } from '../types'
+import type { OnDrop, OnRemove, SquadType } from '../types'
 import Position from '../Position'
 
 const Style = {
@@ -28,6 +28,21 @@ const Style = {
   `,
 }
 
+const outfieldPositions = [
+  { position: Positions.LF, type: 'main_squad' },
+  { position: Positions.CF, type: 'main_squad' },
+  { position: Positions.RF, type: 'main_squad' },
+] as { position: keyof SquadBuild; type: SquadType }[]
+const secondShortPositions = [
+  { position: Positions.SS, type: 'main_squad' },
+  { position: Positions['2B'], type: 'main_squad' },
+] as { position: keyof SquadBuild; type: SquadType }[]
+const thirdMainSPFirstPositions = [
+  { position: Positions['3B'], type: 'main_squad' },
+  { position: Positions['MAIN_SP'], type: 'main_squad' },
+  { position: Positions['1B'], type: 'main_squad' },
+] as { position: keyof SquadBuild; type: SquadType }[]
+
 type Props = {
   squad: SquadBuild
   onDrop: (onDropParam: OnDrop) => void
@@ -45,33 +60,18 @@ const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDeta
         xs="auto"
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
-        <Position
-          onDrop={onDrop}
-          position={Positions.LF}
-          player={squad.LF}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-        <Position
-          onDrop={onDrop}
-          position={Positions.CF}
-          player={squad.CF}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-        <Position
-          onDrop={onDrop}
-          position={Positions.RF}
-          player={squad.RF}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
+        {outfieldPositions.map(({ position, type }) => (
+          <Position
+            key={`main-squad-position-${position}`}
+            onDrop={onDrop}
+            position={position}
+            player={squad[position] as MarketPlayerItemListing}
+            type={type}
+            onRemove={onRemove}
+            onSearch={onPositionSearch}
+            onShowPlayerDetail={onShowPlayerDetail}
+          />
+        ))}
       </Style.OutfieldContainer>
       <Style.SecondShortContainer
         item
@@ -79,24 +79,18 @@ const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDeta
         xs="auto"
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
-        <Position
-          onDrop={onDrop}
-          position={Positions.SS}
-          player={squad.SS}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-        <Position
-          onDrop={onDrop}
-          position={Positions['2B']}
-          player={squad['2B']}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
+        {secondShortPositions.map(({ position, type }) => (
+          <Position
+            key={`main-squad-position-${position}`}
+            onDrop={onDrop}
+            position={position}
+            player={squad[position] as MarketPlayerItemListing}
+            type={type}
+            onRemove={onRemove}
+            onSearch={onPositionSearch}
+            onShowPlayerDetail={onShowPlayerDetail}
+          />
+        ))}
       </Style.SecondShortContainer>
       <Style.ThirdPitcherFirstContainer
         item
@@ -104,33 +98,18 @@ const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDeta
         xs="auto"
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 9 }}>
-        <Position
-          onDrop={onDrop}
-          position={Positions['3B']}
-          player={squad['3B']}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-        <Position
-          onDrop={onDrop}
-          position={Positions.MAIN_SP}
-          player={squad.MAIN_SP}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-        <Position
-          onDrop={onDrop}
-          position={Positions['1B']}
-          player={squad['1B']}
-          type="main_squad"
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
+        {thirdMainSPFirstPositions.map(({ position, type }) => (
+          <Position
+            key={`main-squad-position-${position}`}
+            onDrop={onDrop}
+            position={position}
+            player={squad[position] as MarketPlayerItemListing}
+            type={type}
+            onRemove={onRemove}
+            onSearch={onPositionSearch}
+            onShowPlayerDetail={onShowPlayerDetail}
+          />
+        ))}
       </Style.ThirdPitcherFirstContainer>
       <Style.CatcherContainer item container xs="auto" rowSpacing={1}>
         <Position
