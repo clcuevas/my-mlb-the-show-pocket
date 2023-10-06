@@ -85,7 +85,7 @@ const Marketplace = () => {
                 <div key={`player-item-${player.item.uuid}-${index}`}>
                   <Card stylingProps={{ width: 210, margin: '10px' }} player={player}>
                     <>
-                      <Typography variant="h6">
+                      <Typography variant="h6" sx={{ lineHeight: { md: 'normal' } }}>
                         {player.item.name}, {player.item.ovr}
                       </Typography>
                       <Typography>{player.item.series} Series</Typography>

@@ -30,7 +30,9 @@ const Card = ({ children, player, stylingProps, mediaStylingProps, ...rest }: Pr
           sx={{ ...(mediaStylingProps ? mediaStylingProps : {}) }}
         />
       )}
-      <CardContent sx={{ padding: 0 }}>{children}</CardContent>
+      <CardContent sx={{ padding: { md: '10px 0 0 7px' }, height: { md: '55px' } }}>
+        {children}
+      </CardContent>
     </Style.Card>
   )
 }

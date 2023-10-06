@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import CardWithActions from '@components/cards/CardWithActions'
 import { MarketPlayerItemListing } from '@services/marketListings'
 import { Position as PositionType, Positions } from '@services/squadBuilder'
+import Color from '@styles/Color'
 
 import ActionArea from './ActionArea'
 import type { DropItem, OnDrop, OnRemove } from '../types'
@@ -85,6 +86,7 @@ const Position = ({
         stylingProps={CardResponsiveSettings}
         player={player}
         mediaStylingProps={{
+          backgroundColor: Color.PRIMARY_LIGHT,
           height: { sm: '100px', md: '200px' },
           objectFit: 'contain',
           flex: '2 1 auto',
