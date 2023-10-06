@@ -27,7 +27,7 @@ const SmallCard = ({ player }: Props) => {
             {player.item.team_short_name} - {player.item.display_position}, {player.item.ovr}
           </Typography>
         </CardContent>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', pb: 1 }}>
           <Typography component="div" variant="body2">
             Buy now: {player.best_buy_price}
           </Typography>
