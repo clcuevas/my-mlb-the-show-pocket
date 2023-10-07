@@ -1,19 +1,18 @@
 import { Button } from '@mui/material'
 import * as React from 'react'
 
-import { MarketPlayerItemListing } from '@services/marketListings'
-import { Position as PositionType } from '@services/squadBuilder'
+import { Position as PositionType, SquadBuildPlayer } from '@services/squadBuilder'
 
-import type { OnRemove } from '../types'
+import type { OnRemove, SquadType } from '../types'
 
 type Props = {
-  player: MarketPlayerItemListing | null
+  player: SquadBuildPlayer | null
   position: PositionType
   type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
   index?: number
   onRemovePlayer: (onRemoveParam: OnRemove) => void
-  onSearchPlayer: (position: PositionType) => void
-  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
+  onSearchPlayer: (position: PositionType, squadType: SquadType) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }
 
 const ActionArea = ({
@@ -49,7 +48,7 @@ const ActionArea = ({
         type="button"
         variant="contained"
         color="secondary"
-        onClick={() => onSearchPlayer(position)}>
+        onClick={() => onSearchPlayer(position, type)}>
         Search
       </Button>
     )}

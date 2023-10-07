@@ -4,12 +4,11 @@ import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 
 import CardWithActions from '@components/cards/CardWithActions'
-import { MarketPlayerItemListing } from '@services/marketListings'
-import { Position as PositionType, Positions } from '@services/squadBuilder'
+import { Position as PositionType, Positions, SquadBuildPlayer } from '@services/squadBuilder'
 import Color from '@styles/Color'
 
 import ActionArea from './ActionArea'
-import type { DropItem, OnDrop, OnRemove } from '../types'
+import type { DropItem, OnDrop, OnRemove, SquadType } from '../types'
 
 const CardResponsiveSettings = {
   width: { md: '150px', lg: '200px' },
@@ -23,14 +22,14 @@ const Style = {
 }
 
 type Props = {
-  player: MarketPlayerItemListing | null
+  player: SquadBuildPlayer | null
   position: PositionType
   type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
   index?: number
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
-  onSearch: (position: PositionType) => void
-  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
+  onSearch: (position: PositionType, squadType: SquadType) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }
 
 const Position = ({
@@ -49,7 +48,7 @@ const Position = ({
     () => ({
       accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
       canDrop: ({ player }: DropItem) => {
-        const playerPosition = player.item.display_position
+        const playerPosition = player.marketItem.item.display_position
         const bullpenPositions = [Positions.CP, Positions.RP] as PositionType[]
 
         switch (position) {
@@ -105,13 +104,13 @@ const Position = ({
         {player != null ? (
           <>
             <Typography>
-              {player.listing_name}, {player.item.display_position}
+              {player.marketItem.listing_name}, {player.marketItem.item.display_position}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Buy: {player.best_buy_price}
+              Buy: {player.marketItem.best_buy_price}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Sell: {player.best_sell_price}
+              Sell: {player.marketItem.best_sell_price}
             </Typography>
           </>
         ) : (

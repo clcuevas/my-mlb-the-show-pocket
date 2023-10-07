@@ -18,10 +18,11 @@ import styled from 'styled-components'
 
 import {
   useFetchMarketListingMutation,
+  useFetchPlayerItemDetailsMutation,
   type MarketPlayerItemListing,
   type MarketPlayerItemListingsPayloadResponse,
 } from '@services/marketListings'
-import { type Position } from '@services/squadBuilder'
+import { type SquadBuildPlayer, type Position } from '@services/squadBuilder'
 
 import CloseIconButton from '../CloseIconButton'
 import SmallCard from '../cards/SmallCard'
@@ -40,12 +41,14 @@ const Style = {
 type Props = {
   isOpen: boolean
   position: Position | string
-  onAdd: (selectedPlayer: MarketPlayerItemListing) => void
+  onAdd: (selectedPlayer: SquadBuildPlayer) => void
   onModalClose: () => void
 }
 
 const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   const [fetchMarketListings] = useFetchMarketListingMutation()
+  const [fetchPlayerItemDetails, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
+    useFetchPlayerItemDetailsMutation()
 
   const [formErrors, setFormErrors] = React.useState<string[]>([])
   const [marketListings, setMarketListings] =
@@ -88,6 +91,19 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
     },
     [fetchMarketListings]
   )
+  const handleOnAddSelectedPlayer = React.useCallback(async () => {
+    if (selectedPlayer != null) {
+      const playerDetails = await fetchPlayerItemDetails(selectedPlayer.item.uuid).unwrap()
+
+      onAdd({ marketItem: selectedPlayer, detailedItem: playerDetails })
+      // Clear everything
+      setMarketListings(null)
+      setSelectedPlayer(null)
+      setFormErrors([])
+      // Close Modal
+      onModalClose()
+    }
+  }, [selectedPlayer, fetchPlayerItemDetails, onAdd, onModalClose])
 
   return (
     <>
@@ -142,17 +158,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
               type="button"
               variant="contained"
               disabled={formErrors.length > 0 || selectedPlayer === null}
-              onClick={() => {
-                if (selectedPlayer != null) {
-                  onAdd(selectedPlayer)
-                  // Clear everything
-                  setMarketListings(null)
-                  setSelectedPlayer(null)
-                  setFormErrors([])
-                  // Close Modal
-                  onModalClose()
-                }
-              }}>
+              onClick={handleOnAddSelectedPlayer}>
               ADD
             </Button>
           </DialogActions>

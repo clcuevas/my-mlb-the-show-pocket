@@ -1,4 +1,5 @@
 import { MarketPlayerItemListing } from '../marketListings'
+import { DetailedPlayerItem } from '../types'
 
 export enum Positions {
   'LF' = 'LF',
@@ -18,28 +19,33 @@ export enum Positions {
 
 export type Position = keyof typeof Positions
 
+export type SquadBuildPlayer = {
+  marketItem: MarketPlayerItemListing
+  detailedItem: DetailedPlayerItem
+}
+
 export type SquadBuild = {
-  [Positions.LF]: MarketPlayerItemListing | null
-  [Positions.CF]: MarketPlayerItemListing | null
-  [Positions.RF]: MarketPlayerItemListing | null
-  ['3B']: MarketPlayerItemListing | null
-  [Positions.SS]: MarketPlayerItemListing | null
-  ['2B']: MarketPlayerItemListing | null
-  ['1B']: MarketPlayerItemListing | null
-  [Positions.C]: MarketPlayerItemListing | null
-  [Positions.MAIN_SP]: MarketPlayerItemListing | null
-  [Positions.BENCH]: MarketPlayerItemListing[]
+  [Positions.LF]: SquadBuildPlayer | null
+  [Positions.CF]: SquadBuildPlayer | null
+  [Positions.RF]: SquadBuildPlayer | null
+  ['3B']: SquadBuildPlayer | null
+  [Positions.SS]: SquadBuildPlayer | null
+  ['2B']: SquadBuildPlayer | null
+  ['1B']: SquadBuildPlayer | null
+  [Positions.C]: SquadBuildPlayer | null
+  [Positions.MAIN_SP]: SquadBuildPlayer | null
+  [Positions.BENCH]: SquadBuildPlayer[]
 }
 
 type BullpenItem = {
   position: Position
-  player: MarketPlayerItemListing | null
+  player: SquadBuildPlayer | null
 }
 
 export type Bullpen = BullpenItem[]
 
 export type StartingRotationItem = {
   position: Positions.SP
-  player: MarketPlayerItemListing | null
+  player: SquadBuildPlayer | null
 }
 export type StartingPitchingRotation = StartingRotationItem[]

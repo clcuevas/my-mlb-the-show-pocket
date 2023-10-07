@@ -2,8 +2,12 @@ import { Grid } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { type MarketPlayerItemListing } from '@services/marketListings'
-import { type Position as PositionType, Positions, type SquadBuild } from '@services/squadBuilder'
+import {
+  type Position as PositionType,
+  Positions,
+  type SquadBuild,
+  type SquadBuildPlayer,
+} from '@services/squadBuilder'
 
 import type { OnDrop, OnRemove, SquadType } from '../types'
 import Position from '../Position'
@@ -46,9 +50,9 @@ const thirdMainSPFirstPositions = [
 type Props = {
   squad: SquadBuild
   onDrop: (onDropParam: OnDrop) => void
-  onPositionSearch: (positionSelected: PositionType) => void
+  onPositionSearch: (positionSelected: PositionType, squadType: SquadType) => void
   onRemove: (onRemoveParam: OnRemove) => void
-  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }
 
 const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDetail }: Props) => {
@@ -65,7 +69,7 @@ const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDeta
             key={`main-squad-position-${position}`}
             onDrop={onDrop}
             position={position}
-            player={squad[position] as MarketPlayerItemListing}
+            player={squad[position] as SquadBuildPlayer}
             type={type}
             onRemove={onRemove}
             onSearch={onPositionSearch}
@@ -84,7 +88,7 @@ const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDeta
             key={`main-squad-position-${position}`}
             onDrop={onDrop}
             position={position}
-            player={squad[position] as MarketPlayerItemListing}
+            player={squad[position] as SquadBuildPlayer}
             type={type}
             onRemove={onRemove}
             onSearch={onPositionSearch}
@@ -103,7 +107,7 @@ const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDeta
             key={`main-squad-position-${position}`}
             onDrop={onDrop}
             position={position}
-            player={squad[position] as MarketPlayerItemListing}
+            player={squad[position] as SquadBuildPlayer}
             type={type}
             onRemove={onRemove}
             onSearch={onPositionSearch}

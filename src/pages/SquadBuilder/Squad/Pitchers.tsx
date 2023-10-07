@@ -2,15 +2,15 @@ import { Divider, Grid, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import type { MarketPlayerItemListing } from '@services/marketListings'
 import {
   StartingPitchingRotation,
   type Bullpen,
   type Position as PositionType,
+  SquadBuildPlayer,
 } from '@services/squadBuilder'
 
 import Position from '../Position'
-import type { OnDrop, OnRemove } from '../types'
+import type { OnDrop, OnRemove, SquadType } from '../types'
 
 const Style = {
   Container: styled.div``,
@@ -26,12 +26,12 @@ const Style = {
 
 type Props = {
   bullpen: Bullpen
-  mainSP: MarketPlayerItemListing | null
+  mainSP: SquadBuildPlayer | null
   startingPitchingRotation: StartingPitchingRotation
   onDrop: (onDropParam: OnDrop) => void
-  onPositionSearch: (position: PositionType) => void
+  onPositionSearch: (position: PositionType, squadType: SquadType) => void
   onRemove: (onRemoveParam: OnRemove) => void
-  onShowPlayerDetail: (handleType: 'show' | 'close', player: MarketPlayerItemListing) => void
+  onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }
 
 const Pitchers = ({

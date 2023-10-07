@@ -1,23 +1,43 @@
 import { AnyAction } from '@reduxjs/toolkit'
 import { Dispatch } from 'react'
 
-import { MarketPlayerItemListing } from '@services/marketListings'
 import * as squadBuilderService from '@services/squadBuilder'
 
-import type { OnDrop, OnRemove } from '../types'
+import type { OnDrop, OnRemove, SquadType } from '../types'
+
+type OnPlayerCardAdd = {
+  player: squadBuilderService.SquadBuildPlayer
+  positionSelected: squadBuilderService.Position
+  squadType: SquadType
+  index?: number
+}
 
 export const onPlayerCardAdd = (
   dispatch: Dispatch<AnyAction>,
-  player: MarketPlayerItemListing,
-  selectedPosition: squadBuilderService.Position
+  { player, squadType, positionSelected, index }: OnPlayerCardAdd
 ) => {
-  dispatch(
-    squadBuilderService.updateSquadBuild({
-      player,
-      position: selectedPosition,
-      isMainSP: selectedPosition === 'MAIN_SP', // TODO: Do not allow non-SP players
-    })
-  )
+  switch (squadType) {
+    case 'bullpen':
+      dispatch(squadBuilderService.updateBullpen({ player, index: index ?? 0 }))
+      return
+    case 'starting_rotation':
+      dispatch(
+        squadBuilderService.updateStartingRotation({
+          player,
+          index: index ?? 0,
+        })
+      )
+      return
+    default:
+      dispatch(
+        squadBuilderService.updateSquadBuild({
+          player,
+          position: positionSelected,
+          isMainSP: positionSelected === 'MAIN_SP', // TODO: Do not allow non-SP players
+        })
+      )
+      return
+  }
 }
 
 export const onPlayerCardDrop = (

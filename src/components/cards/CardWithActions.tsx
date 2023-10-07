@@ -2,7 +2,7 @@ import { Card as MuiCard, CardContent, CardMedia } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { MarketPlayerItemListing } from '@services/marketListings'
+import { SquadBuildPlayer } from '@services/squadBuilder'
 
 const Style = {
   Card: styled(MuiCard)`
@@ -40,7 +40,7 @@ const Style = {
 type DynamicObject = { [key: string]: unknown }
 type Props = {
   children: React.ReactNode
-  player: MarketPlayerItemListing | null
+  player: SquadBuildPlayer | null
   actionComponent: React.ReactNode
   stylingProps?: DynamicObject
   mediaStylingProps?: DynamicObject
@@ -60,8 +60,8 @@ const CardWithActions = ({
       {player != null && (
         <CardMedia
           component="img"
-          image={player.item.img}
-          alt={player.item.name}
+          image={player.marketItem.item.img}
+          alt={player.marketItem.item.name}
           sx={{ ...(mediaStylingProps ? mediaStylingProps : {}) }}
         />
       )}
