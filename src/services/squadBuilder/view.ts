@@ -1,12 +1,13 @@
 import { State } from '@reducers'
-import { MarketPlayerItemListing } from '@services/marketListings'
+
+import { SquadBuildPlayer } from './types'
 
 export const getSquadBuild = (state: State) => state.squad
 
 // Check if a player has been added to the "savedPlayers" list
 export const isSavedPlayer = (
   state: State,
-  player: MarketPlayerItemListing | null | undefined
+  player: SquadBuildPlayer | null | undefined
 ): boolean => {
   if (player == null) {
     return false
@@ -14,5 +15,7 @@ export const isSavedPlayer = (
 
   const savedPlayers = getSquadBuild(state).savedPlayers
   // Immediately exits when it finds the first match (i.e. truthy)
-  return savedPlayers.some((savedPlayer) => savedPlayer.item.uuid === player.item.uuid)
+  return savedPlayers.some(
+    (savedPlayer) => savedPlayer.detailedItem.uuid === player.detailedItem.uuid
+  )
 }

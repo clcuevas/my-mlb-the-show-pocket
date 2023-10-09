@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetail from '@components/PlayerDetail'
-import { SelectedPlayer } from '@components/PlayerDetail/types'
 import MarketplaceModal from '@components/modals/MarketplaceModal'
 import { a11yProps } from '@components/helpers'
 import { State } from '@reducers'
@@ -25,7 +24,8 @@ const Squad = () => {
   )
 
   const [activeTab, setActiveTab] = React.useState(0)
-  const [selectedPlayer, setSelectedPlayer] = React.useState<SelectedPlayer | null>(null)
+  const [selectedPlayer, setSelectedPlayer] =
+    React.useState<squadBuilderService.SquadBuildPlayer | null>(null)
   const [selectedPositionSquadType, setSelectedPositionSquadType] = React.useState<{
     positionSelected: Position
     squadType: squadBuilderService.SquadType
@@ -37,17 +37,14 @@ const Squad = () => {
   const handleShowPlayerDetail = React.useCallback(
     async (handleType: 'show' | 'close', player?: squadBuilderService.SquadBuildPlayer) => {
       const open = handleType === 'show'
-      const playerDetail = open && player ? player : {}
+
+      if (player != null && open) {
+        setSelectedPlayer(player)
+      }
 
       setShouldShowPlayerDetail(open)
-      setSelectedPlayer({
-        ...playerDetail,
-        ['buy_now']: player?.marketItem.best_buy_price ?? 0,
-        ['sell_now']: player?.marketItem.best_buy_price ?? 0,
-        squadType: selectedPositionSquadType?.squadType,
-      } as SelectedPlayer)
     },
-    [selectedPositionSquadType?.squadType]
+    []
   )
 
   const handleOnPositionSearch = React.useCallback(
@@ -125,7 +122,7 @@ const Squad = () => {
         open={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
         onClose={() => handleShowPlayerDetail('close')}
         maxWidth="lg">
-        <DialogTitle>{`${selectedPlayer?.name} ` ?? ''}Player Details</DialogTitle>
+        <DialogTitle>{`${selectedPlayer?.detailedItem.name} ` ?? ''}Player Details</DialogTitle>
         <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
         <DialogContent dividers>
           <PlayerDetail player={selectedPlayer} />

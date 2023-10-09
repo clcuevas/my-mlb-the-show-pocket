@@ -3,19 +3,18 @@ import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
+import { State } from '@reducers'
 import * as squadBuilderService from '@services/squadBuilder'
 
 import PlayerDetailFull from './PlayerDetailFull'
 import PlayerDetailSummary from './PlayerDetailSummary'
-import { SelectedPlayer } from './types'
-import { State } from '@reducers'
 
 const Style = {
   Actions: styled(Stack)``,
 }
 
 type Props = {
-  player: SelectedPlayer | null
+  player: squadBuilderService.SquadBuildPlayer | null
   canAddPlayer?: boolean
 }
 
@@ -25,7 +24,7 @@ const PlayerDetail = ({ canAddPlayer, player }: Props) => {
   const [showFullDetails, setShowFullDetails] = React.useState(false)
 
   const hasBeenSaved = useSelector((state: State) =>
-    squadBuilderService.isSavedPlayer(state, player?.marketItem)
+    squadBuilderService.isSavedPlayer(state, player)
   )
 
   const handleShowFullDetailsToggle = React.useCallback(() => {
@@ -34,7 +33,7 @@ const PlayerDetail = ({ canAddPlayer, player }: Props) => {
 
   const handleOnSavePlayer = React.useCallback(() => {
     if (player != null && !hasBeenSaved) {
-      dispatch(squadBuilderService.savePlayer(player.marketItem))
+      dispatch(squadBuilderService.savePlayer(player))
     }
   }, [hasBeenSaved, player, dispatch])
 

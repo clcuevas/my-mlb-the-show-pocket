@@ -11,8 +11,10 @@ import * as React from 'react'
 import { Bar } from 'react-chartjs-2'
 import styled from 'styled-components'
 
+import { SquadBuildPlayer } from '@services/squadBuilder'
+
 import { buildDatasets } from './utils'
-import type { Chart, SelectedPlayer } from './types'
+import type { Chart } from './types'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -24,7 +26,7 @@ const Style = {
 }
 
 type Props = {
-  player: SelectedPlayer | null
+  player: SquadBuildPlayer | null
 }
 
 const PlayerDetailFull = ({ player }: Props) => {
@@ -32,7 +34,7 @@ const PlayerDetailFull = ({ player }: Props) => {
 
   React.useEffect(() => {
     if (chartData == null && player != null) {
-      const datasets = buildDatasets(player)
+      const datasets = buildDatasets(player.detailedItem)
       const data = { datasets }
 
       setChartData(data as Chart)

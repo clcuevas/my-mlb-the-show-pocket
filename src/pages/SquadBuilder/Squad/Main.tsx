@@ -7,9 +7,10 @@ import {
   Positions,
   type SquadBuild,
   type SquadBuildPlayer,
+  type SquadType,
 } from '@services/squadBuilder'
 
-import type { OnDrop, OnRemove, SquadType } from '../types'
+import type { OnDrop, OnRemove } from '../types'
 import Position from '../Position'
 
 const Style = {
