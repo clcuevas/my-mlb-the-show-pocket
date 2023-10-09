@@ -1,10 +1,10 @@
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import { Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
+import { Button, Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import Card from '@components/cards/Card'
-import { useGetPlayerMarketListingsQuery } from '@services/marketListings'
+import CardWithActions from '@components/cards/CardWithActions'
+import { MarketPlayerItemListing, useGetPlayerMarketListingsQuery } from '@services/marketListings'
 import Color from '@styles/Color'
 
 const Style = {
@@ -34,6 +34,14 @@ const Style = {
     width: 500px;
   `,
 }
+
+const Action = ({ player }: { player: MarketPlayerItemListing }) => (
+  <div className="action">
+    <Button type="button" variant="contained" className="action-btn">
+      Info
+    </Button>
+  </div>
+)
 
 const Marketplace = () => {
   const [pageCounter, setPageCounter] = React.useState(1)
@@ -83,14 +91,17 @@ const Marketplace = () => {
             {data != null &&
               data?.listings?.map((player, index) => (
                 <div key={`player-item-${player.item.uuid}-${index}`}>
-                  <Card stylingProps={{ width: 210, margin: '10px' }} player={player}>
+                  <CardWithActions
+                    stylingProps={{ width: 210, margin: '10px' }}
+                    player={player}
+                    actionComponent={<Action player={player} />}>
                     <>
                       <Typography variant="h6" sx={{ lineHeight: { md: 'normal' } }}>
                         {player.item.name}, {player.item.ovr}
                       </Typography>
                       <Typography>{player.item.series} Series</Typography>
                     </>
-                  </Card>
+                  </CardWithActions>
                 </div>
               ))}
           </Style.CardListingsContainer>
