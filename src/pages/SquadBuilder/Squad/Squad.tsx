@@ -23,13 +23,21 @@ const Squad = () => {
   )
 
   const [activeTab, setActiveTab] = React.useState(0)
+  // This state variable is used to display a player card's details and the player
+  // data is passed to the PlayerDetailModal. It is set by the callback we pass to
+  // the <Position /> component to view additional player details when the "details"
+  // button is clicked which is made available during a player onHover event.
   const [selectedPlayer, setSelectedPlayer] =
     React.useState<squadBuilderService.SquadBuildPlayer | null>(null)
+  // Maybe a better name for this state variable is "selectedPositionSearchParams" since
+  // we're using this object or data to apply the appropriate Marketplace search params
+  // in the form and using this data to also add the player card to a certain position.
   const [selectedPositionSquadType, setSelectedPositionSquadType] = React.useState<{
     positionSelected: Position
     squadType: squadBuilderService.SquadType
     index?: number
   } | null>(null)
+
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
   const [shouldShowMarketplaceSearch, setShouldShowMarketplaceSearch] = React.useState(false)
 
