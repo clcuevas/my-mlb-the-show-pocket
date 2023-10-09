@@ -1,9 +1,9 @@
 import { Button } from '@mui/material'
 import * as React from 'react'
 
-import { Position as PositionType, SquadBuildPlayer } from '@services/squadBuilder'
+import { Position as PositionType, SquadBuildPlayer, SquadType } from '@services/squadBuilder'
 
-import type { OnRemove, SquadType } from '../types'
+import type { OnRemove } from '../types'
 
 type Props = {
   player: SquadBuildPlayer | null

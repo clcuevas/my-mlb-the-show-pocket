@@ -4,11 +4,16 @@ import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
 
 import CardWithActions from '@components/cards/CardWithActions'
-import { Position as PositionType, Positions, SquadBuildPlayer } from '@services/squadBuilder'
+import {
+  Position as PositionType,
+  Positions,
+  SquadBuildPlayer,
+  SquadType,
+} from '@services/squadBuilder'
 import Color from '@styles/Color'
 
 import ActionArea from './ActionArea'
-import type { DropItem, OnDrop, OnRemove, SquadType } from '../types'
+import type { DropItem, OnDrop, OnRemove } from '../types'
 
 const CardResponsiveSettings = {
   width: { md: '150px', lg: '200px' },

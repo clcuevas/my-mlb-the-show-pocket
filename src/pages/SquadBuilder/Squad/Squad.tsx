@@ -15,7 +15,7 @@ import * as squadBuilderService from '@services/squadBuilder'
 import Main from './Main'
 import Pitchers from './Pitchers'
 import { onPlayerCardAdd, onPlayerCardDrop, onPositionClear } from './utils'
-import type { OnDrop, OnRemove, SquadType } from '../types'
+import type { OnDrop, OnRemove } from '../types'
 
 const Squad = () => {
   const dispatch = useDispatch()
@@ -28,7 +28,7 @@ const Squad = () => {
   const [selectedPlayer, setSelectedPlayer] = React.useState<SelectedPlayer | null>(null)
   const [selectedPositionSquadType, setSelectedPositionSquadType] = React.useState<{
     positionSelected: Position
-    squadType: SquadType
+    squadType: squadBuilderService.SquadType
     index?: number
   } | null>(null)
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
@@ -51,7 +51,7 @@ const Squad = () => {
   )
 
   const handleOnPositionSearch = React.useCallback(
-    (positionSelected: Position, squadType: SquadType, index?: number) => {
+    (positionSelected: Position, squadType: squadBuilderService.SquadType, index?: number) => {
       if (
         selectedPositionSquadType?.positionSelected !== positionSelected ||
         selectedPositionSquadType?.index !== index

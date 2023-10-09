@@ -3,12 +3,12 @@ import { Dispatch } from 'react'
 
 import * as squadBuilderService from '@services/squadBuilder'
 
-import type { OnDrop, OnRemove, SquadType } from '../types'
+import type { OnDrop, OnRemove } from '../types'
 
 type OnPlayerCardAdd = {
   player: squadBuilderService.SquadBuildPlayer
   positionSelected: squadBuilderService.Position
-  squadType: SquadType
+  squadType: squadBuilderService.SquadType
   index?: number
 }
 

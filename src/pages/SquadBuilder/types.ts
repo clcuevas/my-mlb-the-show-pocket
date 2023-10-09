@@ -1,4 +1,4 @@
-import type { Position, SquadBuildPlayer } from '@services/squadBuilder'
+import type { Position, SquadBuildPlayer, SquadType } from '@services/squadBuilder'
 
 export type DropItem = {
   id: string
@@ -11,8 +11,6 @@ export type OnDrop = {
   actionType?: 'remove'
   index?: number
 }
-
-export type SquadType = 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
 
 export type OnRemove = {
   player: SquadBuildPlayer

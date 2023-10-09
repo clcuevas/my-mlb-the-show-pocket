@@ -18,6 +18,7 @@ export enum Positions {
 }
 
 export type Position = keyof typeof Positions
+export type SquadType = 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
 
 export type SquadBuildPlayer = {
   marketItem: MarketPlayerItemListing
