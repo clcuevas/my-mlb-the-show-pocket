@@ -5,14 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetail from '@components/PlayerDetail'
-import { SelectedPlayer } from '@components/PlayerDetail/types'
 import MarketplaceModal from '@components/modals/MarketplaceModal'
 import { a11yProps } from '@components/helpers'
 import { State } from '@reducers'
-import {
-  useFetchPlayerItemDetailsMutation,
-  MarketPlayerItemListing,
-} from '@services/marketListings'
 import type { Position } from '@services/squadBuilder'
 import * as squadBuilderService from '@services/squadBuilder'
 
@@ -24,57 +19,63 @@ import type { OnDrop, OnRemove } from '../types'
 const Squad = () => {
   const dispatch = useDispatch()
 
-  const [fetchPlayerItemDetails, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
-    useFetchPlayerItemDetailsMutation()
-
   const { bullpen, squad, startingPitchingRotation } = useSelector((state: State) =>
     squadBuilderService.getSquadBuild(state)
   )
 
   const [activeTab, setActiveTab] = React.useState(0)
-  const [selectedPlayer, setSelectedPlayer] = React.useState<SelectedPlayer | null>(null)
-  const [selectedPosition, setSelectedPosition] = React.useState<Position | string>('')
+  const [selectedPlayer, setSelectedPlayer] =
+    React.useState<squadBuilderService.SquadBuildPlayer | null>(null)
+  const [selectedPositionSquadType, setSelectedPositionSquadType] = React.useState<{
+    positionSelected: Position
+    squadType: squadBuilderService.SquadType
+    index?: number
+  } | null>(null)
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
   const [shouldShowMarketplaceSearch, setShouldShowMarketplaceSearch] = React.useState(false)
 
   const handleShowPlayerDetail = React.useCallback(
-    async (handleType: 'show' | 'close', player?: MarketPlayerItemListing) => {
+    async (handleType: 'show' | 'close', player?: squadBuilderService.SquadBuildPlayer) => {
       const open = handleType === 'show'
-      let playerDetail = null
 
-      if (open && player) {
-        playerDetail = await fetchPlayerItemDetails(player.item.uuid).unwrap()
+      if (player != null && open) {
+        setSelectedPlayer(player)
       }
 
       setShouldShowPlayerDetail(open)
-      setSelectedPlayer({
-        ...(playerDetail ?? {}),
-        ['buy_now']: player?.best_buy_price ?? 0,
-        ['sell_now']: player?.best_buy_price ?? 0,
-        marketItem: player,
-      } as SelectedPlayer)
     },
-    [fetchPlayerItemDetails]
+    []
   )
 
   const handleOnPositionSearch = React.useCallback(
-    (positionSelected: Position) => {
-      if (selectedPosition !== positionSelected) {
-        setSelectedPosition(positionSelected)
+    (positionSelected: Position, squadType: squadBuilderService.SquadType, index?: number) => {
+      if (
+        selectedPositionSquadType?.positionSelected !== positionSelected ||
+        selectedPositionSquadType?.index !== index
+      ) {
+        setSelectedPositionSquadType({
+          positionSelected,
+          squadType,
+          ...(index != null ? { index } : {}),
+        })
       }
 
       setShouldShowMarketplaceSearch(true)
     },
-    [selectedPosition]
+    [
+      selectedPositionSquadType?.index,
+      selectedPositionSquadType?.positionSelected,
+      setSelectedPositionSquadType,
+    ]
   )
 
   const handleOnCardAdd = React.useCallback(
-    (player: MarketPlayerItemListing) => {
-      if (selectedPosition !== '') {
-        onPlayerCardAdd(dispatch, player, selectedPosition as Position)
+    (player: squadBuilderService.SquadBuildPlayer) => {
+      if (selectedPositionSquadType !== null) {
+        onPlayerCardAdd(dispatch, { ...selectedPositionSquadType, player })
       }
     },
-    [selectedPosition, dispatch]
+    [selectedPositionSquadType, dispatch]
   )
   const handleOnCardDrop = React.useCallback(
     (onDropProp: OnDrop) => {
@@ -118,23 +119,17 @@ const Squad = () => {
         </CustomTabPanel>
       </Box>
       <Dialog
-        open={shouldShowPlayerDetail && !isPlayerDetailError && !shouldShowMarketplaceSearch}
+        open={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
         onClose={() => handleShowPlayerDetail('close')}
         maxWidth="lg">
-        {isFetchingå ? (
-          <DialogContent>Loading...</DialogContent>
-        ) : (
-          <>
-            <DialogTitle>{`${selectedPlayer?.name} ` ?? ''}Player Details</DialogTitle>
-            <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
-            <DialogContent dividers>
-              <PlayerDetail player={selectedPlayer} />
-            </DialogContent>
-          </>
-        )}
+        <DialogTitle>{`${selectedPlayer?.detailedItem.name} ` ?? ''}Player Details</DialogTitle>
+        <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
+        <DialogContent dividers>
+          <PlayerDetail player={selectedPlayer} />
+        </DialogContent>
       </Dialog>
       <MarketplaceModal
-        position={selectedPosition}
+        position={selectedPositionSquadType?.positionSelected ?? ''}
         isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
         onAdd={handleOnCardAdd}
         onModalClose={() => setShouldShowMarketplaceSearch(false)}

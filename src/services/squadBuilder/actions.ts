@@ -1,9 +1,8 @@
-import { SquadBuild, Position, Bullpen, StartingPitchingRotation } from './types'
+import { SquadBuild, Position, Bullpen, SquadBuildPlayer, StartingPitchingRotation } from './types'
 import { createActionWithPayload } from '../helpers'
-import { MarketPlayerItemListing } from '../marketListings'
 
 export const updateSquadBuild = createActionWithPayload<{
-  player: MarketPlayerItemListing
+  player: SquadBuildPlayer
   position: Position
   isMainSP: boolean
   type?: 'remove'
@@ -14,7 +13,7 @@ export const updateSquadBuildResult = createActionWithPayload<{
 }>('UPDATE_SQUAD_BUILD__RESULT')
 
 export const updateBullpen = createActionWithPayload<{
-  player: MarketPlayerItemListing
+  player: SquadBuildPlayer
   index: number
   type?: 'remove'
 }>('UPDATE_SQUAD_BULLPEN')
@@ -23,7 +22,7 @@ export const updateBullpenResult = createActionWithPayload<{ bullpen: Bullpen }>
 )
 
 export const updateStartingRotation = createActionWithPayload<{
-  player: MarketPlayerItemListing
+  player: SquadBuildPlayer
   index: number
   type?: 'remove'
 }>('UPDATE_STARTING_ROTATION')
@@ -32,7 +31,7 @@ export const updateStartingRotationResult = createActionWithPayload<{
   startingPitchingRotation: StartingPitchingRotation
 }>('UPDATE_STARTING_ROTATION__RESULT')
 
-export const savePlayer = createActionWithPayload<MarketPlayerItemListing>('SAVE_PLAYER')
+export const savePlayer = createActionWithPayload<SquadBuildPlayer>('SAVE_PLAYER')
 export const savePlayerResult = createActionWithPayload<{
-  savedPlayers: MarketPlayerItemListing[]
+  savedPlayers: SquadBuildPlayer[]
 }>('SAVE_PLAYER__RESULT')

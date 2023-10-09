@@ -1,9 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { MarketPlayerItemListing } from '@services/marketListings'
-
 import * as actions from './actions'
-import { Bullpen, SquadBuild, StartingPitchingRotation, Positions } from './types'
+import { Bullpen, SquadBuildPlayer, StartingPitchingRotation, Positions, SquadBuild } from './types'
 
 const BULLPEN_PLACEHOLDER = [
   { position: Positions.RP, player: null },
@@ -38,47 +36,40 @@ const initialState = {
   } as SquadBuild,
   startingPitchingRotation: STARTING_ROTATION,
   bullpen: BULLPEN_PLACEHOLDER as Bullpen,
-  loading: false,
-  savedPlayers: [] as MarketPlayerItemListing[],
+  savedPlayers: [] as SquadBuildPlayer[],
 }
 
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(actions.updateSquadBuild, (state, { payload }) => ({
       ...state,
-      loading: true,
       player: payload.player,
       position: payload.position,
       isMainSP: payload.isMainSP,
     }))
     .addCase(actions.updateSquadBuildResult, (state, { payload }) => ({
       ...state,
-      loading: false,
       squad: payload.squad,
       startingPitchingRotation: payload.startingPitchingRotation,
     }))
     .addCase(actions.updateBullpen, (state, { payload }) => ({
       ...state,
-      loading: true,
       player: payload.player,
       index: payload.index,
       type: payload.type,
     }))
     .addCase(actions.updateBullpenResult, (state, { payload }) => ({
       ...state,
-      loading: false,
       bullpen: payload.bullpen,
     }))
     .addCase(actions.updateStartingRotation, (state, { payload }) => ({
       ...state,
-      loading: true,
       player: payload.player,
       index: payload.index,
       type: payload.type,
     }))
     .addCase(actions.updateStartingRotationResult, (state, { payload }) => ({
       ...state,
-      loading: false,
       squad: payload.squad,
       startingPitchingRotation: payload.startingPitchingRotation,
     }))

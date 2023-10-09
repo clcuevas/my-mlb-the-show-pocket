@@ -27,8 +27,8 @@ const Style = {
   `,
 }
 
-const calculatePlayerType = (player: MarketPlayerItemListing): string => {
-  const position = player.item.display_position
+const calculatePlayerType = (player: squadBuilderService.SquadBuildPlayer): string => {
+  const position = player.marketItem.item.display_position
 
   if (['RP', 'CP'].includes(position)) {
     return 'bullpen'
@@ -39,11 +39,11 @@ const calculatePlayerType = (player: MarketPlayerItemListing): string => {
   return 'main_squad'
 }
 
-const Player = ({ player }: { player: MarketPlayerItemListing }) => {
+const Player = ({ player }: { player: squadBuilderService.SquadBuildPlayer }) => {
   const [_collectObj, dragRef] = useDrag(
     () => ({
       type: calculatePlayerType(player),
-      item: { id: player.item.uuid, player },
+      item: { id: player.marketItem.item.uuid, player },
       collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
     }),
     []
@@ -51,7 +51,7 @@ const Player = ({ player }: { player: MarketPlayerItemListing }) => {
 
   return (
     <Style.ListItem ref={dragRef}>
-      <SmallCard player={player} />
+      <SmallCard player={player.marketItem} />
     </Style.ListItem>
   )
 }
@@ -66,7 +66,7 @@ const SavedPlayers = () => {
       ) : (
         <List disablePadding>
           {savedPlayers.map((player) => (
-            <Player key={`saved-player-item-${player.item.uuid}`} player={player} />
+            <Player key={`saved-player-item-${player?.detailedItem.uuid}`} player={player} />
           ))}
         </List>
       )}

@@ -8,10 +8,10 @@ import {
   Position,
   Positions,
   SquadBuild as SquadBuildType,
+  SquadBuildPlayer,
   StartingPitchingRotation,
 } from './types'
 import { isObjKey } from '../helpers'
-import { MarketPlayerItemListing } from '../marketListings'
 
 type UpdateSquadBuild = ReturnType<typeof actions.updateSquadBuild>
 type UpdateSquadBullpen = ReturnType<typeof actions.updateBullpen>
@@ -22,8 +22,7 @@ type SquadBuildState = {
   bullpen: Bullpen
   squad: SquadBuildType
   startingPitchingRotation: StartingPitchingRotation
-  loading: boolean
-  savedPlayers: MarketPlayerItemListing[]
+  savedPlayers: SquadBuildPlayer[]
 }
 
 function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
@@ -36,7 +35,7 @@ function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
 
     if (position === Positions.BENCH) {
       const bench = shouldRemove
-        ? squad.BENCH.filter((p) => player.item.uuid !== p.item.uuid)
+        ? squad.BENCH.filter((p) => player.marketItem.item.uuid !== p.marketItem.item.uuid)
         : squad.BENCH
 
       squad.BENCH = [...bench, ...(shouldRemove ? [] : [player])]
@@ -66,7 +65,7 @@ function* updateSquadBullpen(action: UpdateSquadBullpen): SagaIterator {
     const bullpen = [...squadBuild.bullpen]
 
     bullpen[index] = {
-      position: player.item.display_position as Position,
+      position: player.marketItem.item.display_position as Position,
       player: type === 'remove' ? null : player,
     }
 

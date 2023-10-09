@@ -66,7 +66,7 @@ const MarketplaceSearch = ({ position, onError, onSubmit }: Props) => {
           <Controller
             control={control}
             name="display_position"
-            defaultValue={formStateDefaultValues?.display_position}
+            defaultValue={position}
             rules={{ required: true }}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
               <Select onChange={onChange} value={value} error={error != null}>

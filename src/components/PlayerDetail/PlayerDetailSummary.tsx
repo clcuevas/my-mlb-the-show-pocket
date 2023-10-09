@@ -2,7 +2,7 @@ import { List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { SelectedPlayer } from '@components/PlayerDetail/types'
+import { SquadBuildPlayer } from '@services/squadBuilder'
 
 import { constructStatLabel, getTopStats } from './utils'
 import type { Stat } from './types'
@@ -14,7 +14,7 @@ const Style = {
 }
 
 type Props = {
-  player: SelectedPlayer | null
+  player: SquadBuildPlayer | null
 }
 
 const PlayerDetailSummary = ({ player }: Props) => {
@@ -22,7 +22,7 @@ const PlayerDetailSummary = ({ player }: Props) => {
 
   React.useEffect(() => {
     if (player) {
-      const data = getTopStats(player)
+      const data = getTopStats(player.detailedItem)
       setStats(data as Stat)
     }
   }, [])
@@ -46,8 +46,8 @@ const PlayerDetailSummary = ({ player }: Props) => {
         </Stack>
         <Stack justifyContent="flex-start" spacing={1} flex="1">
           <Typography variant="h6">Current Prices</Typography>
-          <Typography>Buy Now: {player?.buy_now}</Typography>
-          <Typography>Sell Now: {player?.sell_now}</Typography>
+          <Typography>Buy Now: {player?.marketItem.best_buy_price}</Typography>
+          <Typography>Sell Now: {player?.marketItem.best_sell_price}</Typography>
         </Stack>
       </Stack>
     </Style.Container>
