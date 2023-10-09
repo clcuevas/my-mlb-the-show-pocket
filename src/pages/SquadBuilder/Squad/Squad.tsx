@@ -1,10 +1,9 @@
-import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs } from '@mui/material'
+import { Box, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
-import PlayerDetail from '@components/PlayerDetail'
+import PlayerDetailModal from '@components/modals/PlayerDetailModal'
 import MarketplaceModal from '@components/modals/MarketplaceModal'
 import { a11yProps } from '@components/helpers'
 import { State } from '@reducers'
@@ -118,16 +117,12 @@ const Squad = () => {
           />
         </CustomTabPanel>
       </Box>
-      <Dialog
-        open={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
+
+      <PlayerDetailModal
+        isOpen={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
         onClose={() => handleShowPlayerDetail('close')}
-        maxWidth="lg">
-        <DialogTitle>{`${selectedPlayer?.detailedItem.name} ` ?? ''}Player Details</DialogTitle>
-        <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
-        <DialogContent dividers>
-          <PlayerDetail player={selectedPlayer} />
-        </DialogContent>
-      </Dialog>
+        player={selectedPlayer}
+      />
       <MarketplaceModal
         position={selectedPositionSquadType?.positionSelected ?? ''}
         isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
