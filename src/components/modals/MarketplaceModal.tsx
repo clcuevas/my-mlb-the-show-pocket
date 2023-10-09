@@ -47,8 +47,7 @@ type Props = {
 
 const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   const [fetchMarketListings] = useFetchMarketListingMutation()
-  const [fetchPlayerItemDetails, { isError: isPlayerDetailError, isLoading: isFetchingå }] =
-    useFetchPlayerItemDetailsMutation()
+  const [fetchPlayerItemDetails] = useFetchPlayerItemDetailsMutation()
 
   const [formErrors, setFormErrors] = React.useState<string[]>([])
   const [marketListings, setMarketListings] =

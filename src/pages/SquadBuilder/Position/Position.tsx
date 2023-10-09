@@ -28,7 +28,7 @@ type Props = {
   index?: number
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
-  onSearch: (position: PositionType, squadType: SquadType) => void
+  onSearch: (position: PositionType, squadType: SquadType, index?: number) => void
   onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }
 

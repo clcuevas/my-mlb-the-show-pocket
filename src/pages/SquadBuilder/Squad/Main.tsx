@@ -50,7 +50,7 @@ const thirdMainSPFirstPositions = [
 type Props = {
   squad: SquadBuild
   onDrop: (onDropParam: OnDrop) => void
-  onPositionSearch: (positionSelected: PositionType, squadType: SquadType) => void
+  onPositionSearch: (positionSelected: PositionType, squadType: SquadType, index?: number) => void
   onRemove: (onRemoveParam: OnRemove) => void
   onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }

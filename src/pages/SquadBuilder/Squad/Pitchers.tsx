@@ -29,7 +29,7 @@ type Props = {
   mainSP: SquadBuildPlayer | null
   startingPitchingRotation: StartingPitchingRotation
   onDrop: (onDropParam: OnDrop) => void
-  onPositionSearch: (position: PositionType, squadType: SquadType) => void
+  onPositionSearch: (position: PositionType, squadType: SquadType, index?: number) => void
   onRemove: (onRemoveParam: OnRemove) => void
   onShowPlayerDetail: (handleType: 'show' | 'close', player: SquadBuildPlayer) => void
 }

@@ -29,6 +29,7 @@ const Squad = () => {
   const [selectedPositionSquadType, setSelectedPositionSquadType] = React.useState<{
     positionSelected: Position
     squadType: SquadType
+    index?: number
   } | null>(null)
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
   const [shouldShowMarketplaceSearch, setShouldShowMarketplaceSearch] = React.useState(false)
@@ -46,21 +47,29 @@ const Squad = () => {
         squadType: selectedPositionSquadType?.squadType,
       } as SelectedPlayer)
     },
-    []
+    [selectedPositionSquadType?.squadType]
   )
 
   const handleOnPositionSearch = React.useCallback(
-    (positionSelected: Position, squadType: SquadType) => {
+    (positionSelected: Position, squadType: SquadType, index?: number) => {
       if (
-        selectedPositionSquadType &&
-        selectedPositionSquadType.positionSelected !== positionSelected
+        selectedPositionSquadType?.positionSelected !== positionSelected ||
+        selectedPositionSquadType?.index !== index
       ) {
-        setSelectedPositionSquadType({ positionSelected, squadType })
+        setSelectedPositionSquadType({
+          positionSelected,
+          squadType,
+          ...(index != null ? { index } : {}),
+        })
       }
 
       setShouldShowMarketplaceSearch(true)
     },
-    [selectedPositionSquadType, setSelectedPositionSquadType]
+    [
+      selectedPositionSquadType?.index,
+      selectedPositionSquadType?.positionSelected,
+      setSelectedPositionSquadType,
+    ]
   )
 
   const handleOnCardAdd = React.useCallback(
