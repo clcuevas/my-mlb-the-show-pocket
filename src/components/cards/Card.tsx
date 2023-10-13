@@ -1,4 +1,4 @@
-import { Card as MuiCard, CardContent, CardMedia } from '@mui/material'
+import { Card as MuiCard, CardMedia } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -30,9 +30,7 @@ const Card = ({ children, player, stylingProps, mediaStylingProps, ...rest }: Pr
           sx={{ ...(mediaStylingProps ? mediaStylingProps : {}) }}
         />
       )}
-      <CardContent sx={{ padding: { md: '10px 0 0 7px' }, height: { md: '55px' } }}>
-        {children}
-      </CardContent>
+      {children}
     </Style.Card>
   )
 }

@@ -1,20 +1,14 @@
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import { Button, Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
+import { Container, Grid, Pagination, Skeleton, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import CardWithActions from '@components/cards/CardWithActions'
-import { MarketPlayerItemListing, useGetPlayerMarketListingsQuery } from '@services/marketListings'
+import { useGetPlayerMarketListingsQuery } from '@services/marketListings'
 import Color from '@styles/Color'
 
-const Style = {
-  CardListingsContainer: styled.div`
-    display: flex;
-    flex-wrap: wrap;
+import Listings from './Listings'
 
-    margin-top: 30px;
-    margin-bottom: 30px;
-  `,
+const Style = {
   LoadingContainer: styled(Grid)`
     margin-top: 80px;
   `,
@@ -34,14 +28,6 @@ const Style = {
     width: 500px;
   `,
 }
-
-const Action = ({ player }: { player: MarketPlayerItemListing }) => (
-  <div className="action">
-    <Button type="button" variant="contained" className="action-btn">
-      Info
-    </Button>
-  </div>
-)
 
 const Marketplace = () => {
   const [pageCounter, setPageCounter] = React.useState(1)
@@ -87,24 +73,7 @@ const Marketplace = () => {
         </Style.LoadingContainer>
       ) : (
         <>
-          <Style.CardListingsContainer>
-            {data != null &&
-              data?.listings?.map((player, index) => (
-                <div key={`player-item-${player.item.uuid}-${index}`}>
-                  <CardWithActions
-                    stylingProps={{ width: 210, margin: '10px' }}
-                    player={player}
-                    actionComponent={<Action player={player} />}>
-                    <>
-                      <Typography variant="h6" sx={{ lineHeight: { md: 'normal' } }}>
-                        {player.item.name}, {player.item.ovr}
-                      </Typography>
-                      <Typography>{player.item.series} Series</Typography>
-                    </>
-                  </CardWithActions>
-                </div>
-              ))}
-          </Style.CardListingsContainer>
+          <Listings listings={data?.listings} />
           <Stack alignItems="center" mb="30px">
             <Pagination
               count={data?.total_pages}

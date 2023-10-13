@@ -1,4 +1,4 @@
-import { Card as MuiCard, CardContent, CardMedia } from '@mui/material'
+import { Card as MuiCard, CardMedia } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -75,7 +75,7 @@ const CardWithActions = ({
           sx={{ ...(mediaStylingProps ? mediaStylingProps : {}) }}
         />
       )}
-      <CardContent sx={{ padding: 0 }}>{children}</CardContent>
+      {children}
     </Style.Card>
   )
 }

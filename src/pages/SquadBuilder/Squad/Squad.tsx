@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetailModal from '@components/modals/PlayerDetailModal'
-import MarketplaceModal from '@components/modals/MarketplaceModal'
+import MarketplaceSearchModal from '@components/modals/MarketplaceSearchModal'
 import { a11yProps } from '@components/helpers'
 import { State } from '@reducers'
 import type { Position } from '@services/squadBuilder'
@@ -131,7 +131,7 @@ const Squad = () => {
         onClose={() => handleShowPlayerDetail('close')}
         player={selectedPlayer}
       />
-      <MarketplaceModal
+      <MarketplaceSearchModal
         position={selectedPositionSquadType?.positionSelected ?? ''}
         isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
         onAdd={handleOnCardAdd}
