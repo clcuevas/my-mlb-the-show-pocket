@@ -62,6 +62,10 @@ const CardWithActions = ({
       const p = 'marketItem' in _player ? _player.marketItem : _player
       setPlayer(p)
     }
+
+    if (_player == null) {
+      setPlayer(null)
+    }
   }, [_player, player])
 
   return (
