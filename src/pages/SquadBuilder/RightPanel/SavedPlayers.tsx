@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import SmallCard from '@components/cards/SmallCard'
 import { State } from '@reducers'
-import type { MarketPlayerItemListing } from '@services/marketListings'
 import * as squadBuilderService from '@services/squadBuilder'
 
 const Style = {

@@ -50,3 +50,20 @@ export type StartingRotationItem = {
   player: SquadBuildPlayer | null
 }
 export type StartingPitchingRotation = StartingRotationItem[]
+
+// Constants
+export const UPDATE_SQUAD_BUILD = 'UPDATE_SQUAD_BUILD' as const
+export const UPDATE_SQUAD_BUILD_RESULT = 'UPDATE_SQUAD_BUILD__RESULT' as const
+export const UPDATE_SQUAD_BUILD_ERROR = 'UPDATE_SQUAD_BUILD__ERROR' as const
+
+export const UPDATE_SQUAD_BULLPEN = 'UPDATE_SQUAD_BULLPEN' as const
+export const UPDATE_SQUAD_BULLPEN_RESULT = 'UPDATE_SQUAD_BULLPEN__RESULT' as const
+export const UPDATE_SQUAD_BULLPEN_ERROR = 'UPDATE_SQUAD_BULLPEN__ERROR' as const
+
+export const UPDATE_STARTING_ROTATION = 'UPDATE_STARTING_ROTATION' as const
+export const UPDATE_STARTING_ROTATION_RESULT = 'UPDATE_STARTING_ROTATION__RESULT' as const
+export const UPDATE_STARTING_ROTATION_ERROR = 'UPDATE_STARTING_ROTATION__ERROR' as const
+
+export const SAVE_PLAYER = 'SAVE_PLAYER' as const
+export const SAVE_PLAYER_RESULT = 'SAVE_PLAYER__RESULT' as const
+export const SAVE_PLAYER_ERROR = 'SAVE_PLAYER__ERROR' as const

@@ -19,8 +19,7 @@ const router = createBrowserRouter([
       {
         path: 'marketplace',
         element: <Marketplace />,
-        // Use the "loader" key to make an async call to the marketplace
-        // when navigating into the view
+        children: [],
       },
       {
         path: 'squad-builder',

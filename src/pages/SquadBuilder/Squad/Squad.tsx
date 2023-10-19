@@ -1,11 +1,10 @@
-import { Box, Dialog, DialogContent, DialogTitle, Tab, Tabs } from '@mui/material'
+import { Box, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import CloseIconButton from '@components/CloseIconButton'
 import CustomTabPanel from '@components/CustomTabPanel'
-import PlayerDetail from '@components/PlayerDetail'
-import MarketplaceModal from '@components/modals/MarketplaceModal'
+import PlayerDetailModal from '@components/modals/PlayerDetailModal'
+import MarketplaceSearchModal from '@components/modals/MarketplaceSearchModal'
 import { a11yProps } from '@components/helpers'
 import { State } from '@reducers'
 import type { Position } from '@services/squadBuilder'
@@ -24,13 +23,21 @@ const Squad = () => {
   )
 
   const [activeTab, setActiveTab] = React.useState(0)
+  // This state variable is used to display a player card's details and the player
+  // data is passed to the PlayerDetailModal. It is set by the callback we pass to
+  // the <Position /> component to view additional player details when the "details"
+  // button is clicked which is made available during a player onHover event.
   const [selectedPlayer, setSelectedPlayer] =
     React.useState<squadBuilderService.SquadBuildPlayer | null>(null)
+  // Maybe a better name for this state variable is "selectedPositionSearchParams" since
+  // we're using this object or data to apply the appropriate Marketplace search params
+  // in the form and using this data to also add the player card to a certain position.
   const [selectedPositionSquadType, setSelectedPositionSquadType] = React.useState<{
     positionSelected: Position
     squadType: squadBuilderService.SquadType
     index?: number
   } | null>(null)
+
   const [shouldShowPlayerDetail, setShouldShowPlayerDetail] = React.useState(false)
   const [shouldShowMarketplaceSearch, setShouldShowMarketplaceSearch] = React.useState(false)
 
@@ -118,17 +125,13 @@ const Squad = () => {
           />
         </CustomTabPanel>
       </Box>
-      <Dialog
-        open={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
+
+      <PlayerDetailModal
+        isOpen={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
         onClose={() => handleShowPlayerDetail('close')}
-        maxWidth="lg">
-        <DialogTitle>{`${selectedPlayer?.detailedItem.name} ` ?? ''}Player Details</DialogTitle>
-        <CloseIconButton onClose={() => handleShowPlayerDetail('close')} />
-        <DialogContent dividers>
-          <PlayerDetail player={selectedPlayer} />
-        </DialogContent>
-      </Dialog>
-      <MarketplaceModal
+        player={selectedPlayer}
+      />
+      <MarketplaceSearchModal
         position={selectedPositionSquadType?.positionSelected ?? ''}
         isOpen={shouldShowMarketplaceSearch && !shouldShowPlayerDetail}
         onAdd={handleOnCardAdd}

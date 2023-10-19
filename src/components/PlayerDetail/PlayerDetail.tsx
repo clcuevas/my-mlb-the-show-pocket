@@ -24,7 +24,7 @@ const PlayerDetail = ({ canAddPlayer, player }: Props) => {
   const [showFullDetails, setShowFullDetails] = React.useState(false)
 
   const hasBeenSaved = useSelector((state: State) =>
-    squadBuilderService.isSavedPlayer(state, player)
+    squadBuilderService.isSavedPlayer(state, player?.marketItem)
   )
 
   const handleShowFullDetailsToggle = React.useCallback(() => {

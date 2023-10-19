@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material'
+import { CardContent, Grid, Typography } from '@mui/material'
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import styled from 'styled-components'
@@ -106,21 +106,23 @@ const Position = ({
             onShowPlayerDetail={onShowPlayerDetail}
           />
         }>
-        {player != null ? (
-          <>
-            <Typography>
-              {player.marketItem.listing_name}, {player.marketItem.item.display_position}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Buy: {player.marketItem.best_buy_price}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Sell: {player.marketItem.best_sell_price}
-            </Typography>
-          </>
-        ) : (
-          <>{selectedPosition}</>
-        )}
+        <CardContent sx={{ padding: { md: '10px 0 0 7px' }, height: { md: '55px' } }}>
+          {player != null ? (
+            <>
+              <Typography>
+                {player.marketItem.listing_name}, {player.marketItem.item.display_position}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Buy: {player.marketItem.best_buy_price}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Sell: {player.marketItem.best_sell_price}
+              </Typography>
+            </>
+          ) : (
+            <>{selectedPosition}</>
+          )}
+        </CardContent>
       </CardWithActions>
     </Style.Position>
   )

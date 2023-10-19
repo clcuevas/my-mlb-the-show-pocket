@@ -3,6 +3,15 @@ import { createReducer } from '@reduxjs/toolkit'
 import * as actions from './actions'
 import { Bullpen, SquadBuildPlayer, StartingPitchingRotation, Positions, SquadBuild } from './types'
 
+interface SquadBuildState {
+  squad: SquadBuild
+  startingPitchingRotation: StartingPitchingRotation
+  bullpen: Bullpen
+  savedPlayers: SquadBuildPlayer[]
+  loading: boolean
+  error: unknown
+}
+
 const BULLPEN_PLACEHOLDER = [
   { position: Positions.RP, player: null },
   { position: Positions.RP, player: null },
@@ -33,53 +42,91 @@ const initialState = {
     C: null,
     MAIN_SP: null,
     BENCH: [],
-  } as SquadBuild,
+  },
   startingPitchingRotation: STARTING_ROTATION,
-  bullpen: BULLPEN_PLACEHOLDER as Bullpen,
-  savedPlayers: [] as SquadBuildPlayer[],
-}
+  bullpen: BULLPEN_PLACEHOLDER,
+  savedPlayers: [],
+  loading: false,
+  error: null,
+} as SquadBuildState
 
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(actions.updateSquadBuild, (state, { payload }) => ({
       ...state,
+      error: null,
       player: payload.player,
       position: payload.position,
       isMainSP: payload.isMainSP,
+      loading: true,
     }))
     .addCase(actions.updateSquadBuildResult, (state, { payload }) => ({
       ...state,
+      error: null,
       squad: payload.squad,
       startingPitchingRotation: payload.startingPitchingRotation,
+      loading: false,
+    }))
+    .addCase(actions.updateSquadBuildError, (state, { payload }) => ({
+      ...state,
+      error: payload.error,
+      loading: false,
     }))
     .addCase(actions.updateBullpen, (state, { payload }) => ({
       ...state,
+      error: null,
       player: payload.player,
       index: payload.index,
       type: payload.type,
+      loading: true,
     }))
     .addCase(actions.updateBullpenResult, (state, { payload }) => ({
       ...state,
       bullpen: payload.bullpen,
+      error: null,
+      loading: false,
+    }))
+    .addCase(actions.updateBullpenError, (state, { payload }) => ({
+      ...state,
+      error: payload.error,
+      loading: false,
     }))
     .addCase(actions.updateStartingRotation, (state, { payload }) => ({
       ...state,
+      error: null,
       player: payload.player,
       index: payload.index,
       type: payload.type,
+      loading: true,
     }))
     .addCase(actions.updateStartingRotationResult, (state, { payload }) => ({
       ...state,
+      error: null,
       squad: payload.squad,
       startingPitchingRotation: payload.startingPitchingRotation,
+      loading: false,
+    }))
+    .addCase(actions.updateStartingRotationError, (state, { payload }) => ({
+      ...state,
+      error: payload.error,
+      loading: false,
     }))
     .addCase(actions.savePlayer, (state, { payload }) => ({
       ...state,
+      error: null,
+      loading: true,
       player: payload,
     }))
     .addCase(actions.savePlayerResult, (state, { payload }) => ({
       ...state,
+      error: null,
+      loading: false,
       savedPlayers: payload.savedPlayers,
+    }))
+    .addCase(actions.savePlayerError, (state, { payload }) => ({
+      ...state,
+      loading: false,
+      error: payload.error,
     }))
     .addDefaultCase((state) => state)
 })
