@@ -76,7 +76,7 @@ const Position = ({
   React.useEffect(() => {
     const _position = position === 'MAIN_SP' ? 'SP' : position
     setSelectedPosition(_position)
-  }, [])
+  }, [position])
 
   return (
     <Style.Position ref={dropRef} item xs="auto">
@@ -85,7 +85,7 @@ const Position = ({
         player={player}
         mediaStylingProps={{
           backgroundColor: Color.PRIMARY_LIGHT,
-          height: { sm: '100px', md: '200px' },
+          height: { md: '100px', lg: '200px' },
           objectFit: 'contain',
           flex: '2 1 auto',
         }}
