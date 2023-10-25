@@ -7,10 +7,11 @@ import {
   type Bullpen,
   type Position as PositionType,
   SquadBuildPlayer,
+  SquadType,
 } from '@services/squadBuilder'
 
 import Position from '../Position'
-import type { OnDrop, OnRemove, SquadType } from '../types'
+import type { OnDrop, OnRemove } from '../types'
 
 const Style = {
   Container: styled.div``,
@@ -54,6 +55,7 @@ const Pitchers = ({
                 position={position}
                 type="starting_rotation"
                 index={index}
+                startingPitchers={startingPitchingRotation}
                 onDrop={onDrop}
                 onRemove={onRemove}
                 onSearch={onPositionSearch}
@@ -70,6 +72,7 @@ const Pitchers = ({
           {bullpen.map(({ position, player }, index) => (
             <Grid key={`bullpen-pitcher-${index}`} item xs="auto">
               <Position
+                bullpen={bullpen}
                 player={player}
                 position={position}
                 type="bullpen"

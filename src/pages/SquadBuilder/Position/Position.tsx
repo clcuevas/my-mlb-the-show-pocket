@@ -5,14 +5,17 @@ import styled from 'styled-components'
 
 import CardWithActions from '@components/cards/CardWithActions'
 import {
+  Bullpen,
   Position as PositionType,
-  Positions,
+  SquadBuild,
   SquadBuildPlayer,
   SquadType,
+  StartingPitchingRotation,
 } from '@services/squadBuilder'
 import Color from '@styles/Color'
 
 import ActionArea from './ActionArea'
+import { canDrop } from './utils'
 import type { DropItem, OnDrop, OnRemove } from '../types'
 
 const CardResponsiveSettings = {
@@ -27,10 +30,13 @@ const Style = {
 }
 
 type Props = {
+  bullpen?: Bullpen
   player: SquadBuildPlayer | null
   position: PositionType
-  type: 'main_squad' | 'starting_rotation' | 'bullpen' | 'bench'
+  type: SquadType
   index?: number
+  squad?: SquadBuild
+  startingPitchers?: StartingPitchingRotation
   onDrop: (onDropParam: OnDrop) => void
   onRemove: (onRemoveParam: OnRemove) => void
   onSearch: (position: PositionType, squadType: SquadType, index?: number) => void
@@ -38,9 +44,12 @@ type Props = {
 }
 
 const Position = ({
+  bullpen,
   player,
   position,
   index,
+  squad,
+  startingPitchers,
   type,
   onDrop,
   onRemove,
@@ -52,23 +61,8 @@ const Position = ({
   const [_collectObj, dropRef] = useDrop(
     () => ({
       accept: [type, ...(position === 'MAIN_SP' ? ['starting_rotation'] : [])],
-      canDrop: ({ player }: DropItem) => {
-        const playerPosition = player.marketItem.item.display_position
-        const bullpenPositions = [Positions.CP, Positions.RP] as PositionType[]
-
-        switch (position) {
-          case Positions.MAIN_SP:
-            return playerPosition === Positions.SP && type === 'main_squad'
-          case Positions.SP:
-            return playerPosition === Positions.SP && type === 'starting_rotation'
-          case Positions.RP:
-            return type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
-          case Positions.CP:
-            return type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
-          default:
-            return true
-        }
-      },
+      canDrop: (droppedPlayer: DropItem) =>
+        canDrop({ droppedItem: droppedPlayer, position, type, bullpen, squad, startingPitchers }),
       drop: (item: DropItem) => {
         onDrop({ index, item, position, type })
       },
@@ -76,7 +70,7 @@ const Position = ({
         canDrop: !!monitor.canDrop(),
       }),
     }),
-    [player]
+    [bullpen, player, squad, startingPitchers, type]
   )
 
   React.useEffect(() => {
