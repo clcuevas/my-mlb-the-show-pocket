@@ -11,7 +11,7 @@ import {
 } from '@services/squadBuilder'
 
 import type { OnDrop, OnRemove } from '../types'
-import Position from '../Position'
+import { MemoizedPosition as Position } from '../Position'
 
 const Style = {
   CatcherContainer: styled(Grid)`

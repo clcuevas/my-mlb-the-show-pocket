@@ -122,4 +122,4 @@ const Position = ({
   )
 }
 
-export default Position
+export const MemoizedPosition = React.memo(Position)

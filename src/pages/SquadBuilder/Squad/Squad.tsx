@@ -125,7 +125,6 @@ const Squad = () => {
           />
         </CustomTabPanel>
       </Box>
-
       <PlayerDetailModal
         isOpen={shouldShowPlayerDetail && !shouldShowMarketplaceSearch}
         onClose={() => handleShowPlayerDetail('close')}
