@@ -23,6 +23,8 @@ export const isSavedPlayer = (
 
 export const isError = (state: State) => getSquadBuild(state).error != null
 
+const calcAverage = (division: number) => (isNaN(division) ? 0 : division)
+
 const calcBattingAverages = (players: SquadBuildPlayer[]) => {
   let leftContactTotal = 0
   let rightContactTotal = 0
@@ -57,15 +59,15 @@ const calcBattingAverages = (players: SquadBuildPlayer[]) => {
   })
 
   return {
-    ['left_contact']: leftContactTotal / playersEvaluated,
-    ['right_contact']: rightContactTotal / playersEvaluated,
-    ['left_power']: leftPowerTotal / playersEvaluated,
-    ['right_power']: rightPowerTotal / playersEvaluated,
-    ['clutch']: clutch / playersEvaluated,
-    ['plate_discipline']: discipline / playersEvaluated,
-    ['plate_vision']: vision / playersEvaluated,
-    ['bunting']: bunting / playersEvaluated,
-    ['drag_bunting']: dragBunting / playersEvaluated,
+    ['left_contact']: calcAverage(leftContactTotal / playersEvaluated),
+    ['right_contact']: calcAverage(rightContactTotal / playersEvaluated),
+    ['left_power']: calcAverage(leftPowerTotal / playersEvaluated),
+    ['right_power']: calcAverage(rightPowerTotal / playersEvaluated),
+    ['clutch']: calcAverage(clutch / playersEvaluated),
+    ['plate_discipline']: calcAverage(discipline / playersEvaluated),
+    ['plate_vision']: calcAverage(vision / playersEvaluated),
+    ['bunting']: calcAverage(bunting / playersEvaluated),
+    ['drag_bunting']: calcAverage(dragBunting / playersEvaluated),
   }
 }
 
@@ -87,9 +89,9 @@ const calcBaserunningAverages = (players: SquadBuildPlayer[]) => {
   })
 
   return {
-    speed: speed / playersEvaluated,
-    aggression: baseAggression / playersEvaluated,
-    stealing: baseAbility / playersEvaluated,
+    speed: calcAverage(speed / playersEvaluated),
+    aggression: calcAverage(baseAggression / playersEvaluated),
+    stealing: calcAverage(baseAbility / playersEvaluated),
   }
 }
 
@@ -115,11 +117,11 @@ const calcFieldingAverages = (players: SquadBuildPlayer[]) => {
   })
 
   return {
-    ['fielding']: fielding / playersEvaluated,
-    ['arm_strength']: armStrength / playersEvaluated,
-    ['arm_accuracy']: armAccuracy / playersEvaluated,
-    ['reaction']: reaction / playersEvaluated,
-    ['blocking']: blocking / playersEvaluated,
+    ['fielding']: calcAverage(fielding / playersEvaluated),
+    ['arm_strength']: calcAverage(armStrength / playersEvaluated),
+    ['arm_accuracy']: calcAverage(armAccuracy / playersEvaluated),
+    ['reaction']: calcAverage(reaction / playersEvaluated),
+    ['blocking']: calcAverage(blocking / playersEvaluated),
   }
 }
 
