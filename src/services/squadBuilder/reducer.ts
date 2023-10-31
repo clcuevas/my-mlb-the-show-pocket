@@ -1,16 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import * as actions from './actions'
-import { Bullpen, SquadBuildPlayer, StartingPitchingRotation, Positions, SquadBuild } from './types'
-
-interface SquadBuildState {
-  squad: SquadBuild
-  startingPitchingRotation: StartingPitchingRotation
-  bullpen: Bullpen
-  savedPlayers: SquadBuildPlayer[]
-  loading: boolean
-  error: unknown
-}
+import { StartingPitchingRotation, Positions, SquadBuildState } from './types'
 
 const BULLPEN_PLACEHOLDER = [
   { position: Positions.RP, player: null },
