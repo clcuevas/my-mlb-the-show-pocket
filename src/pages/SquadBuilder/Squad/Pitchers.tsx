@@ -10,7 +10,7 @@ import {
   SquadType,
 } from '@services/squadBuilder'
 
-import Position from '../Position'
+import { MemoizedPosition as Position } from '../Position'
 import type { OnDrop, OnRemove } from '../types'
 
 const Style = {

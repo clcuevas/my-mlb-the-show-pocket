@@ -51,6 +51,15 @@ export type StartingRotationItem = {
 }
 export type StartingPitchingRotation = StartingRotationItem[]
 
+export interface SquadBuildState {
+  squad: SquadBuild
+  startingPitchingRotation: StartingPitchingRotation
+  bullpen: Bullpen
+  savedPlayers: SquadBuildPlayer[]
+  loading: boolean
+  error: unknown
+}
+
 // Constants
 export const UPDATE_SQUAD_BUILD = 'UPDATE_SQUAD_BUILD' as const
 export const UPDATE_SQUAD_BUILD_RESULT = 'UPDATE_SQUAD_BUILD__RESULT' as const
