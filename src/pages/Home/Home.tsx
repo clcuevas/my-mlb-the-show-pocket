@@ -5,10 +5,7 @@ import styled from 'styled-components'
 import Color from '@styles/Color'
 
 const Style = {
-  Container: styled.div`
-    height: 350px;
-  `,
-  IntroContainer: styled(MuiContainer)`
+  Section: styled(MuiContainer)`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,14 +26,13 @@ const Style = {
   SquadBuilderButton: styled(Button)`
     margin-top: 15px;
   `,
-  OtherFeaturesSection: styled.div`
+  SecondarySection: styled(MuiContainer)`
+    display: flex;
+
     background-color: ${Color.GRAY_LIGHT};
     margin-top: 15px;
     padding-top: 95px;
     padding-bottom: 95px;
-  `,
-  OtherFeatureContainer: styled(MuiContainer)`
-    display: flex;
   `,
   Feature: styled.div<{ $first?: boolean; $last?: boolean }>`
     display: flex;
@@ -70,8 +66,8 @@ const Style = {
 
 const Home = () => {
   return (
-    <Style.Container>
-      <Style.IntroContainer>
+    <>
+      <Style.Section>
         <Style.SquadBuilderMessaging>
           <Typography variant="h3">Build your Diamond Dynasty squad</Typography>
           <Typography>With our easy-to-use Squad Builder tool</Typography>
@@ -82,33 +78,31 @@ const Home = () => {
             Start Building
           </Style.SquadBuilderButton>
         </Style.SquadBuilderActions>
-      </Style.IntroContainer>
-      <Style.OtherFeaturesSection>
-        <Style.OtherFeatureContainer>
-          <Style.Feature $first>
-            <Style.FeatureTitle variant="h5">Marketplace</Style.FeatureTitle>
-            <Style.FeatureInfo $isSubHeader>Search for player cards in real-time</Style.FeatureInfo>
-            <Style.FeatureInfo>
-              Uses The Show's current marketplace to search for new player cards added, a card's buy
-              now and sell now prices, and more!
-            </Style.FeatureInfo>
-            <Style.FeatureButton type="button" variant="contained" color="secondary">
-              Search Marketplace
-            </Style.FeatureButton>
-          </Style.Feature>
-          <Style.Feature $last>
-            <Style.FeatureTitle variant="h5">Roster Updates</Style.FeatureTitle>
-            <Style.FeatureInfo $isSubHeader>View roster updates in real-time</Style.FeatureInfo>
-            <Style.FeatureInfo>
-              Easily look through all the roster updates with more filter opetions.
-            </Style.FeatureInfo>
-            <Style.FeatureButton type="button" variant="contained" color="secondary">
-              View Roster Updates
-            </Style.FeatureButton>
-          </Style.Feature>
-        </Style.OtherFeatureContainer>
-      </Style.OtherFeaturesSection>
-      <Style.IntroContainer>
+      </Style.Section>
+      <Style.SecondarySection>
+        <Style.Feature $first>
+          <Style.FeatureTitle variant="h5">Marketplace</Style.FeatureTitle>
+          <Style.FeatureInfo $isSubHeader>Search for player cards in real-time</Style.FeatureInfo>
+          <Style.FeatureInfo>
+            Uses The Show's current marketplace to search for new player cards added, a card's buy
+            now and sell now prices, and more!
+          </Style.FeatureInfo>
+          <Style.FeatureButton type="button" variant="contained" color="secondary">
+            Search Marketplace
+          </Style.FeatureButton>
+        </Style.Feature>
+        <Style.Feature $last>
+          <Style.FeatureTitle variant="h5">Roster Updates</Style.FeatureTitle>
+          <Style.FeatureInfo $isSubHeader>View roster updates in real-time</Style.FeatureInfo>
+          <Style.FeatureInfo>
+            Easily look through all the roster updates with more filter opetions.
+          </Style.FeatureInfo>
+          <Style.FeatureButton type="button" variant="contained" color="secondary">
+            View Roster Updates
+          </Style.FeatureButton>
+        </Style.Feature>
+      </Style.SecondarySection>
+      <Style.Section>
         <Style.SquadBuilderMessaging>
           <Typography variant="h3">Create an account</Typography>
           <Typography>
@@ -123,8 +117,8 @@ const Home = () => {
             Sign Up
           </Style.SquadBuilderButton>
         </Style.SquadBuilderActions>
-      </Style.IntroContainer>
-    </Style.Container>
+      </Style.Section>
+    </>
   )
 }
 

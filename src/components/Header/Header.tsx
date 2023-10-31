@@ -1,5 +1,6 @@
 import { Container as MuiContainer, Typography } from '@mui/material'
 import * as React from 'react'
+import { NavLink as RRNavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Color from '@styles/Color'
@@ -13,6 +14,15 @@ const Style = {
     padding-top: 20px;
     padding-bottom: 20px;
     margin-bottom: 20px;
+  `,
+  HomeLink: styled(RRNavLink)`
+    color: ${Color.PRIMARY_MAIN};
+    margin-left: 10px;
+    text-decoration: none;
+
+    &:visited {
+      color: ${Color.PRIMARY_MAIN};
+    }
   `,
   Layout: styled.div`
     display: flex;
@@ -36,11 +46,14 @@ const Header = () => (
   <Style.Container>
     <MuiContainer>
       <Style.Layout>
-        <Style.LogoContainer>
-          <Typography>
-            <Style.BoldText>My</Style.BoldText> MLB The Show <Style.BoldText>Pocket</Style.BoldText>
-          </Typography>
-        </Style.LogoContainer>
+        <Style.HomeLink to="/">
+          <Style.LogoContainer>
+            <Typography>
+              <Style.BoldText>My</Style.BoldText> MLB The Show{' '}
+              <Style.BoldText>Pocket</Style.BoldText>
+            </Typography>
+          </Style.LogoContainer>
+        </Style.HomeLink>
         <Style.NavContainer>
           <NavigationItems />
         </Style.NavContainer>
