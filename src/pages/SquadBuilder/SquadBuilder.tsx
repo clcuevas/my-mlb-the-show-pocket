@@ -16,10 +16,10 @@ const Style = {
 const SquadBuilder = () => (
   <DndProvider backend={HTML5Backend}>
     <Style.Container container spacing={2}>
-      <Grid item xs={7} md={9} lg={10}>
+      <Grid item xs={7} md={8} lg={9}>
         <Squad />
       </Grid>
-      <Grid item xs={5} md={3} lg={2}>
+      <Grid item xs={5} md={4} lg={3}>
         <RightPanel />
       </Grid>
     </Style.Container>
