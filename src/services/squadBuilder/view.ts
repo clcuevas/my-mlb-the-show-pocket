@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit'
 import { State } from '@reducers'
 import { MarketPlayerItemListing } from '@services/marketListings'
 
-import { Positions, SquadBuild, SquadBuildPlayer } from './types'
+import { Positions, SquadBuildPlayer } from './types'
 
 export const getSquadBuild = (state: State) => state.squad
 
