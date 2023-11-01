@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit'
 import { State } from '@reducers'
 import { MarketPlayerItemListing } from '@services/marketListings'
 
-import { Positions, SquadBuild, SquadBuildPlayer } from './types'
+import { Positions, SquadBuildPlayer } from './types'
 
 export const getSquadBuild = (state: State) => state.squad
 
@@ -23,6 +23,8 @@ export const isSavedPlayer = (
 
 export const isError = (state: State) => getSquadBuild(state).error != null
 
+const calcAverage = (division: number) => (isNaN(division) ? 0 : division)
+
 const calcBattingAverages = (players: SquadBuildPlayer[]) => {
   let leftContactTotal = 0
   let rightContactTotal = 0
@@ -36,7 +38,7 @@ const calcBattingAverages = (players: SquadBuildPlayer[]) => {
   let bunting = 0
   let dragBunting = 0
 
-  let playersEvaluated = 0
+  const playersEvaluated = players.length
 
   players.forEach((player) => {
     const detail = player.detailedItem
@@ -52,20 +54,18 @@ const calcBattingAverages = (players: SquadBuildPlayer[]) => {
 
     bunting += detail['bunting_ability']
     dragBunting += detail['drag_bunting_ability']
-
-    playersEvaluated += 1
   })
 
   return {
-    ['left_contact']: leftContactTotal / playersEvaluated,
-    ['right_contact']: rightContactTotal / playersEvaluated,
-    ['left_power']: leftPowerTotal / playersEvaluated,
-    ['right_power']: rightPowerTotal / playersEvaluated,
-    ['clutch']: clutch / playersEvaluated,
-    ['plate_discipline']: discipline / playersEvaluated,
-    ['plate_vision']: vision / playersEvaluated,
-    ['bunting']: bunting / playersEvaluated,
-    ['drag_bunting']: dragBunting / playersEvaluated,
+    ['left_contact']: calcAverage(leftContactTotal / playersEvaluated),
+    ['right_contact']: calcAverage(rightContactTotal / playersEvaluated),
+    ['left_power']: calcAverage(leftPowerTotal / playersEvaluated),
+    ['right_power']: calcAverage(rightPowerTotal / playersEvaluated),
+    ['clutch']: calcAverage(clutch / playersEvaluated),
+    ['plate_discipline']: calcAverage(discipline / playersEvaluated),
+    ['plate_vision']: calcAverage(vision / playersEvaluated),
+    ['bunting']: calcAverage(bunting / playersEvaluated),
+    ['drag_bunting']: calcAverage(dragBunting / playersEvaluated),
   }
 }
 
@@ -74,7 +74,7 @@ const calcBaserunningAverages = (players: SquadBuildPlayer[]) => {
   let baseAbility = 0
   let baseAggression = 0
 
-  let playersEvaluated = 0
+  const playersEvaluated = players.length
 
   players.forEach((player) => {
     const detail = player.detailedItem
@@ -82,14 +82,12 @@ const calcBaserunningAverages = (players: SquadBuildPlayer[]) => {
     speed += detail['speed']
     baseAbility += detail['baserunning_ability']
     baseAggression += detail['baserunning_aggression']
-
-    playersEvaluated += 1
   })
 
   return {
-    speed: speed / playersEvaluated,
-    aggression: baseAggression / playersEvaluated,
-    stealing: baseAbility / playersEvaluated,
+    speed: calcAverage(speed / playersEvaluated),
+    aggression: calcAverage(baseAggression / playersEvaluated),
+    stealing: calcAverage(baseAbility / playersEvaluated),
   }
 }
 
@@ -100,7 +98,7 @@ const calcFieldingAverages = (players: SquadBuildPlayer[]) => {
   let armAccuracy = 0
   let blocking = 0
 
-  let playersEvaluated = 0
+  const playersEvaluated = players.length
 
   players.forEach((player) => {
     const detail = player.detailedItem
@@ -110,16 +108,56 @@ const calcFieldingAverages = (players: SquadBuildPlayer[]) => {
     armAccuracy += detail['arm_accuracy']
     armStrength += detail['arm_strength']
     blocking += detail['blocking']
-
-    playersEvaluated += 1
   })
 
   return {
-    ['fielding']: fielding / playersEvaluated,
-    ['arm_strength']: armStrength / playersEvaluated,
-    ['arm_accuracy']: armAccuracy / playersEvaluated,
-    ['reaction']: reaction / playersEvaluated,
-    ['blocking']: blocking / playersEvaluated,
+    ['fielding']: calcAverage(fielding / playersEvaluated),
+    ['arm_strength']: calcAverage(armStrength / playersEvaluated),
+    ['arm_accuracy']: calcAverage(armAccuracy / playersEvaluated),
+    ['reaction']: calcAverage(reaction / playersEvaluated),
+    ['blocking']: calcAverage(blocking / playersEvaluated),
+  }
+}
+
+const calcPitchingAverages = (players: SquadBuildPlayer[]) => {
+  let hitsPerBf = 0
+  let kPerBf = 0
+  let bbPerBf = 0
+  let hrPerBf = 0
+  let stamina = 0
+
+  let pitchingClutch = 0
+  let pitchVelocity = 0
+  let pitchControl = 0
+  let pitchMovement = 0
+
+  const playersEvaluated = players.length
+
+  players.forEach((player) => {
+    const detail = player.detailedItem
+
+    hitsPerBf += detail['hits_per_bf']
+    kPerBf += detail['k_per_bf']
+    bbPerBf += detail['bb_per_bf']
+    hrPerBf += detail['hr_per_bf']
+    stamina += detail['stamina']
+
+    pitchingClutch += detail['pitching_clutch']
+    pitchVelocity += detail['pitch_velocity']
+    pitchControl += detail['pitch_control']
+    pitchMovement += detail['pitch_movement']
+  })
+
+  return {
+    ['hits_per_bf']: calcAverage(hitsPerBf / playersEvaluated),
+    ['k_per_bf']: calcAverage(kPerBf / playersEvaluated),
+    ['bb_per_bf']: calcAverage(bbPerBf / playersEvaluated),
+    ['hr_per_bf']: calcAverage(hrPerBf / playersEvaluated),
+    ['pitching_clutch']: calcAverage(pitchingClutch / playersEvaluated),
+    ['pitch_velocity']: calcAverage(pitchVelocity / playersEvaluated),
+    ['pitch_control']: calcAverage(pitchControl / playersEvaluated),
+    ['pitch_movement']: calcAverage(pitchMovement / playersEvaluated),
+    ['stamina']: calcAverage(stamina / playersEvaluated),
   }
 }
 
@@ -131,6 +169,8 @@ export const squadBuildOverall = createSelector(
     const {
       squad: { BENCH: bench },
       squad: mainSquad,
+      startingPitchingRotation,
+      bullpen,
     } = squad
 
     const main = Object.entries(mainSquad)
@@ -143,16 +183,26 @@ export const squadBuildOverall = createSelector(
       })
       .filter((player) => player != null) as SquadBuildPlayer[]
 
+    const startingPitching = startingPitchingRotation
+      .map(({ player }) => player)
+      .filter((p) => p != null) as SquadBuildPlayer[]
+    const bullpenPitching = bullpen
+      .map(({ player }) => player)
+      .filter((p) => p != null) as SquadBuildPlayer[]
+
     const players = [...main, ...bench]
+    const pitchers = [...startingPitching, ...bullpenPitching]
 
     const battingAvgerages = calcBattingAverages(players)
     const baserunningAverages = calcBaserunningAverages(players)
     const fieldingAverages = calcFieldingAverages(players)
+    const pitchingAverages = calcPitchingAverages(pitchers)
 
     return {
       batting: { ...battingAvgerages },
       baserunning: { ...baserunningAverages },
       fielding: { ...fieldingAverages },
+      pitching: { ...pitchingAverages },
     }
   }
 )
