@@ -31,7 +31,7 @@ const Style = {
 }
 
 const Overall = () => {
-  const { batting, baserunning, fielding } = useSelector((state: State) =>
+  const { batting, baserunning, fielding, pitching } = useSelector((state: State) =>
     squadBuilderService.squadBuildOverall(state)
   )
 
@@ -65,6 +65,18 @@ const Overall = () => {
         <Dropdown title="Fielding Averages">
           {Object.entries(fielding).map(([key, value], index) => (
             <Style.Stat key={`avg-fielding-stat-${index}`}>
+              <Style.StatLabel variant="body2">
+                {key.replace(/_/g, ' ').toLocaleUpperCase()}
+              </Style.StatLabel>
+              <Style.StatValue variant="body2">{value.toFixed(0)}</Style.StatValue>
+            </Style.Stat>
+          ))}
+        </Dropdown>
+      </Style.StatContainer>
+      <Style.StatContainer>
+        <Dropdown title="Pitching Averages">
+          {Object.entries(pitching).map(([key, value], index) => (
+            <Style.Stat key={`avg-pitching-stat-${index}`}>
               <Style.StatLabel variant="body2">
                 {key.replace(/_/g, ' ').toLocaleUpperCase()}
               </Style.StatLabel>
