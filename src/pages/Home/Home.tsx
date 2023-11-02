@@ -1,19 +1,20 @@
-import { Button, Container as MuiContainer, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
 import styled from 'styled-components'
 
 import Color from '@styles/Color'
 
 const Style = {
-  Section: styled(MuiContainer)`
+  Section: styled(Box)`
     display: flex;
-    justify-content: center;
     align-items: center;
 
     height: 350px;
   `,
   SquadBuilderMessaging: styled.div`
-    flex: 1 1 250px;
+    flex: 1 1 0;
+
+    margin-left: 15%;
   `,
   SquadBuilderActions: styled.div`
     flex: 1 1 auto;
@@ -26,7 +27,7 @@ const Style = {
   SquadBuilderButton: styled(Button)`
     margin-top: 15px;
   `,
-  SecondarySection: styled(MuiContainer)`
+  SecondarySection: styled(Box)`
     display: flex;
 
     background-color: ${Color.GRAY_LIGHT};
@@ -34,15 +35,14 @@ const Style = {
     padding-top: 95px;
     padding-bottom: 95px;
   `,
-  Feature: styled.div<{ $first?: boolean; $last?: boolean }>`
+  Feature: styled.div<{ $first?: boolean }>`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 
     flex: 1 1 125px;
 
-    margin-right: ${({ $first }) => ($first ? '25px' : '0px')};
-    margin-left: ${({ $last }) => ($last ? '25px' : '0px')};
+    margin-left: ${({ $first }) => ($first ? '15%' : '5%')};
   `,
   FeatureTitle: styled(Typography)`
     flex: 0 1 auto;
@@ -91,7 +91,7 @@ const Home = () => {
             Search Marketplace
           </Style.FeatureButton>
         </Style.Feature>
-        <Style.Feature $last>
+        <Style.Feature>
           <Style.FeatureTitle variant="h5">Roster Updates</Style.FeatureTitle>
           <Style.FeatureInfo $isSubHeader>View roster updates in real-time</Style.FeatureInfo>
           <Style.FeatureInfo>

@@ -4,6 +4,7 @@ import Outlet from '../components/Outlet'
 import ErrorPage from '../pages/Error'
 import Home from '../pages/Home'
 import Marketplace from '../pages/Marketplace'
+import Rosters from '../pages/Rosters'
 import SquadBuilder from '../pages/SquadBuilder'
 
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         path: 'marketplace',
         element: <Marketplace />,
         children: [],
+      },
+      {
+        path: 'rosters',
+        element: <Rosters />,
       },
       {
         path: 'squad-builder',
