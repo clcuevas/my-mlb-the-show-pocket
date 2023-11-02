@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetailModal from '@components/modals/PlayerDetailModal'
-import MarketplaceSearchModal from '@components/modals/MarketplaceSearchModal'
+import MarketplaceSearchModal from '@components/modals/marketplace/MarketplaceSearchModal'
 import { a11yProps } from '@components/helpers'
 import { State } from '@reducers'
 import type { Position } from '@services/squadBuilder'
