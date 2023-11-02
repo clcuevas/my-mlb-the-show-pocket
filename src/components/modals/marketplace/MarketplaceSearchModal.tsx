@@ -74,14 +74,17 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
 
     const playerDetails = await fetchPlayerItemDetails(selectedPlayer.item.uuid).unwrap()
 
-    onAdd({ marketItem: selectedPlayer, detailedItem: playerDetails })
-    // Clear everything
-    setMarketListings(null)
-    setSelectedPlayer(null)
-    setFormErrors([])
-    // Close Modal
-    onModalClose()
-  }, [selectedPlayer, fetchPlayerItemDetails, onAdd, onModalClose])
+    if (!isFetchPlayerItemError) {
+      onAdd({ marketItem: selectedPlayer, detailedItem: playerDetails })
+      // Clear everything
+      setMarketListings(null)
+      setSelectedPlayer(null)
+      setFormErrors([])
+      // Close Modal
+      onModalClose()
+    }
+    // TODO: Think about what to do in the event of an error
+  }, [isFetchPlayerItemError, selectedPlayer, fetchPlayerItemDetails, onAdd, onModalClose])
 
   return (
     <>
@@ -107,6 +110,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
               <div>Could not fetch market listings. Try again.</div>
             ) : (
               <SearchResults
+                isLoading={isFetchMarketListingsLoading}
                 marketListings={marketListings}
                 selectedPlayerUUID={selectedPlayer?.item.uuid}
                 onPlayerSelect={(player) => setSelectedPlayer(player)}
