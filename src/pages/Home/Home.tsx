@@ -1,124 +1,124 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import React from 'react'
 import styled from 'styled-components'
 
 import Color from '@styles/Color'
 
 const Style = {
-  Section: styled(Box)`
-    display: flex;
-    align-items: center;
+  Container: styled.div`
+    display: grid;
+
+    grid-template-columns: 100%;
+    grid-template-rows: auto;
+    grid-template-areas: 'section' 'secondary' 'section2';
+  `,
+  Button: styled(Button)`
+    margin-top: 15px;
+  `,
+  Section: styled.section`
+    display: grid;
+
+    grid-area: section;
+    grid-template-columns: 15% 1fr 15% 1fr 15%;
+    grid-template-rows: 1;
+    grid-template-areas: '. left . right .';
 
     height: 350px;
   `,
-  SquadBuilderMessaging: styled.div`
-    flex: 1 1 0;
+  Section2: styled.section`
+    display: grid;
 
-    margin-left: 15%;
-  `,
-  SquadBuilderActions: styled.div`
-    flex: 1 1 auto;
+    grid-area: section2;
+    grid-template-columns: 15% 1fr 15% 1fr 15%;
+    grid-template-rows: 1;
+    grid-template-areas: '. left . right .';
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    height: 350px;
   `,
-  SquadBuilderButton: styled(Button)`
-    margin-top: 15px;
+  SectionLeft: styled.div`
+    grid-area: left;
+    align-self: center;
   `,
-  SecondarySection: styled(Box)`
-    display: flex;
+  SectionRight: styled.div`
+    grid-area: right;
+    align-self: center;
+  `,
+  Secondary: styled.section`
+    display: grid;
+
+    grid-area: secondary;
+    grid-template-columns: 15% 1fr 15% 1fr 15%;
+    grid-template-rows: 1;
+    grid-template-areas: '. left . right .';
 
     background-color: ${Color.GRAY_LIGHT};
-    margin-top: 15px;
-    padding-top: 95px;
-    padding-bottom: 95px;
+    min-height: 350px;
   `,
-  Feature: styled.div<{ $first?: boolean }>`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-
-    flex: 1 1 125px;
-
-    margin-left: ${({ $first }) => ($first ? '15%' : '5%')};
-  `,
-  FeatureTitle: styled(Typography)`
-    flex: 0 1 auto;
-  `,
-  FeatureInfo: styled(Typography)<{ $isSubHeader?: boolean }>`
-    flex: ${({ $isSubHeader }) => ($isSubHeader ? '0 1 auto' : '2 1 auto')};
-
+  SecondaryText: styled(Typography)<{ $isSubHeader?: boolean }>`
     color: ${({ $isSubHeader }) => ($isSubHeader ? Color.GRAY_DARKER : Color.BLACK)};
     font-size: ${({ $isSubHeader }) => ($isSubHeader ? '16px' : '18px')};
     font-style: ${({ $isSubHeader }) => ($isSubHeader ? 'italic' : 'normal')};
     font-weight: ${({ $isSubHeader }) => ($isSubHeader ? 500 : 300)};
     margin-top: ${({ $isSubHeader }) => ($isSubHeader ? '0px' : '5px')};
   `,
-  FeatureButton: styled(Button)`
-    flex: 1 1 auto;
-
-    align-self: flex-start;
-    margin-top: 15px;
-  `,
 }
 
 const Home = () => {
   return (
-    <>
+    <Style.Container>
       <Style.Section>
-        <Style.SquadBuilderMessaging>
+        <Style.SectionLeft>
           <Typography variant="h3">Build your Diamond Dynasty squad</Typography>
           <Typography>With our easy-to-use Squad Builder tool</Typography>
-        </Style.SquadBuilderMessaging>
-        <Style.SquadBuilderActions>
+        </Style.SectionLeft>
+        <Style.SectionRight>
           <Typography>Create and share your created squad</Typography>
-          <Style.SquadBuilderButton type="button" variant="contained">
+          <Style.Button type="button" variant="contained">
             Start Building
-          </Style.SquadBuilderButton>
-        </Style.SquadBuilderActions>
+          </Style.Button>
+        </Style.SectionRight>
       </Style.Section>
-      <Style.SecondarySection>
-        <Style.Feature $first>
-          <Style.FeatureTitle variant="h5">Marketplace</Style.FeatureTitle>
-          <Style.FeatureInfo $isSubHeader>Search for player cards in real-time</Style.FeatureInfo>
-          <Style.FeatureInfo>
+      <Style.Secondary>
+        <Style.SectionLeft>
+          <Typography variant="h5">Marketplace</Typography>
+          <Style.SecondaryText $isSubHeader>
+            Search for player cards in real-time
+          </Style.SecondaryText>
+          <Style.SecondaryText>
             Uses The Show's current marketplace to search for new player cards added, a card's buy
             now and sell now prices, and more!
-          </Style.FeatureInfo>
-          <Style.FeatureButton type="button" variant="contained" color="secondary">
+          </Style.SecondaryText>
+          <Style.Button type="button" variant="contained" color="secondary">
             Search Marketplace
-          </Style.FeatureButton>
-        </Style.Feature>
-        <Style.Feature>
-          <Style.FeatureTitle variant="h5">Roster Updates</Style.FeatureTitle>
-          <Style.FeatureInfo $isSubHeader>View roster updates in real-time</Style.FeatureInfo>
-          <Style.FeatureInfo>
+          </Style.Button>
+        </Style.SectionLeft>
+        <Style.SectionRight>
+          <Typography variant="h5">Roster Updates</Typography>
+          <Style.SecondaryText $isSubHeader>View roster updates in real-time</Style.SecondaryText>
+          <Style.SecondaryText>
             Easily look through all the roster updates with more filter opetions.
-          </Style.FeatureInfo>
-          <Style.FeatureButton type="button" variant="contained" color="secondary">
+          </Style.SecondaryText>
+          <Style.Button type="button" variant="contained" color="secondary">
             View Roster Updates
-          </Style.FeatureButton>
-        </Style.Feature>
-      </Style.SecondarySection>
-      <Style.Section>
-        <Style.SquadBuilderMessaging>
+          </Style.Button>
+        </Style.SectionRight>
+      </Style.Secondary>
+      <Style.Section2>
+        <Style.SectionLeft>
           <Typography variant="h3">Create an account</Typography>
           <Typography>
             Save your squads without losing them as you exit. Compare the squads you have built for
             better evaluation. And more...
           </Typography>
-        </Style.SquadBuilderMessaging>
-        <Style.SquadBuilderActions>
-          <Typography>For a more personalized experience</Typography>
-          <Typography>create an account with us.</Typography>
-          <Style.SquadBuilderButton type="button" variant="outlined">
+        </Style.SectionLeft>
+        <Style.SectionRight>
+          <Typography>For a more personalized experience create an account with us.</Typography>
+          <Style.Button type="button" variant="outlined">
             Sign Up
-          </Style.SquadBuilderButton>
-        </Style.SquadBuilderActions>
-      </Style.Section>
-    </>
+          </Style.Button>
+        </Style.SectionRight>
+      </Style.Section2>
+    </Style.Container>
   )
 }
 
