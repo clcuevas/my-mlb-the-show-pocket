@@ -1,8 +1,19 @@
 import { Button, Typography } from '@mui/material'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import Color from '@styles/Color'
+
+const secondary = css`
+  display: flex;
+  flex-direction: column;
+
+  button {
+    flex: 0;
+    margin-top: auto;
+    max-width: 210px;
+  }
+`
 
 const Style = {
   Container: styled.div`
@@ -35,13 +46,21 @@ const Style = {
 
     height: 350px;
   `,
-  SectionLeft: styled.div`
+  SectionLeft: styled.div<{ $isSecondary?: boolean }>`
     grid-area: left;
     align-self: center;
+
+    min-height: 200px;
+
+    ${({ $isSecondary }) => ($isSecondary ? secondary : '')};
   `,
-  SectionRight: styled.div`
+  SectionRight: styled.div<{ $isSecondary?: boolean }>`
     grid-area: right;
     align-self: center;
+
+    min-height: 200px;
+
+    ${({ $isSecondary }) => ($isSecondary ? secondary : '')};
   `,
   Secondary: styled.section`
     display: grid;
@@ -79,7 +98,7 @@ const Home = () => {
         </Style.SectionRight>
       </Style.Section>
       <Style.Secondary>
-        <Style.SectionLeft>
+        <Style.SectionLeft $isSecondary>
           <Typography variant="h5">Marketplace</Typography>
           <Style.SecondaryText $isSubHeader>
             Search for player cards in real-time
@@ -92,13 +111,17 @@ const Home = () => {
             Search Marketplace
           </Style.Button>
         </Style.SectionLeft>
-        <Style.SectionRight>
+        <Style.SectionRight $isSecondary>
           <Typography variant="h5">Roster Updates</Typography>
           <Style.SecondaryText $isSubHeader>View roster updates in real-time</Style.SecondaryText>
           <Style.SecondaryText>
             Easily look through all the roster updates with more filter opetions.
           </Style.SecondaryText>
-          <Style.Button type="button" variant="contained" color="secondary">
+          <Style.Button
+            type="button"
+            variant="contained"
+            color="secondary"
+            className="secondary-btn">
             View Roster Updates
           </Style.Button>
         </Style.SectionRight>
