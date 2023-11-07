@@ -1,5 +1,5 @@
-import { Container as MuiContainer, Typography } from '@mui/material'
-import * as React from 'react'
+import { Typography } from '@mui/material'
+import React from 'react'
 import { NavLink as RRNavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -9,33 +9,33 @@ import NavigationItems from './NavigationItems'
 
 const Style = {
   Container: styled.div`
+    display: grid;
+
+    grid-template-columns: 15% 1fr 15% 1fr 15%;
+    grid-template-rows: 1;
+    grid-template-areas: '. home . items .';
+
     border-bottom: 1px solid ${Color.WHITE};
     box-shadow: ${Color.GRAY_LIGHT} 1px 1px 3px;
     padding-top: 20px;
     padding-bottom: 20px;
-    margin-bottom: 20px;
   `,
   HomeLink: styled(RRNavLink)`
+    grid-area: home;
+
     color: ${Color.PRIMARY_MAIN};
-    margin-left: 10px;
     text-decoration: none;
 
     &:visited {
       color: ${Color.PRIMARY_MAIN};
     }
   `,
-  Layout: styled.div`
-    display: flex;
-    flow-direction: row;
-  `,
   LogoContainer: styled.div`
-    flex: 1 1 auto;
-
     font-style: italic;
     font-weight: 300;
   `,
-  NavContainer: styled.div`
-    flex: 2 1 auto;
+  NavItemsContainer: styled.div`
+    grid-area: items;
   `,
   BoldText: styled.strong`
     font-style: normal;
@@ -44,21 +44,16 @@ const Style = {
 
 const Header = () => (
   <Style.Container>
-    <MuiContainer>
-      <Style.Layout>
-        <Style.HomeLink to="/">
-          <Style.LogoContainer>
-            <Typography>
-              <Style.BoldText>My</Style.BoldText> MLB The Show{' '}
-              <Style.BoldText>Pocket</Style.BoldText>
-            </Typography>
-          </Style.LogoContainer>
-        </Style.HomeLink>
-        <Style.NavContainer>
-          <NavigationItems />
-        </Style.NavContainer>
-      </Style.Layout>
-    </MuiContainer>
+    <Style.HomeLink to="/">
+      <Style.LogoContainer>
+        <Typography>
+          <Style.BoldText>My</Style.BoldText> MLB The Show <Style.BoldText>Pocket</Style.BoldText>
+        </Typography>
+      </Style.LogoContainer>
+    </Style.HomeLink>
+    <Style.NavItemsContainer>
+      <NavigationItems />
+    </Style.NavItemsContainer>
   </Style.Container>
 )
 
