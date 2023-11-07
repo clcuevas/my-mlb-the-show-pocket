@@ -117,11 +117,7 @@ const Home = () => {
           <Style.SecondaryText>
             Easily look through all the roster updates with more filter opetions.
           </Style.SecondaryText>
-          <Style.Button
-            type="button"
-            variant="contained"
-            color="secondary"
-            className="secondary-btn">
+          <Style.Button type="button" variant="contained" color="secondary">
             View Roster Updates
           </Style.Button>
         </Style.SectionRight>
