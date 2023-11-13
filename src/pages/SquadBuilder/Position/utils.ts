@@ -27,7 +27,8 @@ export const canDrop = ({
   squad,
   startingPitchers,
   type,
-}: Props) => {
+}: Props): boolean => {
+  const droppedPlayerID = droppedPlayer.marketItem.item.uuid
   const playerPosition = droppedPlayer.marketItem.item.display_position
   const bullpenPositions = [Positions.CP, Positions.RP] as PositionType[]
 
@@ -37,7 +38,7 @@ export const canDrop = ({
     case Positions.SP: {
       const positionMatches = playerPosition === Positions.SP && type === 'starting_rotation'
       const notInRotation = !startingPitchers?.some(
-        (p) => p.player?.marketItem.item.uuid === droppedPlayer.marketItem.item.uuid
+        (p) => p.player?.marketItem.item.uuid === droppedPlayerID
       )
 
       return positionMatches && notInRotation
@@ -45,37 +46,36 @@ export const canDrop = ({
     case Positions.RP: {
       const positionMatches =
         type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
-      const notInBullpen = !bullpen?.some(
-        (p) => p.player?.marketItem.item.uuid === droppedPlayer.marketItem.item.uuid
-      )
+      const notInBullpen = !bullpen?.some((p) => p.player?.marketItem.item.uuid === droppedPlayerID)
 
       return positionMatches && notInBullpen
     }
     case Positions.CP: {
       const positionMatches =
         type === 'bullpen' && bullpenPositions.includes(playerPosition as PositionType)
-      const notInBullpen = !bullpen?.some(
-        (p) => p.player?.marketItem.item.uuid && droppedPlayer.marketItem.item.uuid
-      )
+      const notInBullpen = !bullpen?.some((p) => p.player?.marketItem.item.uuid && droppedPlayerID)
 
       return positionMatches && notInBullpen
     }
     default: {
-      const droppedPlayerID = droppedPlayer.marketItem.item.uuid
-
       const _position = position as SquadFieldPositions
-      const squadPlayerID = squad?.[_position]?.marketItem.item.uuid
       const squadPlayers = squad != null ? Object.values(squad) : []
 
       const isFound = squadPlayers.some((p) => {
-        if (p == null || Array.isArray(p)) {
-          // TODO: Not populating BENCH position players yet
+        if (p == null) {
           return false
+        } else if (Array.isArray(p)) {
+          return p.some((benchPlayer) => benchPlayer.marketItem.item.uuid === droppedPlayerID)
         }
 
         return p.marketItem.item.uuid === droppedPlayerID
       })
 
+      if (position === Positions.BENCH) {
+        return !isFound
+      }
+
+      const squadPlayerID = squad?.[_position]?.marketItem.item.uuid
       return (squadPlayerID == null || squadPlayerID !== droppedPlayerID) && !isFound
     }
   }
