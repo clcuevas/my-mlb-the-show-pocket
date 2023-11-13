@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 
 import CustomTabPanel from '@components/CustomTabPanel'
 import PlayerDetailModal from '@components/modals/PlayerDetailModal'
@@ -11,9 +12,20 @@ import type { Position } from '@services/squadBuilder'
 import * as squadBuilderService from '@services/squadBuilder'
 
 import Main from './Main'
+import MainBench from './MainBench'
 import Pitchers from './Pitchers'
 import { onPlayerCardAdd, onPlayerCardDrop, onPositionClear } from './utils'
 import type { OnDrop, OnRemove } from '../types'
+
+const Style = {
+  MainContainer: styled.div`
+    display: grid;
+
+    grid-template-columns: '5% 1fr 2fr 5%';
+    grid-template-rows: 1;
+    grid-template-areas: '. bench main .';
+  `,
+}
 
 const Squad = () => {
   const dispatch = useDispatch()
@@ -97,6 +109,8 @@ const Squad = () => {
     [dispatch]
   )
 
+  console.log(squad['BENCH'])
+
   return (
     <>
       <Box sx={{ pl: '55px', pr: '15px' }}>
@@ -105,13 +119,22 @@ const Squad = () => {
           <Tab label="Pitchers" {...a11yProps(1)} />
         </Tabs>
         <CustomTabPanel value={activeTab} index={0}>
-          <Main
-            squad={squad}
-            onDrop={handleOnCardDrop}
-            onPositionSearch={handleOnPositionSearch}
-            onRemove={handleOnPositionClear}
-            onShowPlayerDetail={handleShowPlayerDetail}
-          />
+          <Style.MainContainer>
+            <MainBench
+              benchPlayers={squad['BENCH']}
+              onDrop={handleOnCardDrop}
+              onPositionSearch={handleOnPositionSearch}
+              onRemove={handleOnPositionClear}
+              onShowPlayerDetail={handleShowPlayerDetail}
+            />
+            <Main
+              squad={squad}
+              onDrop={handleOnCardDrop}
+              onPositionSearch={handleOnPositionSearch}
+              onRemove={handleOnPositionClear}
+              onShowPlayerDetail={handleShowPlayerDetail}
+            />
+          </Style.MainContainer>
         </CustomTabPanel>
         <CustomTabPanel value={activeTab} index={1}>
           <Pitchers

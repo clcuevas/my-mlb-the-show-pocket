@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Grid, Stack } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -14,6 +14,10 @@ import type { OnDrop, OnRemove } from '../types'
 import { MemoizedPosition as Position } from '../Position'
 
 const Style = {
+  Container: styled.div`
+    grid-area: main;
+    margin-top: 30px;
+  `,
   CatcherContainer: styled(Grid)`
     margin-top: 10px;
   `,
@@ -24,9 +28,7 @@ const Style = {
     margin-top: 10px;
     margin-bottom: 10px;
   `,
-  SquadContainer: styled(Grid)`
-    margin-top: 30px;
-  `,
+  SquadContainer: styled(Stack)``,
   ThirdPitcherFirstContainer: styled(Grid)`
     margin-top: 10px;
     margin-bottom: 10px;
@@ -57,80 +59,82 @@ type Props = {
 }
 
 const MainSquad = ({ squad, onDrop, onPositionSearch, onRemove, onShowPlayerDetail }: Props) => (
-  <Style.SquadContainer container justifyContent="center" direction="column" alignItems="center">
-    <Style.OutfieldContainer
-      item
-      container
-      xs="auto"
-      rowSpacing={1}
-      columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
-      {outfieldPositions.map(({ position, type }) => (
+  <Style.Container>
+    <Style.SquadContainer justifyContent="center" direction="column" alignItems="center">
+      <Style.OutfieldContainer
+        item
+        container
+        xs="auto"
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
+        {outfieldPositions.map(({ position, type }) => (
+          <Position
+            key={`main-squad-position-${position}`}
+            onDrop={onDrop}
+            position={position}
+            player={squad[position] as SquadBuildPlayer}
+            squad={squad}
+            type={type}
+            onRemove={onRemove}
+            onSearch={onPositionSearch}
+            onShowPlayerDetail={onShowPlayerDetail}
+          />
+        ))}
+      </Style.OutfieldContainer>
+      <Style.SecondShortContainer
+        item
+        container
+        xs="auto"
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
+        {secondShortPositions.map(({ position, type }) => (
+          <Position
+            key={`main-squad-position-${position}`}
+            onDrop={onDrop}
+            position={position}
+            player={squad[position] as SquadBuildPlayer}
+            squad={squad}
+            type={type}
+            onRemove={onRemove}
+            onSearch={onPositionSearch}
+            onShowPlayerDetail={onShowPlayerDetail}
+          />
+        ))}
+      </Style.SecondShortContainer>
+      <Style.ThirdPitcherFirstContainer
+        item
+        container
+        xs="auto"
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 9 }}>
+        {thirdMainSPFirstPositions.map(({ position, type }) => (
+          <Position
+            key={`main-squad-position-${position}`}
+            onDrop={onDrop}
+            position={position}
+            player={squad[position] as SquadBuildPlayer}
+            squad={squad}
+            type={type}
+            onRemove={onRemove}
+            onSearch={onPositionSearch}
+            onShowPlayerDetail={onShowPlayerDetail}
+          />
+        ))}
+      </Style.ThirdPitcherFirstContainer>
+      <Style.CatcherContainer item container xs="auto" rowSpacing={1}>
         <Position
-          key={`main-squad-position-${position}`}
           onDrop={onDrop}
-          position={position}
-          player={squad[position] as SquadBuildPlayer}
+          position={Positions.C}
+          player={squad.C}
           squad={squad}
-          type={type}
+          type="main_squad"
           onRemove={onRemove}
           onSearch={onPositionSearch}
           onShowPlayerDetail={onShowPlayerDetail}
         />
-      ))}
-    </Style.OutfieldContainer>
-    <Style.SecondShortContainer
-      item
-      container
-      xs="auto"
-      rowSpacing={1}
-      columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 6 }}>
-      {secondShortPositions.map(({ position, type }) => (
-        <Position
-          key={`main-squad-position-${position}`}
-          onDrop={onDrop}
-          position={position}
-          player={squad[position] as SquadBuildPlayer}
-          squad={squad}
-          type={type}
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-      ))}
-    </Style.SecondShortContainer>
-    <Style.ThirdPitcherFirstContainer
-      item
-      container
-      xs="auto"
-      rowSpacing={1}
-      columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 9 }}>
-      {thirdMainSPFirstPositions.map(({ position, type }) => (
-        <Position
-          key={`main-squad-position-${position}`}
-          onDrop={onDrop}
-          position={position}
-          player={squad[position] as SquadBuildPlayer}
-          squad={squad}
-          type={type}
-          onRemove={onRemove}
-          onSearch={onPositionSearch}
-          onShowPlayerDetail={onShowPlayerDetail}
-        />
-      ))}
-    </Style.ThirdPitcherFirstContainer>
-    <Style.CatcherContainer item container xs="auto" rowSpacing={1}>
-      <Position
-        onDrop={onDrop}
-        position={Positions.C}
-        player={squad.C}
-        squad={squad}
-        type="main_squad"
-        onRemove={onRemove}
-        onSearch={onPositionSearch}
-        onShowPlayerDetail={onShowPlayerDetail}
-      />
-    </Style.CatcherContainer>
-  </Style.SquadContainer>
+      </Style.CatcherContainer>
+    </Style.SquadContainer>
+  </Style.Container>
 )
 
 export default MainSquad
