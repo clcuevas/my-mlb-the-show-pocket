@@ -109,8 +109,6 @@ const Squad = () => {
     [dispatch]
   )
 
-  console.log(squad['BENCH'])
-
   return (
     <>
       <Box sx={{ pl: '55px', pr: '15px' }}>
