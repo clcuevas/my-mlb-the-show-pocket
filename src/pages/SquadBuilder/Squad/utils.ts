@@ -28,15 +28,23 @@ export const onPlayerCardAdd = (
         })
       )
       return
-    default:
-      dispatch(
-        squadBuilderService.updateSquadBuild({
-          player,
-          position: positionSelected,
-          isMainSP: positionSelected === 'MAIN_SP', // TODO: Do not allow non-SP players
-        })
-      )
+    default: {
+      const isBenchPosition = positionSelected === squadBuilderService.Positions.BENCH
+
+      if (isBenchPosition) {
+        dispatch(squadBuilderService.updateBench({ player, index: index ?? 0 }))
+      } else {
+        dispatch(
+          squadBuilderService.updateSquadBuild({
+            player,
+            position: positionSelected,
+            isMainSP: positionSelected === 'MAIN_SP', // TODO: Do not allow non-SP players
+          })
+        )
+      }
+
       return
+    }
   }
 }
 

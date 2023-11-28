@@ -1,7 +1,12 @@
 import { Button } from '@mui/material'
 import * as React from 'react'
 
-import { Position as PositionType, SquadBuildPlayer, SquadType } from '@services/squadBuilder'
+import {
+  Position as PositionType,
+  Positions,
+  SquadBuildPlayer,
+  SquadType,
+} from '@services/squadBuilder'
 
 import type { OnRemove } from '../types'
 
@@ -25,7 +30,7 @@ const ActionArea = ({
   onShowPlayerDetail,
 }: Props) => {
   const handleOnSearch = React.useCallback(() => {
-    if (['starting_rotation', 'bullpen'].includes(type)) {
+    if (['starting_rotation', 'bullpen'].includes(type) || position === Positions.BENCH) {
       onSearchPlayer(position, type, index)
     } else {
       onSearchPlayer(position, type)

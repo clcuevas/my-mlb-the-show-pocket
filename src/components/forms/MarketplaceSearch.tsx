@@ -26,7 +26,9 @@ const filteredPositions = Object.values(Positions).filter(
   (p) => p !== Positions.MAIN_SP && p !== Positions.BENCH
 )
 
-const MarketplaceSearch = ({ position, onError, onSubmit }: Props) => {
+const MarketplaceSearch = ({ position: pos, onError, onSubmit }: Props) => {
+  const [position, setPosition] = React.useState('')
+
   const {
     control,
     formState: { defaultValues: formStateDefaultValues },
@@ -47,6 +49,12 @@ const MarketplaceSearch = ({ position, onError, onSubmit }: Props) => {
     },
     [onError]
   )
+
+  React.useEffect(() => {
+    if (pos === Positions.BENCH) {
+      setPosition(Positions.CF)
+    }
+  }, [])
 
   React.useEffect(() => {
     if (position !== formStateDefaultValues?.display_position) {

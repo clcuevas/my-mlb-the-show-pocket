@@ -7,6 +7,9 @@ import {
   UPDATE_SQUAD_BUILD,
   UPDATE_SQUAD_BUILD_ERROR,
   UPDATE_SQUAD_BUILD_RESULT,
+  UPDATE_SQUAD_BENCH,
+  UPDATE_SQUAD_BENCH_ERROR,
+  UPDATE_SQUAD_BENCH_RESULT,
   UPDATE_SQUAD_BULLPEN,
   UPDATE_SQUAD_BULLPEN_ERROR,
   UPDATE_SQUAD_BULLPEN_RESULT,
@@ -19,6 +22,7 @@ import {
 } from './types'
 import { createActionWithPayload } from '../helpers'
 
+// TODO: Rename to "updateMainSquad"
 export const updateSquadBuild = createActionWithPayload<{
   player: SquadBuildPlayer
   position: Position
@@ -31,6 +35,18 @@ export const updateSquadBuildResult = createActionWithPayload<{
 }>(UPDATE_SQUAD_BUILD_RESULT)
 export const updateSquadBuildError = createActionWithPayload<{ error: unknown }>(
   UPDATE_SQUAD_BUILD_ERROR
+)
+
+export const updateBench = createActionWithPayload<{
+  player: SquadBuildPlayer
+  index: number
+  type?: 'remove'
+}>(UPDATE_SQUAD_BENCH)
+export const updateBenchResult = createActionWithPayload<{ squad: SquadBuild }>(
+  UPDATE_SQUAD_BENCH_RESULT
+)
+export const updateBenchError = createActionWithPayload<{ error: unknown }>(
+  UPDATE_SQUAD_BENCH_ERROR
 )
 
 export const updateBullpen = createActionWithPayload<{

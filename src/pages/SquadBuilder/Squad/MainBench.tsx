@@ -14,7 +14,7 @@ const Style = {
 }
 
 type Props = {
-  benchPlayers: SquadBuildPlayer[]
+  benchPlayers: (SquadBuildPlayer | null)[]
   onDrop: (onDropParam: OnDrop) => void
   onPositionSearch: (positionSelected: PositionType, squadType: SquadType, index?: number) => void
   onRemove: (onRemoveParam: OnRemove) => void

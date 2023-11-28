@@ -64,6 +64,25 @@ const reducer = createReducer(initialState, (builder) => {
       error: payload.error,
       loading: false,
     }))
+    .addCase(actions.updateBench, (state, { payload }) => ({
+      ...state,
+      error: null,
+      index: payload.index,
+      player: payload.player,
+      type: payload.type,
+      loading: true,
+    }))
+    .addCase(actions.updateBenchResult, (state, { payload }) => ({
+      ...state,
+      error: null,
+      loading: false,
+      squad: payload.squad,
+    }))
+    .addCase(actions.updateBenchError, (state, { payload }) => ({
+      ...state,
+      error: payload.error,
+      loading: false,
+    }))
     .addCase(actions.updateBullpen, (state, { payload }) => ({
       ...state,
       error: null,
