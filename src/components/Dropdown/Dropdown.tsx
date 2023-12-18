@@ -1,5 +1,5 @@
-import DownIcon from '@mui/icons-material/ArrowDropDown'
-import UpIcon from '@mui/icons-material/ArrowDropUp'
+import ArrowRight from '@mui/icons-material/ArrowRight'
+import ArrowDown from '@mui/icons-material/ArrowDropDown'
 import { IconButton, Typography } from '@mui/material'
 import * as React from 'react'
 import styled from 'styled-components'
@@ -30,7 +30,7 @@ const Dropdown = ({ children, title }: Props) => {
     <>
       <Style.Button type="button" onClick={handleOnClick}>
         {title != null && <Typography>{title}</Typography>}
-        {isOpen ? <UpIcon /> : <DownIcon />}
+        {isOpen ? <ArrowDown /> : <ArrowRight />}
       </Style.Button>
       {isOpen && <>{children}</>}
     </>
