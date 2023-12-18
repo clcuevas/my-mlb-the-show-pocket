@@ -7,7 +7,7 @@ import {
   type MarketPlayerItemListing,
   type MarketPlayerItemListingsPayloadResponse,
 } from '@services/marketListings'
-import { type SquadBuildPlayer, type Position } from '@services/squadBuilder'
+import { type SquadBuildPlayer, type Position, Positions } from '@services/squadBuilder'
 
 import ModalActions from './ModalActions'
 import ModalHeader from './ModalHeader'
@@ -23,6 +23,23 @@ type Props = {
   onModalClose: () => void
 }
 
+const isBullpenPosition = (value: string) => [Positions.CP, Positions.RP].some((p) => p === value)
+
+const canAddPlayerToPosition = (searchedPlayerPosition: string, position: string) => {
+  // TODO: See if this can be converted to util method and if logic is repeated elsewhere
+  switch (position) {
+    case Positions.MAIN_SP:
+      return searchedPlayerPosition === Positions.SP
+    case Positions.SP:
+      return searchedPlayerPosition === Positions.SP
+    case Positions.BENCH:
+      return !isBullpenPosition(searchedPlayerPosition)
+    default: {
+      return isBullpenPosition(position) ? isBullpenPosition(searchedPlayerPosition) : true
+    }
+  }
+}
+
 const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   const [
     fetchMarketListings,
@@ -31,6 +48,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   const [fetchPlayerItemDetails, { isError: isFetchPlayerItemError }] =
     useFetchPlayerItemDetailsMutation()
 
+  const [canAddPlayer, setCanAddPlayer] = React.useState(true)
   const [formErrors, setFormErrors] = React.useState<string[]>([])
   const [marketListings, setMarketListings] =
     React.useState<MarketPlayerItemListingsPayloadResponse | null>(null)
@@ -86,6 +104,18 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
     // TODO: Think about what to do in the event of an error
   }, [isFetchPlayerItemError, selectedPlayer, fetchPlayerItemDetails, onAdd, onModalClose])
 
+  React.useEffect(() => {
+    if (formErrors.length > 0 || selectedPlayer == null) {
+      setCanAddPlayer(false)
+      return
+    }
+
+    const searchedPlayerPosition = selectedPlayer?.item.display_position
+    const isValid = canAddPlayerToPosition(searchedPlayerPosition, position)
+
+    setCanAddPlayer(isValid)
+  }, [formErrors, position, selectedPlayer])
+
   return (
     <>
       {isOpen && (
@@ -118,7 +148,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
             )}
           </DialogContent>
           <ModalActions
-            isDisabled={formErrors.length > 0 || selectedPlayer == null}
+            isDisabled={!canAddPlayer}
             onModalClose={onModalClose}
             onPlayerAdd={handleOnAddSelectedPlayer}
           />

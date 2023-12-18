@@ -35,7 +35,7 @@ export type SquadBuild = {
   ['1B']: SquadBuildPlayer | null
   [Positions.C]: SquadBuildPlayer | null
   [Positions.MAIN_SP]: SquadBuildPlayer | null
-  [Positions.BENCH]: SquadBuildPlayer[]
+  [Positions.BENCH]: (SquadBuildPlayer | null)[]
 }
 
 type BullpenItem = {
@@ -64,6 +64,10 @@ export interface SquadBuildState {
 export const UPDATE_SQUAD_BUILD = 'UPDATE_SQUAD_BUILD' as const
 export const UPDATE_SQUAD_BUILD_RESULT = 'UPDATE_SQUAD_BUILD__RESULT' as const
 export const UPDATE_SQUAD_BUILD_ERROR = 'UPDATE_SQUAD_BUILD__ERROR' as const
+
+export const UPDATE_SQUAD_BENCH = 'UPDATE_SQUAD_BENCH' as const
+export const UPDATE_SQUAD_BENCH_RESULT = 'UPDATE_SQUAD_BENCH__RESULT' as const
+export const UPDATE_SQUAD_BENCH_ERROR = 'UPDATE_SQUAD_BENCH__ERROR' as const
 
 export const UPDATE_SQUAD_BULLPEN = 'UPDATE_SQUAD_BULLPEN' as const
 export const UPDATE_SQUAD_BULLPEN_RESULT = 'UPDATE_SQUAD_BULLPEN__RESULT' as const

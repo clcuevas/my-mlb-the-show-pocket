@@ -25,7 +25,7 @@ export const isError = (state: State) => getSquadBuild(state).error != null
 
 const calcAverage = (division: number) => (isNaN(division) ? 0 : division)
 
-const calcBattingAverages = (players: SquadBuildPlayer[]) => {
+const calcBattingAverages = (players: (SquadBuildPlayer | null)[]) => {
   let leftContactTotal = 0
   let rightContactTotal = 0
   let leftPowerTotal = 0
@@ -41,19 +41,21 @@ const calcBattingAverages = (players: SquadBuildPlayer[]) => {
   const playersEvaluated = players.length
 
   players.forEach((player) => {
-    const detail = player.detailedItem
+    if (player) {
+      const detail = player.detailedItem
 
-    leftContactTotal += detail[`contact_left`]
-    rightContactTotal += detail[`contact_right`]
-    leftPowerTotal += detail['power_left']
-    rightPowerTotal += detail['power_right']
+      leftContactTotal += detail[`contact_left`]
+      rightContactTotal += detail[`contact_right`]
+      leftPowerTotal += detail['power_left']
+      rightPowerTotal += detail['power_right']
 
-    clutch += detail['batting_clutch']
-    discipline += detail['plate_discipline']
-    vision += detail['plate_vision']
+      clutch += detail['batting_clutch']
+      discipline += detail['plate_discipline']
+      vision += detail['plate_vision']
 
-    bunting += detail['bunting_ability']
-    dragBunting += detail['drag_bunting_ability']
+      bunting += detail['bunting_ability']
+      dragBunting += detail['drag_bunting_ability']
+    }
   })
 
   return {
@@ -69,7 +71,7 @@ const calcBattingAverages = (players: SquadBuildPlayer[]) => {
   }
 }
 
-const calcBaserunningAverages = (players: SquadBuildPlayer[]) => {
+const calcBaserunningAverages = (players: (SquadBuildPlayer | null)[]) => {
   let speed = 0
   let baseAbility = 0
   let baseAggression = 0
@@ -77,11 +79,13 @@ const calcBaserunningAverages = (players: SquadBuildPlayer[]) => {
   const playersEvaluated = players.length
 
   players.forEach((player) => {
-    const detail = player.detailedItem
+    if (player) {
+      const detail = player.detailedItem
 
-    speed += detail['speed']
-    baseAbility += detail['baserunning_ability']
-    baseAggression += detail['baserunning_aggression']
+      speed += detail['speed']
+      baseAbility += detail['baserunning_ability']
+      baseAggression += detail['baserunning_aggression']
+    }
   })
 
   return {
@@ -91,7 +95,7 @@ const calcBaserunningAverages = (players: SquadBuildPlayer[]) => {
   }
 }
 
-const calcFieldingAverages = (players: SquadBuildPlayer[]) => {
+const calcFieldingAverages = (players: (SquadBuildPlayer | null)[]) => {
   let fielding = 0
   let reaction = 0
   let armStrength = 0
@@ -101,13 +105,15 @@ const calcFieldingAverages = (players: SquadBuildPlayer[]) => {
   const playersEvaluated = players.length
 
   players.forEach((player) => {
-    const detail = player.detailedItem
+    if (player) {
+      const detail = player.detailedItem
 
-    fielding += detail['fielding_ability']
-    reaction += detail['reaction_time']
-    armAccuracy += detail['arm_accuracy']
-    armStrength += detail['arm_strength']
-    blocking += detail['blocking']
+      fielding += detail['fielding_ability']
+      reaction += detail['reaction_time']
+      armAccuracy += detail['arm_accuracy']
+      armStrength += detail['arm_strength']
+      blocking += detail['blocking']
+    }
   })
 
   return {

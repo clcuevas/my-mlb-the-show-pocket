@@ -11,6 +11,7 @@ import {
   SquadBuildPlayer,
   StartingPitchingRotation,
   UPDATE_SQUAD_BUILD,
+  UPDATE_SQUAD_BENCH,
   UPDATE_SQUAD_BULLPEN,
   UPDATE_STARTING_ROTATION,
   SAVE_PLAYER,
@@ -18,6 +19,7 @@ import {
 import { isObjKey } from '../helpers'
 
 type UpdateSquadBuild = ReturnType<typeof actions.updateSquadBuild>
+type UpdateSquadBench = ReturnType<typeof actions.updateBench>
 type UpdateSquadBullpen = ReturnType<typeof actions.updateBullpen>
 type UpdateStartingRotation = ReturnType<typeof actions.updateStartingRotation>
 type UpdateSavedPlayers = ReturnType<typeof actions.savePlayer>
@@ -37,13 +39,7 @@ function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
     const squad = { ...squadBuild.squad }
     const shouldRemove = type && type === 'remove'
 
-    if (position === Positions.BENCH) {
-      const bench = shouldRemove
-        ? squad.BENCH.filter((p) => player.marketItem.item.uuid !== p.marketItem.item.uuid)
-        : squad.BENCH
-
-      squad.BENCH = [...bench, ...(shouldRemove ? [] : [player])]
-    } else if (isObjKey(position, squad)) {
+    if (position !== Positions.BENCH && isObjKey(position, squad)) {
       const key = isMainSP ? Positions.MAIN_SP : position
       squad[key] = shouldRemove ? null : player
     }
@@ -58,6 +54,29 @@ function* updateSquadBuild(action: UpdateSquadBuild): SagaIterator {
   } catch (e) {
     console.log(e)
     yield put(actions.updateSquadBuildError({ error: (e as Error).message }))
+  }
+}
+
+function* updateSquadBench(action: UpdateSquadBench): SagaIterator {
+  try {
+    const { index, player, type } = action.payload
+
+    const squadBuild: SquadBuildState = yield select(view.getSquadBuild)
+
+    const shouldRemovePlayer = type === 'remove'
+    const bench = squadBuild.squad['BENCH'].map((p, listIndex) => {
+      if (listIndex === index) {
+        return shouldRemovePlayer ? null : player
+      }
+
+      return p
+    })
+
+    const squad = { ...squadBuild.squad, ['BENCH']: bench }
+    yield put(actions.updateBenchResult({ squad }))
+  } catch (e) {
+    console.log(e)
+    yield put(actions.updateBenchError({ error: (e as Error).message }))
   }
 }
 
@@ -131,6 +150,7 @@ function* updateSavedPlayers(action: UpdateSavedPlayers): SagaIterator {
 
 export default function* saga(): SagaIterator<void> {
   yield takeEvery(UPDATE_SQUAD_BUILD, updateSquadBuild)
+  yield takeEvery(UPDATE_SQUAD_BENCH, updateSquadBench)
   yield takeEvery(UPDATE_SQUAD_BULLPEN, updateSquadBullpen)
   yield takeEvery(UPDATE_STARTING_ROTATION, updateStartingRotation)
   yield takeEvery(SAVE_PLAYER, updateSavedPlayers)

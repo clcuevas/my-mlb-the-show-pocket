@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import * as actions from './actions'
-import { StartingPitchingRotation, Positions, SquadBuildState } from './types'
+import { StartingPitchingRotation, Positions, SquadBuildState, SquadBuildPlayer } from './types'
 
 const BULLPEN_PLACEHOLDER = [
   { position: Positions.RP, player: null },
@@ -20,6 +20,7 @@ const STARTING_ROTATION = [
   { position: Positions.SP, player: null },
   { position: Positions.SP, player: null },
 ] as StartingPitchingRotation
+const BENCH_PLACEHOLDER = new Array(5).fill(null) as Array<SquadBuildPlayer | null>
 
 const initialState = {
   squad: {
@@ -32,7 +33,7 @@ const initialState = {
     ['1B']: null,
     C: null,
     MAIN_SP: null,
-    BENCH: [],
+    BENCH: BENCH_PLACEHOLDER,
   },
   startingPitchingRotation: STARTING_ROTATION,
   bullpen: BULLPEN_PLACEHOLDER,
@@ -59,6 +60,25 @@ const reducer = createReducer(initialState, (builder) => {
       loading: false,
     }))
     .addCase(actions.updateSquadBuildError, (state, { payload }) => ({
+      ...state,
+      error: payload.error,
+      loading: false,
+    }))
+    .addCase(actions.updateBench, (state, { payload }) => ({
+      ...state,
+      error: null,
+      index: payload.index,
+      player: payload.player,
+      type: payload.type,
+      loading: true,
+    }))
+    .addCase(actions.updateBenchResult, (state, { payload }) => ({
+      ...state,
+      error: null,
+      loading: false,
+      squad: payload.squad,
+    }))
+    .addCase(actions.updateBenchError, (state, { payload }) => ({
       ...state,
       error: payload.error,
       loading: false,
