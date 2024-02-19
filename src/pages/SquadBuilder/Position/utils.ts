@@ -65,7 +65,7 @@ export const canDrop = ({
         if (p == null) {
           return false
         } else if (Array.isArray(p)) {
-          return p.some((benchPlayer) => benchPlayer.marketItem.item.uuid === droppedPlayerID)
+          return p.some((benchPlayer) => benchPlayer?.marketItem.item.uuid === droppedPlayerID)
         }
 
         return p.marketItem.item.uuid === droppedPlayerID

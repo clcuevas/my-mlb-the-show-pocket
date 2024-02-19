@@ -1,4 +1,5 @@
-import { SelectedPlayer } from '@components/PlayerDetail/types'
+import { SquadBuildPlayer } from '@services/squadBuilder'
+import { DetailedPlayerItem } from '@services/types'
 import Color from '@styles/Color'
 
 export const pitchingStats = [
@@ -37,7 +38,7 @@ export const fieldingStats = [
 
 export const runningStats = ['speed', 'baserunning_ability', 'baserunning_aggression']
 
-export const getTopStats = (player: SelectedPlayer, numOfTopStats = 5) => {
+export const getTopStats = (player: DetailedPlayerItem, numOfTopStats = 5) => {
   const isPitcher = !player['is_hitter']
   const data = Object.entries(player)
     .map(([key, value]) => {
@@ -89,7 +90,7 @@ const getLabelColor = (label: string) => {
   }
 }
 
-const getDatasetValues = (label: string, player: SelectedPlayer) => {
+const getDatasetValues = (label: string, player: DetailedPlayerItem) => {
   const isPitcher = !player['is_hitter']
 
   return Object.entries(player)
@@ -105,14 +106,16 @@ const getDatasetValues = (label: string, player: SelectedPlayer) => {
     .filter((data) => data != null)
 }
 
-export const buildDatasets = (player: SelectedPlayer) => {
+export const buildDatasets = (player: DetailedPlayerItem) => {
   const datasets = ['Batting', 'Fielding', 'Pitching']
 
   return datasets
     .filter((set) => {
-      if (player['is_hitter'] && (set === 'Batting' || set === 'Fielding')) {
+      const isPositionPlayer = player['is_hitter']
+
+      if (isPositionPlayer && (set === 'Batting' || set === 'Fielding')) {
         return set
-      } else if (!player['is_hitter'] && set === 'Pitching') {
+      } else if (!isPositionPlayer && set === 'Pitching') {
         return set
       }
     })
@@ -124,10 +127,5 @@ export const buildDatasets = (player: SelectedPlayer) => {
     }))
 }
 
-export const buildHorizontalLabels = (isPitcher: boolean) => {
-  if (isPitcher) {
-    return CHART_LABELS.pitching
-  }
-
-  return [...CHART_LABELS.batting, ...CHART_LABELS.fielding]
-}
+export const buildHorizontalLabels = (isPitcher: boolean) =>
+  isPitcher ? CHART_LABELS.pitching : [...CHART_LABELS.batting, ...CHART_LABELS.fielding]
