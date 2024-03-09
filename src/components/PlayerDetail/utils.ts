@@ -1,4 +1,3 @@
-import { SquadBuildPlayer } from '@services/squadBuilder'
 import { DetailedPlayerItem } from '@services/types'
 import Color from '@styles/Color'
 
@@ -40,7 +39,7 @@ export const runningStats = ['speed', 'baserunning_ability', 'baserunning_aggres
 
 export const getTopStats = (player: DetailedPlayerItem, numOfTopStats = 5) => {
   const isPitcher = !player['is_hitter']
-  const data = Object.entries(player)
+  const playerStats = Object.entries(player)
     .map(([key, value]) => {
       if (isPitcher && pitchingStats.includes(key)) {
         return [key, value]
@@ -51,8 +50,9 @@ export const getTopStats = (player: DetailedPlayerItem, numOfTopStats = 5) => {
         return [key, value]
       }
     })
-    // Get rid of undefined values and only return items of 90 or higher
-    .filter((item) => item != null && item[1] >= 90)
+    .filter(Boolean) as [string, number][]
+
+  const data = playerStats
     // Sort in descending order (i.e. highest to lowest)
     .sort((prevItem, currentItem) => {
       if (prevItem != null && currentItem != null && prevItem[1] >= currentItem[1]) {
