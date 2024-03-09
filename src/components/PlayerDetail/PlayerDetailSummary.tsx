@@ -25,7 +25,7 @@ const PlayerDetailSummary = ({ player }: Props) => {
       const data = getTopStats(player.detailedItem)
       setStats(data as Stat)
     }
-  }, [])
+  }, [player])
 
   return (
     <Style.Container>
