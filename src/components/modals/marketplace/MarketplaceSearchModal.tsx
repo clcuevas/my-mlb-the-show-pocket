@@ -124,6 +124,11 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
     [searchQueryParams, fetchMarketListings, setCurrentPage, setMarketListings]
   )
 
+  const handleOnModalClose = React.useCallback(() => {
+    setMarketListings(null)
+    onModalClose()
+  }, [onModalClose])
+
   React.useEffect(() => {
     if (formErrors.length > 0 || selectedPlayer == null) {
       setCanAddPlayer(false)
@@ -139,8 +144,8 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   return (
     <>
       {isOpen && (
-        <Dialog open={isOpen} onClose={onModalClose} fullScreen>
-          <ModalHeader onModalClose={onModalClose} />
+        <Dialog open={isOpen} onClose={handleOnModalClose} fullScreen>
+          <ModalHeader onModalClose={handleOnModalClose} />
           <DialogContent>
             {formErrors.length > 0 ? (
               <Alert severity="error">
