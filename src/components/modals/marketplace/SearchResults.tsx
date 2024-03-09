@@ -38,10 +38,10 @@ const SearchResults = ({
         <CircularProgress />
       </Stack>
     ) : (
-      <Stack direction="row" flexWrap="wrap" justifyContent="space-between" sx={{ mt: '20px' }}>
+      <Stack direction="row" flexWrap="wrap" sx={{ mt: '20px' }}>
         {marketListings != null &&
           marketListings.listings.map((player) => (
-            <Box key={`market-listing-result-${player.item.uuid}`} sx={{ mt: '10px' }}>
+            <Box key={`market-listing-result-${player.item.uuid}`} sx={{ mt: '10px', mr: '25px' }}>
               <Style.CardButton
                 type="button"
                 className={`${selectedPlayerUUID === player.item.uuid ? 'selected' : ''}`}

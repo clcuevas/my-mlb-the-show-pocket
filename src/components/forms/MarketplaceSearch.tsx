@@ -26,8 +26,8 @@ const filteredPositions = Object.values(Positions).filter(
   (p) => p !== Positions.MAIN_SP && p !== Positions.BENCH
 )
 
-const MarketplaceSearch = ({ position: pos, onError, onSubmit }: Props) => {
-  const [position, setPosition] = React.useState('')
+const MarketplaceSearch = ({ position: selectedPosition, onError, onSubmit }: Props) => {
+  const [position, setPosition] = React.useState(selectedPosition)
 
   const {
     control,
@@ -49,22 +49,25 @@ const MarketplaceSearch = ({ position: pos, onError, onSubmit }: Props) => {
     },
     [onError]
   )
+  const handleOnFormReset = React.useCallback(() => {
+    reset({
+      ['display_position']: position,
+      ['min_rank']: '',
+      ['max_rank']: '',
+    })
+  }, [position, reset])
 
   React.useEffect(() => {
-    if (pos === Positions.BENCH) {
-      setPosition(Positions.CF)
+    if (selectedPosition === Positions.BENCH) {
+      setPosition('')
     }
-  }, [])
+  }, [selectedPosition])
 
   React.useEffect(() => {
     if (position !== formStateDefaultValues?.display_position) {
-      reset({
-        ['display_position']: position,
-        ['min_rank']: '',
-        ['max_rank']: '',
-      })
+      handleOnFormReset()
     }
-  }, [position, formStateDefaultValues?.display_position, reset])
+  }, [position, formStateDefaultValues?.display_position, handleOnFormReset])
 
   return (
     <form onSubmit={handleSubmit(handleOnFormSubmit, handleOnFormError)}>
@@ -128,7 +131,7 @@ const MarketplaceSearch = ({ position: pos, onError, onSubmit }: Props) => {
           />
         </FormControl>
         <Stack direction="row" alignItems="center" spacing={1}>
-          <Button type="button" variant="outlined" color="secondary">
+          <Button type="button" variant="outlined" color="secondary" onClick={handleOnFormReset}>
             Reset
           </Button>
           <Button type="submit" variant="contained" color="secondary">

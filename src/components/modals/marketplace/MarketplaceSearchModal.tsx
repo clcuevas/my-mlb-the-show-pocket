@@ -1,4 +1,4 @@
-import { Alert, Dialog, DialogContent, List, ListItem } from '@mui/material'
+import { Alert, Dialog, DialogContent, List, ListItem, Pagination } from '@mui/material'
 import * as React from 'react'
 
 import {
@@ -54,6 +54,9 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
     React.useState<MarketPlayerItemListingsPayloadResponse | null>(null)
   const [selectedPlayer, setSelectedPlayer] = React.useState<MarketPlayerItemListing | null>(null)
 
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const [searchQueryParams, setSearchQueryParams] = React.useState('')
+
   const handleOnPlayerSearch = React.useCallback(
     async (data: MarketplaceSearchForm) => {
       const queryParams = [] as string[][]
@@ -72,6 +75,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
         queryParams: qp,
       }).unwrap()
 
+      setSearchQueryParams(qp)
       // RTKQuery handles responses in an opinionated format. When making network requests
       // (i.e. fetching, etc.) the opinionated format in which a successful response body
       // should be is { data: NetworkResponseData }. So, what this means is that when unwrap
@@ -104,6 +108,27 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
     // TODO: Think about what to do in the event of an error
   }, [isFetchPlayerItemError, selectedPlayer, fetchPlayerItemDetails, onAdd, onModalClose])
 
+  const handleOnPageChange = React.useCallback(
+    async (_event: React.ChangeEvent<unknown>, value: number) => {
+      const nextPage = value
+      const updatedQueryParams = `${searchQueryParams}&page=${nextPage}`
+
+      const response = await fetchMarketListings({
+        type: 'mlb_card',
+        queryParams: updatedQueryParams,
+      }).unwrap()
+
+      setCurrentPage(nextPage)
+      setMarketListings(response as unknown as MarketPlayerItemListingsPayloadResponse)
+    },
+    [searchQueryParams, fetchMarketListings, setCurrentPage, setMarketListings]
+  )
+
+  const handleOnModalClose = React.useCallback(() => {
+    setMarketListings(null)
+    onModalClose()
+  }, [onModalClose])
+
   React.useEffect(() => {
     if (formErrors.length > 0 || selectedPlayer == null) {
       setCanAddPlayer(false)
@@ -119,10 +144,10 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
   return (
     <>
       {isOpen && (
-        <Dialog open={isOpen} onClose={onModalClose} fullScreen>
-          <ModalHeader onModalClose={onModalClose} />
+        <Dialog open={isOpen} onClose={handleOnModalClose} fullScreen>
+          <ModalHeader onModalClose={handleOnModalClose} />
           <DialogContent>
-            {formErrors.length > 0 && (
+            {formErrors.length > 0 ? (
               <Alert severity="error">
                 <List>
                   {formErrors.map((error, index) => (
@@ -130,7 +155,7 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
                   ))}
                 </List>
               </Alert>
-            )}
+            ) : null}
             <MarketplaceSearch
               position={position}
               onError={setFormErrors}
@@ -146,6 +171,15 @@ const MarketplaceModal = ({ isOpen, position, onAdd, onModalClose }: Props) => {
                 onPlayerSelect={(player) => setSelectedPlayer(player)}
               />
             )}
+            {marketListings && marketListings.listings.length > 0 ? (
+              <Pagination
+                count={marketListings.total_pages}
+                page={currentPage}
+                shape="rounded"
+                onChange={handleOnPageChange}
+                sx={{ mt: '20px', display: 'flex', justifyContent: 'center' }}
+              />
+            ) : null}
           </DialogContent>
           <ModalActions
             isDisabled={!canAddPlayer}
