@@ -1,27 +1,15 @@
-# React + TypeScript + Vite
+# My MLB The Show Pocket
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to My MLB The Show Pocket application. This application enables MLB The Show players to search for MLB Player Cards that are currently in the marketplace. It also provides a Squad Builder tool where you can search, save, and add players to your squad. This tool enables you to methodically decide what your squad can look like outside of the game's platform.
 
-Currently, two official plugins are available:
+This application uses Sony Studio's MLB The Show API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This application is also in its beta stage so you may experience some weird UX behaviors and bugs.
 
-## Expanding the ESLint configuration
+## Contributing
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Want to help making this application better? Great! Follow the instructions below to get started.
 
-- Configure the top-level `parserOptions` property like this:
+### Pre-requisites
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+This application was built with ViteJS, Typescript, and React.
