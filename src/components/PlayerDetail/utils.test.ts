@@ -87,6 +87,7 @@ describe('utils', () => {
         ['contact_right', mockedPlayer.contact_right],
         ['batting_clutch', mockedPlayer.batting_clutch],
         ['plate_discipline', mockedPlayer.plate_discipline],
+        ['reaction_time', mockedPlayer.reaction_time],
       ])
       expect(mockedPlayer.is_hitter).toBe(true)
     })
